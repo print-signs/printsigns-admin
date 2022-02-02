@@ -54,7 +54,7 @@ const Login = () => {
                       </CCol>
                       <CCol xs={6}>
                         <Link to="/">
-                          <CButton color="danger" className="px-4">
+                          <CButton color="danger" className="px-4 ">
                             Cancel
                           </CButton>
                         </Link>
