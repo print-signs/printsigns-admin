@@ -23,25 +23,25 @@ const WidgetsDropdown = () => {
           value={
             <>
               26K{' '}
-              <span className="fs-6 fw-normal">
+              {/* <span className="fs-6 fw-normal">
                 (-12.4% <CIcon icon={cilArrowBottom} />)
-              </span>
+              </span> */}
             </>
           }
           title="Users"
-          action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="p-0">
-                <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-          }
+          // action={
+          //   <CDropdown alignment="end">
+          //     <CDropdownToggle color="transparent" caret={false} className="p-0">
+          //       <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
+          //     </CDropdownToggle>
+          //     <CDropdownMenu>
+          //       <CDropdownItem>Action</CDropdownItem>
+          //       <CDropdownItem>Another action</CDropdownItem>
+          //       <CDropdownItem>Something else here...</CDropdownItem>
+          //       <CDropdownItem disabled>Disabled action</CDropdownItem>
+          //     </CDropdownMenu>
+          //   </CDropdown>
+          // }
           chart={
             <CChartLine
               className="mt-3 mx-3"
@@ -110,25 +110,25 @@ const WidgetsDropdown = () => {
           value={
             <>
               $6.200{' '}
-              <span className="fs-6 fw-normal">
+              {/* <span className="fs-6 fw-normal">
                 (40.9% <CIcon icon={cilArrowTop} />)
-              </span>
+              </span> */}
             </>
           }
           title="Income"
-          action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="p-0">
-                <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-          }
+          // action={
+          //   <CDropdown alignment="end">
+          //     <CDropdownToggle color="transparent" caret={false} className="p-0">
+          //       <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
+          //     </CDropdownToggle>
+          //     <CDropdownMenu>
+          //       <CDropdownItem>Action</CDropdownItem>
+          //       <CDropdownItem>Another action</CDropdownItem>
+          //       <CDropdownItem>Something else here...</CDropdownItem>
+          //       <CDropdownItem disabled>Disabled action</CDropdownItem>
+          //     </CDropdownMenu>
+          //   </CDropdown>
+          // }
           chart={
             <CChartLine
               className="mt-3 mx-3"
@@ -189,7 +189,7 @@ const WidgetsDropdown = () => {
           }
         />
       </CCol>
-      <CCol sm={6} lg={3}>
+      {/* <CCol sm={6} lg={3}>
         <CWidgetStatsA
           className="mb-4"
           color="warning"
@@ -353,7 +353,7 @@ const WidgetsDropdown = () => {
             />
           }
         />
-      </CCol>
+      </CCol> */}
     </CRow>
   )
 }
