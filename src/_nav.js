@@ -272,6 +272,18 @@ const _nav = [
   //   name: 'Login',
   //   to: '/',
   // },
+  {
+    component: CNavItem,
+    name: 'Vendors',
+    to: '/vendors',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Courier',
+    to: '/courier',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+  },
 
   {
     component: CNavItem,
