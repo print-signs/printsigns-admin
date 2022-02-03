@@ -293,12 +293,12 @@ const _nav = [
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
 
-  {
-    component: CNavItem,
-    name: 'Change Password',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-    to: '/register',
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Change Password',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  //   to: '/register',
+  // },
 
   // {
   //   component: CNavGroup,

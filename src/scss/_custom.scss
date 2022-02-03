@@ -1,1 +1,5 @@
 // Here you can add other styles
+$a-tags: 'a, a:active, a:hover, a:visited';
+#{$a-tags} {
+    text-decoration: none;
+  }

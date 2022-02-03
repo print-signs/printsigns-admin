@@ -19,10 +19,12 @@ import {
   cilSettings,
   cilTask,
   cilUser,
+  cilPencil,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
+import { Link } from 'react-router-dom'
 
 const AppHeaderDropdown = () => {
   return (
@@ -84,6 +86,12 @@ const AppHeaderDropdown = () => {
           </CBadge> */}
         </CDropdownItem>
         {/* <CDropdownDivider /> */}
+        <Link to='/register'>
+          <CDropdownItem>
+            <CIcon icon={cilPencil} className="me-2" />
+            Change Password
+          </CDropdownItem>
+        </Link>
         <CDropdownItem href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
           Log Out
