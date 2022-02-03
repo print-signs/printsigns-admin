@@ -18,11 +18,13 @@ import {
     CTableHeaderCell,
     CTableRow,
 } from '@coreui/react'
+import { Link } from 'react-router-dom';
 
 const Vendor = () => {
     return <div>
-
-        <CButton color="dark">+Add New Vendor</CButton>
+        <Link to='/addvendor'>
+            <CButton color="dark">+Add New Vendor</CButton>
+        </Link>
         <hr />
         <CTable striped hover>
             <CTableHead>

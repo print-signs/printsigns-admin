@@ -18,10 +18,13 @@ import {
     CTableHeaderCell,
     CTableRow,
 } from '@coreui/react'
+import { Link } from 'react-router-dom';
 
 const Courier = () => {
     return <div>
-        <CButton color="dark">+Add New</CButton>
+        <Link to='/addcourier'>
+            <CButton color="dark">+Add New</CButton>
+        </Link>
         <hr />
         <CTable striped hover>
             <CTableHead>
@@ -40,7 +43,6 @@ const Courier = () => {
                     <CTableDataCell>
                         <CButtonGroup role="group" aria-label="Basic mixed styles example">
                             <CButton color="warning">Edit</CButton>
-
                             <CButton color="danger">Delete</CButton>
                         </CButtonGroup>
                     </CTableDataCell>

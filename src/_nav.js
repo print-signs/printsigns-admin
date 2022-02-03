@@ -6,6 +6,8 @@ import {
   cilChartPie,
   cilCursor,
   cilDrop,
+  cilMoney,
+  cilNewspaper,
   cilNotes,
   cilPencil,
   cilPuzzle,
@@ -283,6 +285,12 @@ const _nav = [
     name: 'Courier',
     to: '/courier',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'AirwaysBill',
+    to: '/airwaysbill',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
 
   {
