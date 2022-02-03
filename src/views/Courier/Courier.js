@@ -37,9 +37,9 @@ const Courier = () => {
             </CTableHead>
             <CTableBody>
                 <CTableRow>
-                    <CTableHeaderCell scope="row">Mark</CTableHeaderCell>
+                    <CTableHeaderCell scope="row">FedEx</CTableHeaderCell>
                     <CTableDataCell>123</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
+                    <CTableDataCell>123-1234-123</CTableDataCell>
                     <CTableDataCell>
                         <CButtonGroup role="group" aria-label="Basic mixed styles example">
                             <CButton color="warning">Edit</CButton>

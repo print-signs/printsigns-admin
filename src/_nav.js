@@ -288,7 +288,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'AirwaysBill',
+    name: 'Airway Bills',
     to: '/airwaysbill',
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
