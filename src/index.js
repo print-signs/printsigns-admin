@@ -6,6 +6,18 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './store'
+import axios from 'axios'
+
+const setupAxios = () => {
+  axios.defaults.baseURL = "https://api-courier-vendor.herokuapp.com/"
+  axios.defaults.headers = {
+    'Cache-Control': 'no-cache,no-store',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  };
+};
+
+setupAxios();
 
 ReactDOM.render(
   <Provider store={store}>

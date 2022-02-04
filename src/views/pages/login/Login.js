@@ -15,8 +15,38 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useState } from 'react'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
+  const [auth, setAuth] = useState({
+    email: "",
+    password: ""
+  });
+  const history = useHistory();
+
+  const handleChange = (e) => (event) => {
+    setAuth({ ...auth, [e]: event.target.value });
+  };
+
+  const Login = async () => {
+    const res = await axios.post("/admin-signin", auth);
+    if (res.data.status == "ok") {
+      localStorage.setItem("auth", JSON.stringify({
+        // user: res.data.user,
+        token: res.data.token,
+      }));
+      history.push('/dashboard')
+
+    }
+    else {
+      if (res.data.status === "blocked")
+        alert(res.data.message)
+      else
+        alert("Invalid Credentials");
+    }
+  }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -32,7 +62,7 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Email" autoComplete="email" />
+                      <CFormInput placeholder="Email" onChange={handleChange("email")} autoComplete="email" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -40,16 +70,17 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         type="password"
+                        onChange={handleChange("password")}
                         placeholder="Password"
                         autoComplete="current-password"
                       />
                     </CInputGroup>
 
-                    <Link to="/dashboard">
-                      <CButton color="primary" className="px-4">
-                        Login
-                      </CButton>
-                    </Link>
+
+                    <CButton color="primary" className="px-4" onClick={Login}>
+                      Login
+                    </CButton>
+
 
                     <Link to="/">
                       <CButton color="dark" className="px-4 ms-2">

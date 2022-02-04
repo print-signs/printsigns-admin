@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     CAvatar,
     CButton,
@@ -19,8 +19,28 @@ import {
     CTableRow,
 } from '@coreui/react'
 import { Link } from 'react-router-dom';
+import { isAutheticated } from 'src/auth';
+import axios from 'axios';
 
 const AirwaysBill = () => {
+    const { token } = isAutheticated();
+    console.log(token);
+
+    useEffect(() => {
+        const getData = async () => {
+            const res = await axios.get('/api/vendor/view', {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            console.log(res.data);
+        }
+        getData();
+
+    }, []);
+
     return <div>
 
         <CButton color="dark">+ Upload Spreadsheet</CButton>
