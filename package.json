@@ -52,7 +52,8 @@
     "react-router-dom": "^5.3.0",
     "redux": "4.1.2",
     "serve": "^13.0.2",
-    "simplebar-react": "^2.3.6"
+    "simplebar-react": "^2.3.6",
+    "sweetalert2": "^11.4.0"
   },
   "devDependencies": {
     "auto-changelog": "~2.3.0",

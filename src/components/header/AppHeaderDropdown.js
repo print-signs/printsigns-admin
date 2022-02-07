@@ -25,6 +25,7 @@ import CIcon from '@coreui/icons-react'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
 import { Link } from 'react-router-dom'
+import { signout } from 'src/auth'
 
 const AppHeaderDropdown = () => {
   return (
@@ -93,7 +94,7 @@ const AppHeaderDropdown = () => {
           </CDropdownItem>
         </Link>
         <CDropdownItem href="#">
-          <CIcon icon={cilLockLocked} className="me-2" />
+          <CIcon icon={cilLockLocked} onClick={() => signout()} className="me-2" />
           Log Out
         </CDropdownItem>
       </CDropdownMenu>

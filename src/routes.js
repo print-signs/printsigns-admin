@@ -1,11 +1,14 @@
 import React from 'react'
 
+
 const AirwaysBill = React.lazy(() => import('./views/AirwaysBill/AirwaysBill'))
 const AddAirwaysBill = React.lazy(() => import('./views/AirwaysBill/AddAirwaysBill'))
 const Courier = React.lazy(() => import('./views/Courier/Courier'))
+const EditCourier = React.lazy(() => import('./views/Courier/EditCourier'))
 const AddCourier = React.lazy(() => import('./views/Courier/AddCourier'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Vendor = React.lazy(() => import('./views/Vendor/Vendor'))
+const EditVendor = React.lazy(() => import('./views/Vendor/EditVendor'))
 const AddVendor = React.lazy(() => import('./views/Vendor/AddVendor'))
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -62,10 +65,12 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/register', name: 'Change Password', component: Register },
   { path: '/courier', name: 'Courier', component: Courier },
+  { path: '/editcourier/:id', name: ' Edit Courier', component: EditCourier },
   { path: '/addcourier', name: 'Courier / Add Courier', component: AddCourier },
   { path: '/airwaysbill', name: 'Airways Bill', component: AirwaysBill },
   { path: '/addairwaysbill', name: 'Airways Bill / Add New Entry', component: AddAirwaysBill },
   { path: '/vendors', name: 'Vendors', component: Vendor },
+  { path: '/editvendor/:id', name: 'Edit Vendor', component: EditVendor },
   { path: '/addvendor', name: 'Vendors / Add New Vendor', component: AddVendor },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },

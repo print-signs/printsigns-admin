@@ -13,19 +13,40 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import Swal from 'sweetalert2';
 import { cil3d } from '@coreui/icons'
 import { useState } from 'react';
 import axios from 'axios';
 import { isAutheticated } from 'src/auth';
+import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 
-const AddCourier = () => {
-    const [id, setId] = useState(0);
+const EditCourier = () => {
+    // const [id, setId] = useState(0);
     const [date, setDate] = useState('')
-    const [courier, setCourier] = useState('')
+    const [courier, setCourier] = useState()
     const { token } = isAutheticated();
-    const history = useHistory()
+    const { id } = useParams();
+    const [data, setData] = useState([])
+    const history = useHistory();
+    useEffect(() => {
+        const getData = async () => {
+            const res = await axios.get(`/api/courier/${id}`, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            console.log(res.data);
+            setData(res.data?.Pincode[0])
+            setCourier(res.data?.Pincode[0].name)
+            console.log(data);
+        }
+        getData();
+
+    }, []);
+
     useEffect(() => {
         const getDate = () => {
             let today = new Date();
@@ -39,7 +60,7 @@ const AddCourier = () => {
 
 
         const generateCode = () => {
-            setId(Math.round(Math.random() * 1000000000))
+            // setId(Math.round(Math.random() * 1000000000))
         }
         generateCode()
         setDate(getDate())
@@ -49,15 +70,15 @@ const AddCourier = () => {
         setCourier(value)
     }
     const handleClick = async () => {
-        let res = await axios.post('/api/courier/add', { name: courier, addedOn: date, UID: id }, {
+        let res = await axios.put(`/api/courier/${id}`, { name: courier }, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
         })
         if ((res.data.message === "Success")) {
             Swal.fire({
-                title: 'Done',
-                text: 'Courier Added',
+                title: 'Updated',
+                text: 'Courier Updated',
                 icon: 'success',
                 confirmButtonText: 'Cool',
                 confirmButtonColor: '#303c54',
@@ -69,6 +90,15 @@ const AddCourier = () => {
             Swal("Oops!", "Something went wrong!", "error");
         }
     }
+    const formatDate = (date) => {
+        let today = new Date(date);
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = dd + '/' + mm + '/' + yyyy;
+        return today
+    }
 
 
     return <div className="bg-light min-vh-100 d-flex flex-row align-items-start">
@@ -76,7 +106,7 @@ const AddCourier = () => {
             <CRow className="justify-content-start">
                 <CCol md={8}>
                     <CForm>
-                        <h1>Add New Courier</h1>
+                        <h1>Edit Courier</h1>
                         <p className="text-medium-emphasis">Fill the fields and submit to add a new vendor</p>
                         <CRow className=' flex-row align-items-center'>
                             <CCol md={2} ><h5>Unique ID:</h5></CCol>
@@ -85,7 +115,7 @@ const AddCourier = () => {
                         </CRow>
                         <CRow className=' flex-row align-items-center'>
                             <CCol md={2} ><h5>Added On:</h5></CCol>
-                            <CCol><h6>{date}</h6></CCol>
+                            <CCol><h6>{formatDate(data.createdAt)}</h6></CCol>
                             {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
                         </CRow>
 
@@ -97,6 +127,7 @@ const AddCourier = () => {
                                 type="text"
                                 placeholder="Courier Name"
                                 name="courier"
+                                value={courier}
                                 onChange={handleChange}
                             />
                         </CInputGroup>
@@ -112,4 +143,4 @@ const AddCourier = () => {
     </div>;
 };
 
-export default AddCourier;
+export default EditCourier;

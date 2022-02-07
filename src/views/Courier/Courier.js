@@ -1,16 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     CAvatar,
     CButton,
     CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CContainer,
-    CProgress,
-    CRow,
     CTable,
     CTableBody,
     CTableDataCell,
@@ -21,25 +13,64 @@ import {
 import { Link } from 'react-router-dom';
 import { isAutheticated } from 'src/auth';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useHistory } from 'react-router-dom';
+
 
 const Courier = () => {
     const { token } = isAutheticated();
-    console.log(token);
+    const [data, setData] = useState([])
+    const history = useHistory()
 
     useEffect(() => {
         const getData = async () => {
-            const res = await axios.get('/api/vendor/view', {
+            const res = await axios.get('/api/courier', {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Content-type": "Application/json",
                     "Authorization": `Bearer ${token}`
                 }
             });
-            console.log(res);
+            console.log(res.data);
+            setData(res.data.Pincode)
+            console.log(data);
         }
         getData();
 
     }, []);
+    const handleDelete = async (id) => {
+        const res = await axios.delete(`/api/courier/${id}`, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        if ((res.data.message === "Success")) {
+            Swal.fire({
+                title: 'Updated',
+                text: 'Courier Deleted',
+                icon: 'success',
+                confirmButtonText: 'Cool',
+                confirmButtonColor: '#303c54',
+                iconColor: '#303c54'
+            }).then(() => {
+                history.push('/courier');
+            });
+        } else {
+            Swal("Oops!", "Something went wrong!", "error");
+        }
+
+    }
+    const formatDate = (date) => {
+        let today = new Date(date);
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = dd + '/' + mm + '/' + yyyy;
+        return today
+    }
     return <div>
         <Link to='/addcourier'>
             <CButton color="dark">+Add New</CButton>
@@ -54,19 +85,22 @@ const Courier = () => {
                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
-            <CTableBody>
-                <CTableRow>
-                    <CTableHeaderCell scope="row">FedEx</CTableHeaderCell>
-                    <CTableDataCell>123</CTableDataCell>
-                    <CTableDataCell>123-1234-123</CTableDataCell>
-                    <CTableDataCell>
-                        <CButtonGroup role="group" aria-label="Basic mixed styles example">
-                            <CButton color="warning">Edit</CButton>
-                            <CButton color="danger">Delete</CButton>
-                        </CButtonGroup>
-                    </CTableDataCell>
-                </CTableRow>
-            </CTableBody>
+            <tbody>
+                {data.map(item =>
+                    <tr>
+                        <td scope="row">{item.name}</td>
+                        <td>{item._id}</td>
+                        <td>{formatDate(item.createdAt)}</td>
+                        <td>
+                            <CButtonGroup role="group" aria-label="Basic mixed styles example">
+                                <Link to={`/editcourier/${item._id}`}> <CButton color="warning">Edit</CButton></Link>
+                                <CButton color="danger" onClick={() => handleDelete(item._id)}>Delete</CButton>
+                            </CButtonGroup>
+                        </td>
+                    </tr>
+                )}
+
+            </tbody>
         </CTable>
     </div>;
 };

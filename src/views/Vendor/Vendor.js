@@ -3,14 +3,6 @@ import {
     CAvatar,
     CButton,
     CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CContainer,
-    CProgress,
-    CRow,
     CTable,
     CTableBody,
     CTableDataCell,
@@ -21,10 +13,14 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { isAutheticated } from '../../auth';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Vendor = () => {
     const { token } = isAutheticated();
-    console.log(token);
+    const history = useHistory();
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -35,12 +31,42 @@ const Vendor = () => {
                     "Authorization": `Bearer ${token}`
                 }
             });
-            console.log(res);
+            if (res) {
+                setData(res?.data?.Stores)
+            }
+
+
+            console.log(res.data);
         }
         getData();
+        data.map(item => console.log(item.city))
 
     }, []);
+    console.log(data);
 
+    const handleDelete = async (id) => {
+        const res = await axios.delete(`/api/vendor/${id}`, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        if ((res.data.message === 'Deleted Successfully')) {
+            Swal.fire({
+                title: 'Done',
+                text: 'Vendor Deleted',
+                icon: 'success',
+                confirmButtonText: 'Cool',
+                confirmButtonColor: '#303c54',
+                iconColor: '#303c54'
+            }).then(() => {
+                history.push('/vendors');
+            });
+        } else {
+            Swal("Oops!", "Something went wrong!", "error");
+        }
+    }
 
 
     return <div>
@@ -57,20 +83,37 @@ const Vendor = () => {
                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
-            <CTableBody>
-                <CTableRow>
-                    <CTableHeaderCell scope="row">Mark</CTableHeaderCell>
-                    <CTableDataCell>123</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
-                    <CTableDataCell>
-                        <CButtonGroup role="group" aria-label="Basic mixed styles example">
-                            <CButton color="warning">Edit</CButton>
-                            <CButton color="success">View</CButton>
-                            <CButton color="danger">Delete</CButton>
-                        </CButtonGroup>
-                    </CTableDataCell>
-                </CTableRow>
-            </CTableBody>
+            <tbody>{data.map(item => <tr><td>{item.vendor_name}</td>
+                <td>{item.code}</td>
+                <td>{item.city}</td>
+                <td><CButtonGroup role="group" aria-label="Basic mixed styles example">
+                    <Link to={`/editvendor/${item._id}`}>
+                        <CButton color="warning">Edit</CButton>
+                    </Link>
+                    <CButton color="success" >View</CButton>
+                    <CButton color="danger" onClick={() => handleDelete(item._id)}>Delete</CButton>
+                </CButtonGroup></td>
+            </tr>)}</tbody>
+            {/* <CTableBody>
+                {data?.map(item => {
+
+                    <CTableRow>
+                        <h1>{item.city}</h1>
+                        <CTableHeaderCell scope="row">{item.vendor_name}</CTableHeaderCell>
+                        <CTableDataCell>{item.code}</CTableDataCell>
+                        <CTableDataCell>{item.city}</CTableDataCell>
+                        <CTableDataCell>
+                            <CButtonGroup role="group" aria-label="Basic mixed styles example">
+                                <CButton color="warning">Edit</CButton>
+                                <CButton color="success">View</CButton>
+                                <CButton color="danger">Delete</CButton>
+                            </CButtonGroup>
+                        </CTableDataCell>
+                    </CTableRow>
+                })}
+
+
+            </CTableBody> */}
         </CTable>
     </div>;
 };

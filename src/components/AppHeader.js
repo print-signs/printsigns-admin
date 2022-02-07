@@ -70,7 +70,7 @@ const AppHeader = () => {
       </CContainer>
       <CHeaderDivider />
       <CContainer fluid>
-        <AppBreadcrumb />
+        {/* <AppBreadcrumb /> */}
       </CContainer>
     </CHeader>
   )
