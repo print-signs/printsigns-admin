@@ -21,6 +21,7 @@ const Vendor = () => {
     const { token } = isAutheticated();
     const history = useHistory();
     const [data, setData] = useState([]);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -36,12 +37,12 @@ const Vendor = () => {
             }
 
 
-            console.log(res.data);
+
         }
         getData();
-        data.map(item => console.log(item.city))
 
-    }, []);
+
+    }, [reload]);
     console.log(data);
 
     const handleDelete = async (id) => {
@@ -62,7 +63,8 @@ const Vendor = () => {
                 iconColor: '#303c54'
             }).then(() => {
                 // history.('/vendors');
-                location.reload();
+                setReload(!reload)
+                // location.reload();
             });
         } else {
             Swal("Oops!", "Something went wrong!", "error");

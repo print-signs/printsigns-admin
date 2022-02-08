@@ -1,8 +1,8 @@
 import React from 'react'
 
-
 const AirwaysBill = React.lazy(() => import('./views/AirwaysBill/AirwaysBill'))
 const AddAirwaysBill = React.lazy(() => import('./views/AirwaysBill/AddAirwaysBill'))
+const AirwayBillDetail = React.lazy(() => import('./views/AirwaysBill/AirwayBillDetail'))
 const Courier = React.lazy(() => import('./views/Courier/Courier'))
 const EditCourier = React.lazy(() => import('./views/Courier/EditCourier'))
 const AddCourier = React.lazy(() => import('./views/Courier/AddCourier'))
@@ -70,6 +70,7 @@ const routes = [
   { path: '/addcourier', name: 'Courier / Add Courier', component: AddCourier },
   { path: '/airwaysbill', name: 'Airways Bill', component: AirwaysBill },
   { path: '/addairwaysbill', name: 'Airways Bill / Add New Entry', component: AddAirwaysBill },
+  { path: '/viewbill/:id', name: 'View Bill', component: AirwayBillDetail }, ,
   { path: '/vendors', name: 'Vendors', component: Vendor },
   { path: '/editvendor/:id', name: 'Edit Vendor', component: EditVendor },
   { path: '/viewvendor/:id', name: 'View Vendor', component: VendorDetail },

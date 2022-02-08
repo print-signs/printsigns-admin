@@ -18,6 +18,8 @@ import { cil3d, cilAirplaneMode, cilGlobeAlt, cilLocationPin, cilLockLocked, cil
 import { useState } from 'react';
 import axios from 'axios';
 import { isAutheticated } from 'src/auth';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const AddAirwaysBill = () => {
@@ -27,17 +29,28 @@ const AddAirwaysBill = () => {
         city: '',
         state: 'Andhra Pradesh',
         country: 'India',
-        address_1: '',
-        address_2: '',
-
+        from_address_1: '',
+        from_address_2: '',
+        to_address_1: '',
+        to_name: '',
+        to_address_2: '',
+        AWB: '',
+        courier: ''
     })
+    const [showCouriers, setShowCouriers] = useState([])
+    const [showVendors, setShowVendors] = useState([])
     const [code, setCode] = useState()
+    const history = useHistory()
+
     useEffect(() => {
         const generateCode = () => {
             setCode(Math.round(Math.random() * 1000000000))
         }
+
+
         const getData = async () => {
-            const res = await axios.get('/api/vendor/view',
+
+            const couriers = await axios.get('/api/courier',
                 {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -45,11 +58,25 @@ const AddAirwaysBill = () => {
                         "Authorization": `Bearer ${token}`
                     }
                 })
-            console.log(res.data.Stores);
+            const vendors = await axios.get('/api/vendor/view',
+                {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+
+            console.log(couriers.data.Pincode);
+            console.log(vendors.data.Stores);
+            setShowVendors(vendors.data.Stores)
+            setShowCouriers(couriers.data.Pincode)
         }
         getData();
         generateCode()
     }, [])
+
+
     const formatDate = () => {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
@@ -58,6 +85,32 @@ const AddAirwaysBill = () => {
 
         today = dd + '/' + mm + '/' + yyyy;
         return today
+    }
+
+    const handleChange = (e) => (event) => {
+        setBill({ ...bill, [e]: event.target.value });
+    };
+    const handleClick = async () => {
+        let res = await axios.post('/api/airways/add', { ...bill, code }, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        if ((res.data.message === "Success")) {
+            console.log(res.data);
+            Swal.fire({
+                title: 'Done',
+                text: 'Bill Added',
+                icon: 'success',
+                confirmButtonText: 'ok',
+                confirmButtonColor: '#303c54',
+                iconColor: '#303c54'
+            }).then(() => {
+                history.push('/airwaysbill')
+            });
+        } else {
+            Swal("Oops!", "Something went wrong!", "error");
+        }
     }
 
     return <div className="bg-light min-vh-100 d-flex flex-row align-items-start">
@@ -69,7 +122,7 @@ const AddAirwaysBill = () => {
                         <p className="text-medium-emphasis">Fill the fields and submit to add a new bill</p>
                         <CRow className='flex-row align-items-center'>
                             <CCol md={2} ><h4>ID:</h4></CCol>
-                            <CCol><h6>5324756898</h6></CCol>
+                            <CCol><h6>{code}</h6></CCol>
                             {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
                         </CRow>
                         <CRow className='flex-row align-items-center'>
@@ -83,13 +136,14 @@ const AddAirwaysBill = () => {
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
-                                options={[
-                                    'Select Vendor',
-                                    { label: 'One', value: '1' },
-                                    { label: 'Two', value: '2' },
-                                    { label: 'Three', value: '3', disabled: true }
-                                ]}
-                            />
+                                onChange={handleChange('vendor_name')}
+                            >
+                                <option value='India'>Select Vendor</option>{
+                                    showVendors.map((item) =>
+                                        <option value={item.vendor_name}>{item.vendor_name}</option>
+                                    )
+                                }
+                            </CFormSelect>
                         </CInputGroup>
                         <CInputGroup className="mb-3">
                             <CInputGroupText>
@@ -98,12 +152,14 @@ const AddAirwaysBill = () => {
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 1"
-                            // autoComplete="address"
+                                // autoComplete="address"
+                                onChange={handleChange('from_address_1')}
                             />
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 2(area)"
                                 autoComplete="address2"
+                                onChange={handleChange('from_address_2')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -114,6 +170,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="To (Name)"
                                 autoComplete="toname"
+                                onChange={handleChange('to_name')}
                             />
 
                         </CInputGroup>
@@ -124,12 +181,14 @@ const AddAirwaysBill = () => {
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 1"
-                            // autoComplete="address"
+                                // autoComplete="address"
+                                onChange={handleChange('to_address_1')}
                             />
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 2(area)"
                                 autoComplete="address2"
+                                onChange={handleChange('to_address_2')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -138,13 +197,15 @@ const AddAirwaysBill = () => {
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
-                                options={[
-                                    'Select Courier',
-                                    { label: 'One', value: '1' },
-                                    { label: 'Two', value: '2' },
-                                    { label: 'Three', value: '3', disabled: true }
-                                ]}
-                            /></CInputGroup>
+                                onChange={handleChange('courier')}
+                            >
+                                <option value='India'>Select Courier</option>{
+                                    showCouriers.map((item) =>
+                                        <option value={item._id}>{item.name}</option>
+                                    )
+                                }
+                            </CFormSelect>
+                        </CInputGroup>
                         <CInputGroup className="mb-3">
                             <CInputGroupText>
                                 <CIcon icon={cilAirplaneMode} />
@@ -153,9 +214,10 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="AWB"
                                 autoComplete="AWB"
+                                onChange={handleChange('AWB')}
                             />
                         </CInputGroup>
-                        <CButton color="dark" className="px-4">
+                        <CButton color="dark" className="px-4" onClick={() => handleClick()}>
                             Submit
                         </CButton>
 

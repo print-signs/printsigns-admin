@@ -24,11 +24,11 @@ import axios from 'axios';
 
 const AirwaysBill = () => {
     const { token } = isAutheticated();
-    console.log(token);
+    const [data, setData] = useState([])
 
     useEffect(() => {
         const getData = async () => {
-            const res = await axios.get('/api/vendor/view', {
+            const res = await axios.get('/api/airways/view', {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Content-type": "Application/json",
@@ -36,10 +36,20 @@ const AirwaysBill = () => {
                 }
             });
             console.log(res.data);
+            setData(res.data.Stores)
         }
         getData();
 
     }, []);
+    const formatDate = (date) => {
+        let today = new Date(date);
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = dd + '/' + mm + '/' + yyyy;
+        return today
+    }
 
     return <div>
 
@@ -59,21 +69,25 @@ const AirwaysBill = () => {
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
-            <CTableBody>
-                <CTableRow>
-                    <CTableHeaderCell scope="row">Mark</CTableHeaderCell>
-                    <CTableDataCell>123</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
-                    <CTableDataCell>123</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
-                    <CTableDataCell>
-                        <CButtonGroup role="group" aria-label="Basic mixed styles example">
-                            <CButton color="success">View</CButton>
+            <tbody>
+                {data.map(item =>
+                    <tr>
+                        <td scope="row">{item.code}</td>
+                        <td>{item.vendor_name}</td>
+                        <td>{formatDate(item.createdAt)}</td>
+                        <td>{item.to_name}</td>
+                        <td>{item.AWB}</td>
+                        <td>
+                            <CButtonGroup role="group" aria-label="Basic mixed styles example">
+                                <Link to={`/viewbill/${item._id}`}><CButton color="success">View</CButton></Link>
 
-                        </CButtonGroup>
-                    </CTableDataCell>
-                </CTableRow>
-            </CTableBody>
+                            </CButtonGroup>
+                        </td>
+                    </tr>
+
+                )}
+
+            </tbody>
         </CTable></div>;
 };
 

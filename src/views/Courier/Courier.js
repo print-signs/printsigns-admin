@@ -20,7 +20,7 @@ import { useHistory } from 'react-router-dom';
 const Courier = () => {
     const { token } = isAutheticated();
     const [data, setData] = useState([])
-    const history = useHistory()
+    const [reload, setReload] = useState(false)
 
     useEffect(() => {
         const getData = async () => {
@@ -37,7 +37,7 @@ const Courier = () => {
         }
         getData();
 
-    }, []);
+    }, [reload]);
     const handleDelete = async (id) => {
         const res = await axios.delete(`/api/courier/${id}`, {
             headers: {
@@ -56,7 +56,8 @@ const Courier = () => {
                 iconColor: '#303c54'
             }).then(() => {
                 // history.push('/courier');
-                location.reload();
+                // location.reload();
+                setReload(!reload)
             });
         } else {
             Swal("Oops!", "Something went wrong!", "error");

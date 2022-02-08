@@ -82,7 +82,7 @@ const AddVendor = () => {
                 confirmButtonColor: '#303c54',
                 iconColor: '#303c54'
             }).then(() => {
-                history.push('/courier');
+                history.push('/vendors');
             });
         } else {
             Swal("Oops!", "Something went wrong!", "error");
