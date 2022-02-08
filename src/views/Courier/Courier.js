@@ -55,7 +55,8 @@ const Courier = () => {
                 confirmButtonColor: '#303c54',
                 iconColor: '#303c54'
             }).then(() => {
-                history.push('/courier');
+                // history.push('/courier');
+                location.reload();
             });
         } else {
             Swal("Oops!", "Something went wrong!", "error");

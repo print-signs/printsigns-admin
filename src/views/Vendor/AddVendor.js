@@ -99,7 +99,7 @@ const AddVendor = () => {
                         <CRow className=' flex-row align-items-center'>
                             <CCol md={2} ><h4>Code:</h4></CCol>
                             <CCol><h6>{code}</h6></CCol>
-                            <p className="text-medium-emphasis">(auto-generated)</p>
+                            {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
                         </CRow>
                         <CInputGroup className="mb-3">
                             <CInputGroupText>

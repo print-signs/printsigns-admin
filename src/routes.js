@@ -8,6 +8,7 @@ const EditCourier = React.lazy(() => import('./views/Courier/EditCourier'))
 const AddCourier = React.lazy(() => import('./views/Courier/AddCourier'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Vendor = React.lazy(() => import('./views/Vendor/Vendor'))
+const VendorDetail = React.lazy(() => import('./views/Vendor/VendorDetail'))
 const EditVendor = React.lazy(() => import('./views/Vendor/EditVendor'))
 const AddVendor = React.lazy(() => import('./views/Vendor/AddVendor'))
 
@@ -71,6 +72,7 @@ const routes = [
   { path: '/addairwaysbill', name: 'Airways Bill / Add New Entry', component: AddAirwaysBill },
   { path: '/vendors', name: 'Vendors', component: Vendor },
   { path: '/editvendor/:id', name: 'Edit Vendor', component: EditVendor },
+  { path: '/viewvendor/:id', name: 'View Vendor', component: VendorDetail },
   { path: '/addvendor', name: 'Vendors / Add New Vendor', component: AddVendor },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },

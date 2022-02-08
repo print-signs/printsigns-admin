@@ -61,7 +61,8 @@ const Vendor = () => {
                 confirmButtonColor: '#303c54',
                 iconColor: '#303c54'
             }).then(() => {
-                history.push('/vendors');
+                // history.('/vendors');
+                location.reload();
             });
         } else {
             Swal("Oops!", "Something went wrong!", "error");
@@ -87,33 +88,12 @@ const Vendor = () => {
                 <td>{item.code}</td>
                 <td>{item.city}</td>
                 <td><CButtonGroup role="group" aria-label="Basic mixed styles example">
-                    <Link to={`/editvendor/${item._id}`}>
-                        <CButton color="warning">Edit</CButton>
-                    </Link>
-                    <CButton color="success" >View</CButton>
+                    <CButton color="warning" onClick={() => history.push(`/editvendor/${item._id}`)}>Edit</CButton>
+                    <CButton color="success" onClick={() => history.push(`/viewvendor/${item._id}`)}>View</CButton>
                     <CButton color="danger" onClick={() => handleDelete(item._id)}>Delete</CButton>
                 </CButtonGroup></td>
-            </tr>)}</tbody>
-            {/* <CTableBody>
-                {data?.map(item => {
-
-                    <CTableRow>
-                        <h1>{item.city}</h1>
-                        <CTableHeaderCell scope="row">{item.vendor_name}</CTableHeaderCell>
-                        <CTableDataCell>{item.code}</CTableDataCell>
-                        <CTableDataCell>{item.city}</CTableDataCell>
-                        <CTableDataCell>
-                            <CButtonGroup role="group" aria-label="Basic mixed styles example">
-                                <CButton color="warning">Edit</CButton>
-                                <CButton color="success">View</CButton>
-                                <CButton color="danger">Delete</CButton>
-                            </CButtonGroup>
-                        </CTableDataCell>
-                    </CTableRow>
-                })}
-
-
-            </CTableBody> */}
+            </tr>)}
+            </tbody>
         </CTable>
     </div>;
 };
