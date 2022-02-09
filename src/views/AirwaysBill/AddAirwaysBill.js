@@ -20,10 +20,12 @@ import axios from 'axios';
 import { isAutheticated } from 'src/auth';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { Country } from 'country-state-city';
 
 
 const AddAirwaysBill = () => {
     const { token } = isAutheticated()
+    const countries = Country.getAllCountries();
     const [bill, setBill] = useState({
         vendor_name: '',
         city: '',
@@ -288,12 +290,17 @@ const AddAirwaysBill = () => {
                             <CInputGroupText>
                                 <CIcon icon={cilGlobeAlt} />
                             </CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                placeholder="Country"
-                                autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
-                            />
+                            <CFormSelect
+                                aria-label="Default select example"
+                            // onChange={handleChange("country")}
+                            >
+                                <option value='India'>Select Country</option>{
+                                    countries.map((item) =>
+                                        <option value={item.name}>{item.name}</option>
+                                    )
+                                }
+                            </CFormSelect>
+
                         </CInputGroup>
                         <CInputGroup className="mb-3">
                             <CInputGroupText>

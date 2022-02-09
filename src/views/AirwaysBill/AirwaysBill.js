@@ -82,55 +82,23 @@ const AirwaysBill = () => {
 
         </CRow>
         <hr />
-        <CTable striped hover className='overflow-table '>
+        <CTable striped hover >
             <CTableHead >
                 <CTableRow>
-                    <CTableHeaderCell scope="col">S.No</CTableHeaderCell>
+
                     <CTableHeaderCell scope="col">Order No</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Client Name</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Item Name</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Customer Name
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Customer Phone
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Customer Address
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Country
-                    </CTableHeaderCell>
+
+
                     <CTableHeaderCell scope="col">Shipped From
                     </CTableHeaderCell>
                     <CTableHeaderCell scope="col">Logistic Name
                     </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Date of Dispatch
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Shipments
-                    </CTableHeaderCell>
+
                     <CTableHeaderCell scope="col">AWB No
                     </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Dimensions
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Dimenssion Weight
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Actual Weight
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Total Weight
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Shipment Charges
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Actual Billing
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Customer Billing
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Projected Margin
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Actual Margin
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Invoice No
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Received Amount
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Received Date
-                    </CTableHeaderCell>
+
+
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
