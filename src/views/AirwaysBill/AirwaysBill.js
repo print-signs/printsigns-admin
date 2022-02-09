@@ -9,6 +9,9 @@ import {
     CCardHeader,
     CCol,
     CContainer,
+    CFormInput,
+    CInputGroup,
+    CInputGroupText,
     CProgress,
     CRow,
     CTable,
@@ -25,6 +28,8 @@ import axios from 'axios';
 const AirwaysBill = () => {
     const { token } = isAutheticated();
     const [data, setData] = useState([])
+    const [file, setFile] = useState(null)
+    let formData = new FormData();
 
     useEffect(() => {
         const getData = async () => {
@@ -50,29 +55,89 @@ const AirwaysBill = () => {
         today = dd + '/' + mm + '/' + yyyy;
         return today
     }
+    const handleChange = (e) => {
+        setFile(e.target.files[0])
 
+    }
+    const handleClick = () => {
+
+        formData.append('file', file)
+
+        console.log(...formData)
+
+
+    }
+    console.log(file);
     return <div>
+        <CRow><CCol sm='auto'>
+            <CInputGroup className="mb-3" >
+                <CFormInput type="file" id="inputGroupFile02" onChange={e => handleChange(e)} />
+                <CButton component="label" color='dark' onClick={() => handleClick()}>Upload Spreadsheet</CButton>
+            </CInputGroup>
+        </CCol>
 
-        <CButton color="dark">+ Upload Spreadsheet</CButton>
-        <Link to='/addairwaysbill'>
-            <CButton className='ms-3' color="dark">+Add New Entry</CButton>
-        </Link>
+            <CCol sm='auto'> <Link to='/addairwaysbill'>
+                <CButton className='ms-3' color="dark">+Add New Entry</CButton>
+            </Link></CCol>
+
+        </CRow>
         <hr />
-        <CTable striped hover>
-            <CTableHead>
+        <CTable striped hover className='overflow-table '>
+            <CTableHead >
                 <CTableRow>
-                    <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Vendor</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">To (Name)</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">AWB</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">S.No</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Order No</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Client Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Item Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Customer Name
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Customer Phone
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Customer Address
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Country
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Shipped From
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Logistic Name
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Date of Dispatch
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Shipments
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">AWB No
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Dimensions
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Dimenssion Weight
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actual Weight
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Total Weight
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Shipment Charges
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actual Billing
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Customer Billing
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Projected Margin
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actual Margin
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Invoice No
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Received Amount
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Received Date
+                    </CTableHeaderCell>
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
             <tbody>
                 {data.map(item =>
                     <tr>
-                        <td scope="row">{item.code}</td>
+                        {/* <td scope="row">{item.code}</td>
                         <td>{item.vendor_name}</td>
                         <td>{formatDate(item.createdAt)}</td>
                         <td>{item.to_name}</td>
@@ -82,7 +147,7 @@ const AirwaysBill = () => {
                                 <Link to={`/viewbill/${item._id}`}><CButton color="success">View</CButton></Link>
 
                             </CButtonGroup>
-                        </td>
+                        </td> */}
                     </tr>
 
                 )}

@@ -14,7 +14,7 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cil3d, cilAirplaneMode, cilGlobeAlt, cilLocationPin, cilLockLocked, cilPeople, cilUser } from '@coreui/icons'
+import { cil3d, cilAirplaneMode, cilBadge, cilBalanceScale, cilBoatAlt, cilBriefcase, cilBuilding, cilCalendar, cilGlobeAlt, cilListNumbered, cilLocationPin, cilLockLocked, cilMoney, cilNoteAdd, cilNotes, cilPeople, cilPhone, cilShareBoxed, cilUser, cilUserPlus } from '@coreui/icons'
 import { useState } from 'react';
 import axios from 'axios';
 import { isAutheticated } from 'src/auth';
@@ -120,17 +120,17 @@ const AddAirwaysBill = () => {
                     <CForm>
                         <h1>Add New Bill</h1>
                         <p className="text-medium-emphasis">Fill the fields and submit to add a new bill</p>
-                        <CRow className='flex-row align-items-center'>
-                            <CCol md={2} ><h4>ID:</h4></CCol>
-                            <CCol><h6>{code}</h6></CCol>
-                            {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
-                        </CRow>
-                        <CRow className='flex-row align-items-center'>
-                            <CCol md={2} ><h4>Date:</h4></CCol>
-                            <CCol><h6>{formatDate()}</h6></CCol>
-                            {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
-                        </CRow>
-                        <CInputGroup className="mb-3">
+                        {/* <CRow className='flex-row align-items-center'> */}
+                        {/* <CCol md={2} ><h4>ID:</h4></CCol> */}
+                        {/* <CCol><h6>{code}</h6></CCol> */}
+                        {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
+                        {/* </CRow> */}
+                        {/* <CRow className='flex-row align-items-center'> */}
+                        {/* <CCol md={2} ><h4>Date:</h4></CCol> */}
+                        {/* <CCol><h6>{formatDate()}</h6></CCol> */}
+                        {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
+                        {/* </CRow> */}
+                        {/* <CInputGroup className="mb-3">
                             <CInputGroupText>
                                 <CIcon icon={cilUser} />
                             </CInputGroupText>
@@ -205,7 +205,7 @@ const AddAirwaysBill = () => {
                                     )
                                 }
                             </CFormSelect>
-                        </CInputGroup>
+                        </CInputGroup> */}
                         <CInputGroup className="mb-3">
                             <CInputGroupText>
                                 <CIcon icon={cilAirplaneMode} />
@@ -217,6 +217,273 @@ const AddAirwaysBill = () => {
                                 onChange={handleChange('AWB')}
                             />
                         </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilListNumbered} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Order No
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('Order_No')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilUser} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Client Name"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBadge} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Item Name"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilUser} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Customer Name"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilPhone} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Customer Phone"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilLocationPin} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Customer Address"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilGlobeAlt} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Country"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilAirplaneMode} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Shipped From"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBuilding} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Logistic Name
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilCalendar} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Date of Dispatch
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBoatAlt} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Shipments
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cil3d} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Dimensions
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBalanceScale} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Dimenssion Weight
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBalanceScale} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Actual Weight
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilBalanceScale} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Total Weight
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilMoney} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Shipment Charges
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilNotes} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Actual Billing
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilNotes} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Customer Billing
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilMoney} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Projceted Margin
+"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilMoney} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Actual Margin"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilListNumbered} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Invoice No"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilMoney} />
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Received Amount"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <CIcon icon={cilAirplaneMode} />
+
+                            </CInputGroupText>
+                            <CFormInput
+                                type="text"
+                                placeholder="Received Date"
+                                autoComplete="AWB"
+                            // onChange={handleChange('AWB')}
+                            />
+                        </CInputGroup>
+
                         <CButton color="dark" className="px-4" onClick={() => handleClick()}>
                             Submit
                         </CButton>
