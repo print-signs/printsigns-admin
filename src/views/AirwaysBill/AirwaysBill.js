@@ -59,12 +59,22 @@ const AirwaysBill = () => {
         setFile(e.target.files[0])
 
     }
-    const handleClick = () => {
+    const handleClick = async () => {
 
-        formData.append('file', file)
+        formData.append('file', file, file.name)
 
         console.log(...formData)
 
+        const res = await axios.post('/api/airways/upload', { file: formData }, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type': 'multipart/form-data',
+                "Authorization": `Bearer ${token}`
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+        console.log(res)
 
     }
     console.log(file);
@@ -105,17 +115,17 @@ const AirwaysBill = () => {
             <tbody>
                 {data.map(item =>
                     <tr>
-                        {/* <td scope="row">{item.code}</td>
-                        <td>{item.vendor_name}</td>
-                        <td>{formatDate(item.createdAt)}</td>
-                        <td>{item.to_name}</td>
-                        <td>{item.AWB}</td>
+                        <td scope="row">{item.Order_No}</td>
+                        <td>{item.Client_Name}</td>
+                        <td>{item.Shipped_From}</td>
+                        <td>{item.Logistic_Name}</td>
+                        <td>{item.AWB_No}</td>
                         <td>
                             <CButtonGroup role="group" aria-label="Basic mixed styles example">
                                 <Link to={`/viewbill/${item._id}`}><CButton color="success">View</CButton></Link>
 
                             </CButtonGroup>
-                        </td> */}
+                        </td>
                     </tr>
 
                 )}

@@ -27,17 +27,31 @@ const AddAirwaysBill = () => {
     const { token } = isAutheticated()
     const countries = Country.getAllCountries();
     const [bill, setBill] = useState({
-        vendor_name: '',
-        city: '',
-        state: 'Andhra Pradesh',
+        AWB_No: '',
+        Actual_Billing: '',
+        Actual_Margin: 'Andhra Pradesh',
         country: 'India',
-        from_address_1: '',
-        from_address_2: '',
-        to_address_1: '',
-        to_name: '',
-        to_address_2: '',
-        AWB: '',
-        courier: ''
+        Actual_Weight: '',
+        Client_Name: '',
+        Customer_Address: "",
+        Customer_Billing: "",
+        Customer_Name: "",
+        Customer_Phone: "",
+        Date_Of_Dispatch: "",
+        Dimension_Weight: "",
+        Dimensions: "",
+        Invoice_No: "",
+        Item_Name: ""
+        , Logistic_Name: "",
+        Order_No: "",
+        Projected_Margin: "",
+        Recieved_Amount: "",
+        Recieved_Date: "",
+        Shipment_Charges: "",
+        Shipments: "",
+        Shipped_From: "",
+        Sr_No: "",
+        Total_Weight: "",
     })
     const [showCouriers, setShowCouriers] = useState([])
     const [showVendors, setShowVendors] = useState([])
@@ -114,6 +128,7 @@ const AddAirwaysBill = () => {
             Swal("Oops!", "Something went wrong!", "error");
         }
     }
+    console.log(bill);
 
     return <div className="bg-light min-vh-100 d-flex flex-row align-items-start">
         <CContainer>
@@ -216,7 +231,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="AWB"
                                 autoComplete="AWB"
-                                onChange={handleChange('AWB')}
+                                onChange={handleChange('AWB_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -228,7 +243,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Order No
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('Order_No')}
+                                onChange={handleChange('Order_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -239,7 +254,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Client Name"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange(' Client_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -250,7 +265,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Item Name"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Item_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -261,7 +276,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Customer Name"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Customer_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -272,7 +287,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Customer Phone"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange(' Customer_Phone')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -283,7 +298,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Customer Address"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Customer_Address')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -292,7 +307,7 @@ const AddAirwaysBill = () => {
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
-                            // onChange={handleChange("country")}
+                                onChange={handleChange("country")}
                             >
                                 <option value='India'>Select Country</option>{
                                     countries.map((item) =>
@@ -310,7 +325,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Shipped From"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Shipped_From')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -322,7 +337,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Logistic Name
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Logistic_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -330,11 +345,11 @@ const AddAirwaysBill = () => {
                                 <CIcon icon={cilCalendar} />
                             </CInputGroupText>
                             <CFormInput
-                                type="text"
+                                type="date"
                                 placeholder="Date of Dispatch
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Date_Of_Dispatch')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -346,7 +361,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Shipments
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Shipments')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -358,7 +373,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Dimensions
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Dimensions')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -370,7 +385,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Dimenssion Weight
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Dimension_Weight')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -382,7 +397,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Actual Weight
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Actual_Weight')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -394,7 +409,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Total Weight
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('AWB')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -406,7 +421,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Shipment Charges
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Shipment_Charges')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -418,7 +433,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Actual Billing
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Actual_Billing')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -430,7 +445,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Customer Billing
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Customer_Billing')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -442,7 +457,7 @@ const AddAirwaysBill = () => {
                                 placeholder="Projceted Margin
 "
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Projected_Margin')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -453,7 +468,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Actual Margin"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Actual_Margin')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -475,7 +490,7 @@ const AddAirwaysBill = () => {
                                 type="text"
                                 placeholder="Received Amount"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Invoice_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
@@ -484,10 +499,10 @@ const AddAirwaysBill = () => {
 
                             </CInputGroupText>
                             <CFormInput
-                                type="text"
+                                type="date"
                                 placeholder="Received Date"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                onChange={handleChange('Recieved_Date')}
                             />
                         </CInputGroup>
 

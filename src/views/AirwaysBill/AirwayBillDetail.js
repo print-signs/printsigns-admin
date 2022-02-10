@@ -57,29 +57,106 @@ const AirwayBillDetail = () => {
             </CTableHead>
             <CTableBody>
                 <CTableRow>
-                    <CTableHeaderCell scope="col">Code</CTableHeaderCell>
-                    <CTableDataCell scope="col">{data.code}</CTableDataCell>
+                    <CTableHeaderCell scope="col">Actual Billing</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Actual_Billing}</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
                     <CTableHeaderCell scope="col">AWB</CTableHeaderCell>
-                    <CTableDataCell scope="col">{data.AWB}</CTableDataCell>
+                    <CTableDataCell scope="col">{data.AWB_No}</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
-                    <CTableHeaderCell scope="row">Vendor Name</CTableHeaderCell>
-                    <CTableDataCell>{data.vendor_name}</CTableDataCell>
+                    <CTableHeaderCell scope="row">Actual Margin</CTableHeaderCell>
+                    <CTableDataCell>{data.Actual_Margin}</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
                     <CTableHeaderCell scope="row">Added On</CTableHeaderCell>
                     <CTableDataCell>{formatDate(data.createdAt)}</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
-                    <CTableHeaderCell scope="row">From Address</CTableHeaderCell>
-                    <CTableDataCell>{data.from_address_1},{data.from_address_2},{data.city},{data.state},{data.country}</CTableDataCell>
+                    <CTableHeaderCell scope="row">Actual_Weight</CTableHeaderCell>
+                    <CTableDataCell>{data.Actual_Weight}</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
-                    <CTableHeaderCell scope="row">To Address</CTableHeaderCell>
-                    <CTableDataCell>{data.to_address_1},{data.to_address_2}</CTableDataCell>
+                    <CTableHeaderCell scope="row">Client Name</CTableHeaderCell>
+                    <CTableDataCell>{data.Client_Name}</CTableDataCell>
                 </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Country</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Country}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Customer Address</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Customer_Address}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Customer_Billing</CTableHeaderCell>
+                    <CTableDataCell>{data.Customer_Billing}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Customer_Name</CTableHeaderCell>
+                    <CTableDataCell>{data.Customer_Name}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Customer_Phone</CTableHeaderCell>
+                    <CTableDataCell>{data.Customer_Phone}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Date Of Dispatch</CTableHeaderCell>
+                    <CTableDataCell>{formatDate(data.Date_Of_Dispatch)}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Dimension_Weight</CTableHeaderCell>
+                    <CTableDataCell>{data.Dimension_Weight}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Dimensions</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Dimensions}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Invoice No</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Invoice_No}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Item_Name</CTableHeaderCell>
+                    <CTableDataCell>{data.Item_Name}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Logistic_Name</CTableHeaderCell>
+                    <CTableDataCell>{data.Logistic_Name}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Order_No</CTableHeaderCell>
+                    <CTableDataCell>{data.Order_No}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Projected_Margin</CTableHeaderCell>
+                    <CTableDataCell>{data.Projected_Margin}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Recieved_Amount</CTableHeaderCell>
+                    <CTableDataCell>{data.Recieved_Amount}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Recieved_Date</CTableHeaderCell>
+                    <CTableDataCell scope="col">{formatDate(data.Recieved_Date)}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="col">Shipment_Charges</CTableHeaderCell>
+                    <CTableDataCell scope="col">{data.Shipment_Charges}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Shipments</CTableHeaderCell>
+                    <CTableDataCell>{data.Shipments}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Shipped_From</CTableHeaderCell>
+                    <CTableDataCell>{data.Shipped_From}</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableHeaderCell scope="row">Total_Weight</CTableHeaderCell>
+                    <CTableDataCell>{data.Total_Weight}</CTableDataCell>
+                </CTableRow>
+
             </CTableBody>
         </CTable>
     </div>;
