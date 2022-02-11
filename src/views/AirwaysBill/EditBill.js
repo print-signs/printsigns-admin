@@ -6,7 +6,6 @@ import {
     CCardGroup,
     CCol,
     CContainer,
-
     CForm,
     CFormInput,
     CFormSelect,
@@ -22,11 +21,13 @@ import { isAutheticated } from 'src/auth';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Country } from 'country-state-city';
+import { useParams } from 'react-router-dom';
 
 
 const AddAirwaysBill = () => {
     const { token } = isAutheticated()
     const countries = Country.getAllCountries();
+    const { id } = useParams()
     const [bill, setBill] = useState({
         AWB_No: '',
         Actual_Billing: '',
@@ -84,14 +85,37 @@ const AddAirwaysBill = () => {
                     }
                 })
 
-            // console.log(couriers.data.Pincode);
-            // console.log(vendors.data.Stores);
+            console.log(couriers.data.Pincode);
+            console.log(vendors.data.Stores);
             setShowVendors(vendors.data.Stores)
             setShowCouriers(couriers.data.Pincode)
         }
         getData();
         generateCode()
     }, [])
+    useEffect(() => {
+        const getData = async () => {
+            const res = await axios.get(`/api/airways/view/${id}`, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            if (res) {
+                // setBill()
+                setBill(res.data.Store);
+                // setData(res?.data?.Store)
+                // setVendor(res?.data?.Store)
+            }
+
+
+            console.log(res.data);
+        }
+        getData();
+
+
+    }, []);
 
 
     const formatDate = () => {
@@ -108,7 +132,7 @@ const AddAirwaysBill = () => {
         setBill({ ...bill, [e]: event.target.value });
     };
     const handleClick = async () => {
-        let res = await axios.post('/api/airways/add', { ...bill, code }, {
+        let res = await axios.put(`/api/airways/${id}`, { ...bill, code }, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -136,7 +160,7 @@ const AddAirwaysBill = () => {
             <CRow className="justify-content-start">
                 <CCol md={8}>
                     <CForm>
-                        <h1>Add New Bill</h1>
+                        <h1>Edit Bill</h1>
                         <p className="text-medium-emphasis">Fill the fields and submit to add a new bill</p>
                         {/* <CRow className='flex-row align-items-center'> */}
                         {/* <CCol md={2} ><h4>ID:</h4></CCol> */}
@@ -149,9 +173,9 @@ const AddAirwaysBill = () => {
                         {/* <p className="text-medium-emphasis">(auto-generated)</p> */}
                         {/* </CRow> */}
                         {/* <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilUser} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormSelect
                                 aria-label="Default select example"
                                 onChange={handleChange('vendor_name')}
@@ -164,9 +188,9 @@ const AddAirwaysBill = () => {
                             </CFormSelect>
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilLocationPin} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 1"
@@ -181,9 +205,9 @@ const AddAirwaysBill = () => {
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilPeople} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormInput
                                 type="text"
                                 placeholder="To (Name)"
@@ -193,9 +217,9 @@ const AddAirwaysBill = () => {
 
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilLocationPin} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormInput
                                 type="text"
                                 placeholder="Address Line 1"
@@ -210,9 +234,9 @@ const AddAirwaysBill = () => {
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cil3d} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormSelect
                                 aria-label="Default select example"
                                 onChange={handleChange('courier')}
@@ -225,37 +249,38 @@ const AddAirwaysBill = () => {
                             </CFormSelect>
                         </CInputGroup> */}
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilAirplaneMode} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilAirplaneMode} />AWB
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="AWB"
                                 autoComplete="AWB"
+                                value={bill.AWB_No}
                                 onChange={handleChange('AWB_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilListNumbered} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilListNumbered} />Order_No
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Order No
-"
+" value={bill.Order_No}
                                 autoComplete="AWB"
                                 onChange={handleChange('Order_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilUser} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilUser} />Vendor
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
                                 onChange={handleChange('Client_Name')}
                             >
-                                <option value='India'>Select Vendor</option>{
+                                <option value={bill.Client_Name}>{bill.Client_Name}</option>{
                                     showVendors.map((item) =>
                                         <option value={item.code}>{item.vendor_name}</option>
                                     )
@@ -263,9 +288,9 @@ const AddAirwaysBill = () => {
                             </CFormSelect>
                         </CInputGroup>
                         {/* <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilUser} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             <CFormInput
                                 type="text"
                                 placeholder="Client Name"
@@ -274,58 +299,62 @@ const AddAirwaysBill = () => {
                             />
                         </CInputGroup> */}
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilBadge} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilBadge} />Item_Name
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Item Name"
                                 autoComplete="AWB"
+                                value={bill.Item_Name}
                                 onChange={handleChange('Item_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilUser} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilUser} />Customer_Name
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Customer Name"
                                 autoComplete="AWB"
+                                value={bill.Customer_Name}
                                 onChange={handleChange('Customer_Name')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilPhone} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilPhone} />Customer_Phone
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Customer Phone"
                                 autoComplete="AWB"
+                                value={bill.Customer_Phone}
                                 onChange={handleChange(' Customer_Phone')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilLocationPin} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilLocationPin} />Customer_Address
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Customer Address"
                                 autoComplete="AWB"
+                                value={bill.Customer_Address}
                                 onChange={handleChange('Customer_Address')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilGlobeAlt} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilGlobeAlt} />country
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
                                 onChange={handleChange("country")}
                             >
-                                <option value='India'>Select Country</option>{
+                                <option value={bill.country}>{bill.country}</option>{
                                     countries.map((item) =>
                                         <option value={item.name}>{item.name}</option>
                                     )
@@ -334,8 +363,8 @@ const AddAirwaysBill = () => {
 
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilAirplaneMode} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilAirplaneMode} />Shipped_From
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
@@ -346,8 +375,8 @@ const AddAirwaysBill = () => {
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilUser} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilUser} />Courier
                             </CInputGroupText>
                             <CFormSelect
                                 aria-label="Default select example"
@@ -361,9 +390,9 @@ const AddAirwaysBill = () => {
                             </CFormSelect>
                         </CInputGroup>
                         {/* <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilBuilding} />
-                            </CInputGroupText>
+                            </CInputGroupText className="edit_text">
                             
                             <CFormInput
                                 type="text"
@@ -374,169 +403,173 @@ const AddAirwaysBill = () => {
                             />
                         </CInputGroup> */}
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
+                            <CInputGroupText className="edit_text">
                                 <CIcon icon={cilCalendar} />
-                                DOD
+                                Date_Of_Dispatch
                             </CInputGroupText>
                             <CFormInput
-                                type="date"
+                                type="text"
                                 placeholder="Date of Dispatch
-"
+" value={formatDate(bill.Date_Of_Dispatch)}
                                 autoComplete="AWB"
                                 onChange={handleChange('Date_Of_Dispatch')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilBoatAlt} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilBoatAlt} />Shipments
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Shipments
-"
+" value={bill.Shipments}
                                 autoComplete="AWB"
                                 onChange={handleChange('Shipments')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cil3d} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cil3d} />Dimensions
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Dimensions
-"
+" value={bill.Dimensions}
                                 autoComplete="AWB"
                                 onChange={handleChange('Dimensions')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilBalanceScale} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilBalanceScale} />Dimension_Weight
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Dimenssion Weight
-"
+" value={bill.Dimension_Weight}
                                 autoComplete="AWB"
                                 onChange={handleChange('Dimension_Weight')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilBalanceScale} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilBalanceScale} />Actual_Weight
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Actual Weight
-"
+" value={bill.Actual_Weight}
                                 autoComplete="AWB"
                                 onChange={handleChange('Actual_Weight')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilBalanceScale} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilBalanceScale} />Total_weight
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Total Weight
-"
+" value={bill.Total_Weight}
                                 autoComplete="AWB"
                                 onChange={handleChange('Total_weight')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilMoney} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilMoney} />Shipment_Charges
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Shipment Charges
-"
+" value={bill.Shipment_Charges}
                                 autoComplete="AWB"
                                 onChange={handleChange('Shipment_Charges')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilNotes} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilNotes} />Actual_Billing
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Actual Billing
-"
+" value={bill.Actual_Billing}
                                 autoComplete="AWB"
                                 onChange={handleChange('Actual_Billing')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilNotes} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilNotes} />Customer_Billing
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Customer Billing
-"
+" value={bill.Customer_Billing}
                                 autoComplete="AWB"
                                 onChange={handleChange('Customer_Billing')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilMoney} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilMoney} />Projected_Margin
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Projceted Margin
-"
+" value={bill.Projected_Margin}
                                 autoComplete="AWB"
                                 onChange={handleChange('Projected_Margin')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilMoney} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilMoney} />Actual_Margin
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Actual Margin"
+                                value={bill.Actual_Margin}
                                 autoComplete="AWB"
                                 onChange={handleChange('Actual_Margin')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilListNumbered} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilListNumbered} />Invoice_No
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Invoice No"
                                 autoComplete="AWB"
-                            // onChange={handleChange('AWB')}
+                                value={bill.Invoice_No}
+                                onChange={handleChange('Invoice_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilMoney} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilMoney} />Recieved_Amount
                             </CInputGroupText>
                             <CFormInput
                                 type="text"
                                 placeholder="Received Amount"
                                 autoComplete="AWB"
+                                value={bill.Recieved_Amount}
                                 onChange={handleChange('Invoice_No')}
                             />
                         </CInputGroup>
                         <CInputGroup className="mb-3">
-                            <CInputGroupText>
-                                <CIcon icon={cilCalendar} />
+                            <CInputGroupText className="edit_text">
+                                <CIcon icon={cilCalendar} />Recieved_Date
                                 RD
 
                             </CInputGroupText>
                             <CFormInput
-                                type="date"
+                                type="text"
                                 placeholder="Received Date"
                                 autoComplete="AWB"
+                                value={formatDate(bill.Recieved_Date)}
                                 onChange={handleChange('Recieved_Date')}
                             />
                         </CInputGroup>

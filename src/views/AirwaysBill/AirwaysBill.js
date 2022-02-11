@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     CAvatar,
+    CBadge,
     CButton,
     CButtonGroup,
     CCard,
@@ -24,11 +25,14 @@ import {
 import { Link } from 'react-router-dom';
 import { isAutheticated } from 'src/auth';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import Badges from '../notifications/badges/Badges';
 
 const AirwaysBill = () => {
     const { token } = isAutheticated();
     const [data, setData] = useState([])
     const [file, setFile] = useState(null)
+    const history = useHistory()
     let formData = new FormData();
 
     useEffect(() => {
@@ -63,7 +67,7 @@ const AirwaysBill = () => {
 
         formData.append('file', file, file.name)
 
-        console.log(...formData)
+        // console.log(...formData)
 
         const res = await axios.post('/api/airways/upload', { file: formData }, {
             headers: {
@@ -97,17 +101,18 @@ const AirwaysBill = () => {
                 <CTableRow>
 
                     <CTableHeaderCell scope="col">Order No</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Client Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Vendor</CTableHeaderCell>
 
 
-                    <CTableHeaderCell scope="col">Shipped From
-                    </CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Logistic Name
+                    {/* <CTableHeaderCell scope="col">Shipped From
+                    </CTableHeaderCell> */}
+
+                    <CTableHeaderCell scope="col">Courier
                     </CTableHeaderCell>
 
                     <CTableHeaderCell scope="col">AWB No
                     </CTableHeaderCell>
-
+                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
 
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
@@ -117,12 +122,14 @@ const AirwaysBill = () => {
                     <tr>
                         <td scope="row">{item.Order_No}</td>
                         <td>{item.Client_Name}</td>
-                        <td>{item.Shipped_From}</td>
+                        {/* <td>{item.Shipped_From}</td> */}
                         <td>{item.Logistic_Name}</td>
                         <td>{item.AWB_No}</td>
+                        <td><CBadge color='primary' >Delivered</CBadge></td>
                         <td>
                             <CButtonGroup role="group" aria-label="Basic mixed styles example">
-                                <Link to={`/viewbill/${item._id}`}><CButton color="success">View</CButton></Link>
+                                <CButton color="success" onClick={() => history.push(`/viewbill/${item._id}`)}>View</CButton>
+                                <CButton color="warning" onClick={() => history.push(`/editbill/${item._id}`)}>Edit</CButton>
 
                             </CButtonGroup>
                         </td>
