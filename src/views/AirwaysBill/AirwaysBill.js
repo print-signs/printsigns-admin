@@ -44,6 +44,7 @@ const AirwaysBill = () => {
                     "Authorization": `Bearer ${token}`
                 }
             });
+
             console.log(res.data);
             setData(res.data.Stores)
         }
@@ -69,10 +70,10 @@ const AirwaysBill = () => {
 
         // console.log(...formData)
 
-        const res = await axios.post('/api/airways/upload', { file: formData }, {
+        const res = await axios.post('/api/airways/upload', formData, {
             headers: {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type': 'multipart/form-data',
+
+                'Content-Type': 'application/x-www-form-urlencoded',
                 "Authorization": `Bearer ${token}`
             }
         }).catch(error => {
