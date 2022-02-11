@@ -257,7 +257,7 @@ const AddAirwaysBill = () => {
                             >
                                 <option value='India'>Select Vendor</option>{
                                     showVendors.map((item) =>
-                                        <option value={item.code}>{item.vendor_name}</option>
+                                        <option value={item.Client_Name}>{item.vendor_name}</option>
                                     )
                                 }
                             </CFormSelect>

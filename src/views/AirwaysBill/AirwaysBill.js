@@ -4,20 +4,12 @@ import {
     CBadge,
     CButton,
     CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
     CCol,
-    CContainer,
     CFormInput,
+    CFormSelect,
     CInputGroup,
-    CInputGroupText,
-    CProgress,
     CRow,
     CTable,
-    CTableBody,
-    CTableDataCell,
     CTableHead,
     CTableHeaderCell,
     CTableRow,
@@ -26,13 +18,23 @@ import { Link } from 'react-router-dom';
 import { isAutheticated } from 'src/auth';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import Badges from '../notifications/badges/Badges';
+import { ExportToExcel } from './ExportToExcel';
+
 
 const AirwaysBill = () => {
     const { token } = isAutheticated();
     const [data, setData] = useState([])
+    const [showData, setShowData] = useState([])
+    const [showVendors, setShowVendors] = useState([])
+    const [showCouriers, setShowCouriers] = useState([])
+    const [filter, setFilter] = useState({
+        courier: '',
+        vendor: '',
+        state: ''
+    })
     const [file, setFile] = useState(null)
     const history = useHistory()
+    const fileName = 'AirwaysBill'
     let formData = new FormData();
 
     useEffect(() => {
@@ -43,14 +45,47 @@ const AirwaysBill = () => {
                     "Content-type": "Application/json",
                     "Authorization": `Bearer ${token}`
                 }
-            });
-
-            console.log(res.data);
+            })
+            const couriers = await axios.get('/api/courier',
+                {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+            const vendors = await axios.get('/api/vendor/view',
+                {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+            setShowVendors(vendors.data.Stores)
+            setShowCouriers(couriers.data.Pincode)
+            // console.log(res.data.Stores);
             setData(res.data.Stores)
+            setShowData(res.data.Stores)
+
         }
         getData();
 
     }, []);
+    useEffect(() => {
+        filterData();
+
+    }, [filter.courier, filter.vendor])
+
+    const filterData = () => {
+
+        const newData = data.filter(item => item.Logistic_Name?.toLowerCase() === filter.courier?.toLowerCase() || item.Client_Name?.toLowerCase() === filter.vendor?.toLowerCase())
+        if (filter.courier === '' && filter.vendor === '') {
+            setShowData(data)
+        } else {
+            setShowData(newData)
+        }
+    }
     const formatDate = (date) => {
         let today = new Date(date);
         let dd = String(today.getDate()).padStart(2, '0');
@@ -60,10 +95,13 @@ const AirwaysBill = () => {
         today = dd + '/' + mm + '/' + yyyy;
         return today
     }
-    const handleChange = (e) => {
+    const handleFile = (e) => {
         setFile(e.target.files[0])
 
     }
+    const handleChange = (e) => (event) => {
+        setFilter({ ...filter, [e]: event.target.value });
+    };
     const handleClick = async () => {
 
         formData.append('file', file, file.name)
@@ -82,11 +120,11 @@ const AirwaysBill = () => {
         console.log(res)
 
     }
-    console.log(file);
+
     return <div>
         <CRow><CCol sm='auto'>
             <CInputGroup className="mb-3" >
-                <CFormInput type="file" id="inputGroupFile02" onChange={e => handleChange(e)} />
+                <CFormInput type="file" id="inputGroupFile02" onChange={e => handleFile(e)} />
                 <CButton component="label" color='dark' onClick={() => handleClick()}>Upload Spreadsheet</CButton>
             </CInputGroup>
         </CCol>
@@ -94,6 +132,41 @@ const AirwaysBill = () => {
             <CCol sm='auto'> <Link to='/addairwaysbill'>
                 <CButton className='ms-3' color="dark">+Add New Entry</CButton>
             </Link></CCol>
+            <CCol sm='auto'>
+                <ExportToExcel apiData={data} fileName={fileName} />
+            </CCol>
+        </CRow>
+        <CRow><CCol sm='auto'>
+            <CInputGroup className="mb-3" >
+                <CFormSelect
+                    aria-label="Default select example"
+                    onChange={handleChange('vendor')}
+                >
+                    <option value=''>Select Vendor</option>{
+                        showVendors.map((item) =>
+
+                            <option value={item.vendor_name}>{item.vendor_name}</option>
+                        )
+                    }
+                </CFormSelect>
+            </CInputGroup>
+        </CCol>
+
+            <CCol sm='auto'>
+                <CInputGroup className="mb-3" >
+                    <CFormSelect
+                        aria-label="Default select example"
+                        onChange={handleChange('courier')}
+                    >
+                        <option value=''>Select Courier</option>{
+                            showCouriers.map((item) =>
+
+                                <option value={item.name}>{item.name}</option>
+                            )
+                        }
+                    </CFormSelect>
+                </CInputGroup>
+            </CCol>
 
         </CRow>
         <hr />
@@ -119,7 +192,7 @@ const AirwaysBill = () => {
                 </CTableRow>
             </CTableHead>
             <tbody>
-                {data.map(item =>
+                {(!showData ? data : showData).map(item =>
                     <tr>
                         <td scope="row">{item.Order_No}</td>
                         <td>{item.Client_Name}</td>
