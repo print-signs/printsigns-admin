@@ -31,11 +31,12 @@ const Login = () => {
   };
 
   const Login = async () => {
-    const res = await axios.post("/admin-signin", auth);
+    const res = await axios.post("/owner/signin", auth);
     if (res.data.status == "ok") {
       localStorage.setItem("auth", JSON.stringify({
-        // user: res.data.user,
+        user: res.data.user,
         token: res.data.token,
+
       }));
       history.push('/dashboard')
 
@@ -98,6 +99,11 @@ const Login = () => {
 
                   </CForm>
                 </CCardBody>
+                <CButton color="" className="px-0">
+                  <Link to="/newRegister">
+                    dont have an account? Sign Up
+                  </Link>
+                </CButton>
               </CCard>
 
             </CCardGroup>

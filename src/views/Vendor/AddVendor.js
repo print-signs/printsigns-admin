@@ -61,7 +61,7 @@ const AddVendor = () => {
         const scode = allStates.find(item => item.name === vendor.state)
         console.log(ccode.isoCode + ":" + scode.isoCode);
         console.log(vendor.country, vendor.state);
-        setCountryCode(ccode.isoCode)
+        setCountryCode(ccode?.isoCode)
         setStateCode(scode.isoCode)
         setStates(prev => State.getStatesOfCountry(countryCode))
         setCities(prev => City.getCitiesOfState(countryCode, stateCode))

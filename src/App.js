@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import './scss/style.scss'
 import ForgotPassword from './views/pages/register/ForgotPassword'
+import NewRegister from './views/pages/register/NewRegister'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -26,6 +27,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
             <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
+            <Route exact path="/newRegister" name="Register Page" render={(props) => <NewRegister {...props} />} />
             {/* <Route
               exact
               path="/register"

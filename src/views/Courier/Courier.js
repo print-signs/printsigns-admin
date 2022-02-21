@@ -92,6 +92,7 @@ const Courier = () => {
                     <tr>
                         <td scope="row">{item.name}</td>
                         <td>{item._id}</td>
+                        {/* <td>{item.code}</td> */}
                         <td>{formatDate(item.createdAt)}</td>
                         <td>
                             <CButtonGroup role="group" aria-label="Basic mixed styles example">

@@ -13,6 +13,7 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
+  cilUser,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -274,46 +275,46 @@ const _nav = [
   //   name: 'Login',
   //   to: '/',
   // },
-  {
-    component: CNavItem,
-    name: 'Vendors',
-    to: '/vendors',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Courier',
-    to: '/courier',
-    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Airway Bills',
-    to: '/airwaysbill',
-    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
-  },
-
   // {
   //   component: CNavItem,
-  //   name: 'Change Password',
-  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  //   to: '/register',
+  //   name: 'Vendors',
+  //   to: '/vendors',
+  //   icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Courier',
+  //   to: '/courier',
+  //   icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Airway Bills',
+  //   to: '/airwaysbill',
+  //   icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+  // },
+
+  {
+    component: CNavItem,
+    name: 'Profile',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    to: '/profile',
+  },
 
   // {
   //   component: CNavGroup,
-  //   name: 'Pages',
-  //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  //   name: 'Profile',
+  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   //   items: [
   //     {
   //       component: CNavItem,
-  //       name: 'Error 404',
-  //       to: '/404',
+  //       name: 'Display',
+  //       to: '/profile',
   //     },
   //     {
   //       component: CNavItem,
-  //       name: 'Error 500',
-  //       to: '/500',
+  //       name: 'Edit',
+  //       to: '/edit',
   //     },
   //   ],
   // },

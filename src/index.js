@@ -9,7 +9,7 @@ import store from './store'
 import axios from 'axios'
 
 const setupAxios = () => {
-  axios.defaults.baseURL = "https://api-courier-vendor.herokuapp.com/"
+  axios.defaults.baseURL = 'https://dating-api-server.herokuapp.com';
   axios.defaults.headers = {
     'Cache-Control': 'no-cache,no-store',
     'Pragma': 'no-cache',
