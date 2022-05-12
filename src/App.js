@@ -9,7 +9,7 @@ const loading = (
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
 )
-
+// import EditProducts from './views/Commerce/Editproducts'
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -28,6 +28,11 @@ class App extends Component {
             <Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
             <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
             <Route exact path="/newRegister" name="Register Page" render={(props) => <NewRegister {...props} />} />
+
+
+
+
+            {/* <Route exact path="/comproducts/edit/:_id" name="commerce-product-edit" render={(props) => <EditProducts {...props} />} /> */}
             {/* <Route
               exact
               path="/register"

@@ -301,6 +301,27 @@ const _nav = [
     to: '/profile',
   },
 
+
+
+  {
+    component: CNavGroup,
+    name: 'Commerce',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Products',
+        to: '/comproducts',
+      },
+      {
+        component: CNavItem,
+        name: 'Coupons',
+        to: '/comcoupon',
+      },
+
+    ],
+  },
+
   // {
   //   component: CNavGroup,
   //   name: 'Profile',

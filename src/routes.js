@@ -1,4 +1,6 @@
 import React from 'react'
+import Products from './views/Commerce/Products'
+import EditProducts from './views/Commerce/Editproducts'
 
 const AirwaysBill = React.lazy(() => import('./views/AirwaysBill/AirwaysBill'))
 const EditBill = React.lazy(() => import('./views/AirwaysBill/EditBill'))
@@ -70,6 +72,12 @@ const routes = [
   { path: '/register', name: 'Change Password', component: Register },
   { path: '/edit', name: 'Change Password', component: EditProfile },
   { path: '/profile', name: 'Change Password', component: Profile },
+
+  //product route
+  { path: '/comproducts/edit/:id', name: 'Product Edit', component: EditProducts },
+  { path: '/comproducts', name: 'Courier Products', component: Products },
+  ,
+  ////
   { path: '/courier', name: 'Courier', component: Courier },
   { path: '/editcourier/:id', name: ' Edit Courier', component: EditCourier },
   { path: '/addcourier', name: 'Courier / Add Courier', component: AddCourier },
