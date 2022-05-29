@@ -141,7 +141,7 @@ function EditProducts() {
                                 <button
                                     onClick={handleSubmit}
                                     type="button"
-                                    className="btn btn-warning  mt-3  mb-0 my-1 btn btn-success btn-login waves-effect waves-light mr-1"
+                                    className="btn btn-success  mt-3  mb-0 my-1 btn btn-success btn-login waves-effect waves-light mr-1"
                                 >
                                     <ClipLoader loading={loading} size={18} />
                                     {!loading && "Save"}
@@ -149,7 +149,7 @@ function EditProducts() {
                                 <button
                                     onClick={onCancel}
                                     type="button"
-                                    className=" mt-3 ml-2 btn btn-success btn-cancel waves-effect waves-light mr-3"
+                                    className=" mt-3 ml-2 btn btn-warning btn-cancel waves-effect waves-light mr-3"
                                 >
                                     Cancel
                                 </button>

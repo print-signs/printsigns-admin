@@ -33,9 +33,12 @@ const Login = () => {
   const Login = async () => {
     const res = await axios.post("/owner/signin", auth);
     if (res.data.status == "ok") {
+      localStorage.setItem("authToken", res.data.token)
+      console.log(res.data)
       localStorage.setItem("auth", JSON.stringify({
         user: res.data.user,
         token: res.data.token,
+
 
       }));
       history.push('/dashboard')

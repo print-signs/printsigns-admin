@@ -1,6 +1,13 @@
 import React from 'react'
 import Products from './views/Commerce/Products'
 import EditProducts from './views/Commerce/Editproducts'
+import LoginUser from './components/User/LoginUser'
+
+//user logged property
+import MothlyLoginUser from './components/User/MothlyLoginUser'
+import SpecificDate from './components/User/SpecificDate'
+import AddProduct from './views/Commerce/AddProduct'
+// import EditProducts from './views/Commerce/Editproducts'
 
 const AirwaysBill = React.lazy(() => import('./views/AirwaysBill/AirwaysBill'))
 const EditBill = React.lazy(() => import('./views/AirwaysBill/EditBill'))
@@ -68,14 +75,21 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
+
   { path: '/', exact: true, name: 'Home' },
   { path: '/register', name: 'Change Password', component: Register },
   { path: '/edit', name: 'Change Password', component: EditProfile },
   { path: '/profile', name: 'Change Password', component: Profile },
 
   //product route
+  { path: '/addproduct', name: 'Product Edit', component: AddProduct },
   { path: '/comproducts/edit/:id', name: 'Product Edit', component: EditProducts },
   { path: '/comproducts', name: 'Courier Products', component: Products },
+
+  //user
+  { path: '/specificDateLoginUser', name: ' Monthly Logged in User', component: SpecificDate },
+  { path: '/monthlylogin', name: ' Monthly Logged in User', component: MothlyLoginUser },
+  { path: '/loginUser', name: 'Logged in User', component: LoginUser },
   ,
   ////
   { path: '/courier', name: 'Courier', component: Courier },

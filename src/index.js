@@ -1,9 +1,4 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import "bootstrap/dist/js/bootstrap.js";
 
-// import "bootstrap";
-// import "bootstrap/dist/css/bootstrap.css";
-// import "bootstrap/dist/js/bootstrap.js";
 import 'react-app-polyfill/stable'
 import 'core-js'
 import React from 'react'
@@ -15,8 +10,8 @@ import store from './store'
 import axios from 'axios'
 
 const setupAxios = () => {
-  axios.defaults.baseURL = 'https://dating-api-server.herokuapp.com';
-  //axios.defaults.baseURL = 'http://localhost:5000'
+  // axios.defaults.baseURL = 'https://dating-api-server.herokuapp.com';
+  axios.defaults.baseURL = 'http://localhost:5000'
   axios.defaults.headers = {
     'Cache-Control': 'no-cache,no-store',
     'Pragma': 'no-cache',

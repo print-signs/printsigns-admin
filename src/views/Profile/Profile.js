@@ -20,7 +20,7 @@ const Profile = () => {
     const [user, setUser] = useState({});
     const { token } = isAutheticated();
     const history = useHistory()
-    console.log(token);
+    // console.log(token);
     useEffect(async () => {
         let res = await axios.get('/owner', {
             headers: {
@@ -28,13 +28,15 @@ const Profile = () => {
             }
         })
         if (res) {
+            // console.log(res.data.user._id)
+            localStorage.setItem('ownerId', res.data.user._id)
             setUser(res.data.user)
         }
-        console.log(res);
+        // console.log(res);
     }, [])
 
 
-    console.log(user);
+    // console.log(user);
     return (
         <div>
             <CRow>
@@ -42,10 +44,11 @@ const Profile = () => {
                     <h1>Profile</h1>
                 </CCol>
                 <CCol>
-                    <CButton color='dark' onClick={() => history.push('/edit')}>Edit Profile</CButton>
+                    <CButton color='dark'
+                        className="float-right" onClick={() => history.push('/edit')}>Edit Profile</CButton>
                 </CCol>
             </CRow>
-            <CTable color="dark" striped>
+            <CTable color="white" striped>
                 <CTableHead>
                     <CTableRow>
                         <CTableHeaderCell scope="col">Cafe Name</CTableHeaderCell>

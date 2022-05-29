@@ -321,6 +321,12 @@ const _nav = [
 
     ],
   },
+  {
+    component: CNavItem,
+    name: 'User Logs',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    to: '/loginUser',
+  },
 
   // {
   //   component: CNavGroup,
