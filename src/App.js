@@ -48,5 +48,5 @@ class App extends Component {
     )
   }
 }
-
+//@coreui/coreui-free-react-admin-template@4.1.1
 export default App
