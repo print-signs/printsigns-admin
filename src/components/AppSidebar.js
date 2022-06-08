@@ -29,9 +29,9 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CSidebarBrand className="d-none d-md-flex" to="/">
+      <CSidebarBrand className="d-none bg-info d-md-flex" to="/">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h1>Appy2Meet</h1>
+        <h1>CMP</h1>
         {/* <CIcon className="sidebar-brand-narrow"  height={35} /> */}
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>

@@ -22,12 +22,24 @@ import {
   cilPencil,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import swal from 'sweetalert';
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
 import { Link } from 'react-router-dom'
-import { signout } from 'src/auth'
-
+// import { signout } from 'src/auth'
+import { useHistory } from "react-router-dom";
 const AppHeaderDropdown = () => {
+  let history = useHistory();
+  const signout = async () => {
+    localStorage.removeItem('authToken')
+    // let res = await axios.get(
+    //   `http://localhost:5000/api/user/logOut`
+    // );
+    // if (res.success == true) {
+    swal("success!", "Logged Out", "success");
+    history.push("/");
+    // }
+  }
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -87,15 +99,15 @@ const AppHeaderDropdown = () => {
           </CBadge> */}
         </CDropdownItem>
         {/* <CDropdownDivider /> */}
-        <Link to='/register'>
+        <Link to='/change_password'>
           <CDropdownItem>
             <CIcon icon={cilPencil} className="me-2" />
             Change Password
           </CDropdownItem>
         </Link>
         <CDropdownItem href="#">
-          <CIcon icon={cilLockLocked} onClick={() => signout()} className="me-2" />
-          Log Out
+          <CIcon icon={cilLockLocked} className="me-2" />
+          <span onClick={signout} >Log Out</span>
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

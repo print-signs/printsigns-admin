@@ -2,16 +2,16 @@ export const isAutheticated = () => {
     if (typeof window == "undefined") {
         return true;
     }
-    if (localStorage.getItem("auth")) {
+    if (localStorage.getItem("authToken")) {
 
-        return JSON.parse(localStorage.getItem("auth"));
+        return (localStorage.getItem("authToken"));
     } else {
         return false;
     }
 };
 
 export const signout = () => {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("authToken");
 
     return true;
 };
