@@ -102,7 +102,7 @@ const EditBisuness = () => {
         let res = await axios.put(
             `/api/directory/update/${id}`,
             {
-                state,
+                ...state,
             },
             {
                 headers: {

@@ -31,8 +31,8 @@ const Login = () => {
   };
 
   const Login = async () => {
-    const res = await axios.post("/owner/signin", auth);
-    if (res.data.status == "ok") {
+    const res = await axios.post("/api/user/login/", auth);
+    if (res.data.success == true) {
       localStorage.setItem("authToken", res.data.token)
       console.log(res.data)
       localStorage.setItem("auth", JSON.stringify({
@@ -61,7 +61,7 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to your account</p>
+                    <p className="text-medium-emphasis">Sign In to Your CMP Dashboard Account.</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -93,20 +93,20 @@ const Login = () => {
                     </Link>
                     <br />
 
-                    <CButton color="link" className="px-0">
+                    {/* <CButton color="link" className="px-0">
                       <Link to="/forgot">
                         Forgot password?
                       </Link>
-                    </CButton>
+                    </CButton> */}
 
 
                   </CForm>
                 </CCardBody>
-                <CButton color="" className="px-0">
+                {/* <CButton color="" className="px-0">
                   <Link to="/newRegister">
                     dont have an account? Sign Up
                   </Link>
-                </CButton>
+                </CButton> */}
               </CCard>
 
             </CCardGroup>
