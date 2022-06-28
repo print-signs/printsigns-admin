@@ -1,4 +1,7 @@
 
+
+
+
 import axios from "axios";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import swal from 'sweetalert';
@@ -6,30 +9,30 @@ import swal from 'sweetalert';
 import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
-function ViewNews() {
-    const [news, setNews] = useState([])
+function ViewBanner() {
+    const [banner, setBanner] = useState([])
     const { id } = useParams();
-    console.log(id)
+    // console.log(id)
     const { token } = isAutheticated();
 
-    const getNews = useCallback(async () => {
+    const getBanner = useCallback(async () => {
         let res = await axios.get(
-            `/api/news/getOne/${id}`,
+            `/api/banner/getOne/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        console.log(res.data.news)
-        setNews(res.data.news)
+
+        setBanner(res.data.banner)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getBanner();
+    }, [getBanner]);
 
 
 
@@ -56,8 +59,8 @@ function ViewNews() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
+                                <h4 className="mb-3">CMP-BANNER</h4>
+                                <Link to="/addbanner"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add New Banner</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
                     <li className="breadcrumb-item">
@@ -81,34 +84,27 @@ function ViewNews() {
                                     <div className="table-responsive table-shoot">
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <td>{news?._id}</td>
-                                                </tr>
-                                                <tr><th>Title</th>
-                                                    <td>{news?.title}</td>
-                                                </tr>
 
-                                                <tr> <th>Image</th>
-                                                    <td>
-                                                        <img src={`${news.image?.url}`} width="50" alt="" />
-                                                    </td>
-                                                </tr>
+                                                <tr><th>Id</th><td>{banner?._id}</td></tr>
+                                                <tr><th>Title</th><td>{banner?.title}</td></tr>
+                                                <tr> <th>Sub Title</th><td>{banner?.subTitle}</td></tr>
 
-                                                <tr> <th>Description</th>
-                                                    <td>{news?.description}</td>
-                                                </tr>
-                                                <tr><th>Added On</th>
-                                                    <td>
-                                                        {new Date(`${news?.addedOn}`).toDateString()}<span> , {`${formatAMPM(news?.addedOn)}`}</span>
-                                                    </td>
-                                                </tr>
-                                                <tr> <th>Updated At</th>
-                                                    <td>
-                                                        {new Date(`${news?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(news?.updatedAt)}`}</span>
-                                                    </td>
+                                                <tr> <th>Image</th> <td>
+                                                    <img src={`${banner.image?.url}`} width="50" alt="" />
+                                                </td></tr>
+                                                <tr><th>Section</th><td>{banner?.section}</td></tr>
+                                                <tr><th>Start Date</th> <td>
+                                                    {new Date(`${banner?.startDate}`).toDateString()}
+                                                </td></tr>
+                                                <tr><th>End Date</th><td>
+                                                    {new Date(`${banner?.endDate}`).toDateString()}</td></tr>
+                                                <tr><th>Added On</th><td>
+                                                    {new Date(`${banner?.addedOn}`).toDateString()}<span> , {`${formatAMPM(banner?.addedOn)}`}</span>
+                                                </td></tr>
+                                                <tr> <th>Updated At</th><td>
+                                                    {new Date(`${banner?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(banner?.updatedAt)}`}</span>
+                                                </td></tr>
 
-                                                </tr>
                                             </thead>
                                             <tbody>
 
@@ -129,4 +125,4 @@ function ViewNews() {
     );
 }
 
-export default ViewNews;
+export default ViewBanner;

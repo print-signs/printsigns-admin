@@ -13,6 +13,31 @@ import AddNews from "./views/News/AddNews"
 import EditNews from "./views/News/EditNews"
 import News from "./views/News/News"
 import ViewNews from "./views/News/ViewNews"
+//Events
+import Event from './views/Events/Event'
+import EditEvent from './views/Events/EditEvent'
+import AddEvent from './views/Events/AddEvent'
+import ViewEvent from './views/Events/ViewEvent'
+//offers Route
+import Offer from './views/Offers/Offer'
+import AddOffer from './views/Offers/AddOffer'
+import EditOffer from './views/Offers/EditOffer'
+import ViewOffer from './views/Offers/ViewOffer'
+//Banner
+import Banner from './views/Banners/Banner'
+import ViewBanner from './views/Banners/ViewBanner'
+import EditBanner from './views/Banners/EditBanner'
+import AddBanner from './views/Banners/AddBanner'
+//cms 
+import CMS from './views/CMS/cms'
+import CMSView from './views/CMS/ViewCms'
+import CMSEdit from './views/CMS/EditCms'
+//cms 
+import Feedback from './views/Feedback/feedback'
+import ViewFeedback from './views/Feedback/ViewFeedback'
+//cms 
+import Users from './views/Users/users'
+import ViewUsers from './views/Users/ViewUsers'
 
 //  DashBoard
 const Change_Password = React.lazy(() => import('./views/pages/register/Change_password'))
@@ -42,8 +67,37 @@ const routes = [
   { path: '/addNews', name: 'addNews', component: AddNews },
   { path: '/news/edit/:id', name: 'EditNews', component: EditNews },
   { path: '/news', name: 'news', component: News },
+  //Events route
+  { path: '/event/view/:id', name: 'ViewEvent', component: ViewEvent },
+  { path: '/addevent', name: 'AddEvent', component: AddEvent },
+  { path: '/event/edit/:id', name: 'EditEvent', component: EditEvent },
+  { path: '/event', name: 'Event', component: Event },
+
+  //Offers route
+  { path: '/offer/view/:id', name: 'Viewoffer', component: ViewOffer },
+  { path: '/addOffer', name: 'AddOffer', component: AddOffer },
+  { path: '/offer/edit/:id', name: 'EditOffer', component: EditOffer },
+  { path: '/offer', name: 'offer', component: Offer },
+
+  //BANNERS 
+  { path: '/banner/view/:id', name: 'ViewBanner', component: ViewBanner },
+  { path: '/addbanner', name: 'AddBanner', component: AddBanner },
+  { path: '/banner/edit/:id', name: 'EditBanner', component: EditBanner },
+  { path: '/banner', name: 'Banner', component: Banner },
+  //CMS 
+  { path: '/cms/view/:id', name: 'CMS', component: CMSView },
+  { path: '/cms/edit/:id', name: 'CMS', component: CMSEdit },
+  { path: '/cms', name: 'CMS', component: CMS },
+  //CMS 
+  { path: '/feedback/view/:id', name: 'ViewFeedback', component: ViewFeedback },
+  { path: '/feedback', name: 'Feedback', component: Feedback },
+
+  //Users 
+  { path: '/users/view/:id', name: 'ViewUsers', component: ViewUsers },
+  { path: '/users', name: 'users', component: Users },
 
   //dashboard
+
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
 ]
 

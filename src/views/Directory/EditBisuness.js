@@ -10,7 +10,8 @@ import { useHistory } from "react-router-dom";
 
 const EditBisuness = () => {
     const [categoryName, setCategoryName] = useState([]);
-    const { token } = isAutheticated();
+    const [image, setImage] = useState();
+    const token = isAutheticated();
 
     let history = useHistory();
     const [state, setState] = useState({
@@ -93,19 +94,34 @@ const EditBisuness = () => {
 
 
     const handleSubmit = async () => {
-        if (!(name || description || phone || email || Bname || Sname || city)) {
-            alert("Please fill required field ");
-            return;
-        }
+        const myForm = new FormData();
+        myForm.set('name', state.name)
+        myForm.set('phone', state.phone)
+        myForm.set('email', state.email)
+        myForm.set('Building_Name', state.Building_Name)
+        myForm.set('Street_Name', state.Street_Name)
+        myForm.set('country', state.country)
+        myForm.set('city', state.city)
+        myForm.set('description', state.description)
+
+        myForm.set('category', state.category)
+
+        myForm.set('status', state.status)
+
+        myForm.set('Glocation', state.Glocation)
+        myForm.set('LinkedinUrl', state.Glocation)
+        myForm.set('FacebookUrl', state.FacebookUrl)
+        myForm.set('InstagramUrl', state.InstagramUrl)
+        myForm.set("image", image);
+
         changeState({ loading: true });
 
         let res = await axios.put(
             `/api/directory/update/${id}`,
-            {
-                ...state,
-            },
+            myForm,
             {
                 headers: {
+                    "content-Type": 'multipart/form-data',
                     Authorization: `Bearer ${token}`,
                 },
             }
@@ -125,7 +141,7 @@ const EditBisuness = () => {
 
 
 
-    // console.log(state)
+    console.log(image)
     return (
         <>
             <div className=" main-content">
@@ -332,6 +348,29 @@ const EditBisuness = () => {
                                         <div className="row">
                                             <div className="col-md-12">
                                                 <form>
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <div className="form-group">
+                                                                <label
+                                                                    htmlFor="basicpill-phoneno-input"
+                                                                    className="label-100"
+                                                                >
+                                                                    Bisuness Image
+                                                                </label>
+                                                                <input
+                                                                    required
+                                                                    type="file"
+                                                                    //name="image"
+                                                                    accept="image/*"
+                                                                    // value={image}
+                                                                    className="mt-0 my-3 form-control input-field"
+                                                                    // onChange={handleChange}
+                                                                    onChange={(e) => setImage(e.target.files[0])}
+                                                                    placeholder="Bisuness Image"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div className="row">
                                                         <div className="col-lg-12">

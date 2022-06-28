@@ -15,11 +15,13 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import ClipLoader from "react-spinners/ClipLoader";
 import { useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const [auth, setAuth] = useState({
     email: "",
     password: ""
@@ -31,24 +33,19 @@ const Login = () => {
   };
 
   const Login = async () => {
-    const res = await axios.post("/api/user/login/", auth);
+    setLoading({ loading: true })
+    const res = await axios.post("/api/v1/user/login/", auth);
     if (res.data.success == true) {
       localStorage.setItem("authToken", res.data.token)
-      console.log(res.data)
-      localStorage.setItem("auth", JSON.stringify({
-        user: res.data.user,
-        token: res.data.token,
-
-
-      }));
       history.push('/dashboard')
+      setLoading(false);
+      window.location.reload()
+
 
     }
     else {
-      if (res.data.status === "blocked")
-        alert(res.data.message)
-      else
-        alert("Invalid Credentials");
+      alert("Invalid Credentials");
+      setLoading(false);
     }
   }
   return (
@@ -82,7 +79,9 @@ const Login = () => {
 
 
                     <CButton color="primary" className="px-4" onClick={Login}>
-                      Login
+                      <ClipLoader loading={loading} size={18} />
+                      {!loading && "Login"}
+
                     </CButton>
 
 

@@ -5,9 +5,8 @@ import { API } from "../../data";
 import { isAutheticated } from "../../auth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useHistory } from "react-router-dom";
-import { Link, useParams } from "react-router-dom";
 import swal from 'sweetalert';
-
+import { Link, useParams } from "react-router-dom";
 import {
     CButton,
     CCard,
@@ -21,39 +20,68 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser } from '@coreui/icons'
-const EditNews = () => {
+import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription } from '@coreui/icons'
+const EditOffer = () => {
     const { id } = useParams();
-    // console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
+    // console.log(token)
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
+    const [bisunessName, setBisunessName] = useState([]);
+    const [sendBisunessName, setSendBisunessName] = useState('');
+
     const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
+
     const [loading, setLoading] = useState(false);
 
-    //fetch one image
+
+    //fetch one Offer
     useEffect(async () => {
-        const res = await axios.get(`/api/news/getOne/${id}`, {
+        const res = await axios.get(`/api/offer/getOne/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        // console.log(res.data)
+        setTitle(res.data.offer.title)
+        setDescription(res.data.offer.description)
+        setLocation(res.data.offer.location)
+        setSendBisunessName(res.data.offer.bisunessName)
+
+    }, [id]);
+    const fetchBusuness = useCallback(async () => {
+        const res = await axios.get(`/api/directory/getAll`, {
             // headers: {
             //     Authorization: `Bearer ${token}`,
             // },
         });
-        setTitle(res.data.news.title)
-        setDescription(res.data.news.description)
 
-    }, [id]);
+        // console.log(res.data.directory);
+        setBisunessName(res.data.directory)
+
+    }, [token]);
+
+    useEffect(async () => {
+        fetchBusuness();
+
+    }, [fetchBusuness]);
+
+
 
     const handleSubmit = async () => {
         const myForm = new FormData();
 
         myForm.set("title", title);
         myForm.set("description", description);
+        myForm.set("bisunessName", sendBisunessName);
+        myForm.set("location", location);
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
         let res = await axios.put(
-            `/api/news/update/${id}`, myForm,
+            `/api/offer/update/${id}`, myForm,
             {
                 headers: {
                     "Content-Type": 'multipart/form-data',
@@ -63,7 +91,7 @@ const EditNews = () => {
         );
         // console.log(res.data)
         if (res.data) {
-            swal("success!", "News Edit Successfully!", "success");
+            swal("success!", "Event Added Successfully!", "success");
             history.goBack();
         }
 
@@ -81,7 +109,7 @@ const EditNews = () => {
         history.goBack()
 
     };
-
+    // console.log(bisunessName)
     return (
         <>
             <div className="bg-light min-vh-70 d-flex flex-row ">
@@ -91,7 +119,7 @@ const EditNews = () => {
                             <CCard className="mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h3 className="mb-4 justify-content-center">Edit News</h3>
+                                        <h3 className="mb-4 justify-content-center">Edit Offer</h3>
                                         <div>
                                             <div>
                                                 <CInputGroup className="mb-3">
@@ -104,15 +132,47 @@ const EditNews = () => {
                                                         value={title}
                                                         placeholder="Title" />
                                                 </CInputGroup>
+
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
-                                                        <CIcon icon={cilSettings} />
+                                                        <CIcon icon={cilAudioDescription} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
                                                         required
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
                                                         placeholder="Description" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilBell} />
+                                                    </CInputGroupText>
+
+                                                    <select
+                                                        name="bisunessName"
+                                                        value={sendBisunessName}
+                                                        // onChange={handleChange}
+                                                        // //onChange={(e) => setBisunessName(e.target.value)}
+                                                        onChange={(e) => setSendBisunessName(e.target.value)}
+                                                        className="form-control  input-field"
+                                                    >
+
+                                                        <option value="1">--select--</option>
+                                                        {bisunessName.map(item =>
+                                                            <option>{item?.name}</option>
+
+                                                        )}
+                                                    </select>
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilLocationPin} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="text"
+                                                        required
+                                                        onChange={(e) => setLocation(e.target.value)}
+                                                        value={location}
+                                                        placeholder="Location" />
                                                 </CInputGroup>
 
                                                 <CInputGroup className="mb-3">
@@ -161,4 +221,4 @@ const EditNews = () => {
     )
 }
 
-export default EditNews
+export default EditOffer

@@ -6,43 +6,43 @@ import swal from 'sweetalert';
 // import { API } from "../../data";
 import { isAutheticated } from "../../auth";
 
-function News() {
-    const [news, setNews] = useState([])
+function Offer() {
+    const [offer, setOffer] = useState([])
 
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
-    const getNews = useCallback(async () => {
+    const getOffer = useCallback(async () => {
         let res = await axios.get(
-            `/api/news/getAll`,
+            `/api/offer/getAll`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-
-        setNews(res.data.news)
+        // console.log(res.data)
+        setOffer(res.data.offer)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getOffer();
+    }, [getOffer]);
 
 
     const handleDelete = async (id) => {
         let status = window.confirm("Do you want to delete");
         if (!status) return;
 
-        let res = await axios.delete(`/api/news/delete/${id}`, {
+        let res = await axios.delete(`/api/offer/delete/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
         console.log(res)
         if (res.data.success == true) {
-            swal("success!", "News Deleted Successfully!", "success");
+            swal("success!", "Offer Deleted Successfully!", "success");
             window.location.reload();
         }
     };
@@ -69,16 +69,9 @@ function News() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
-                                {/* <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/dashboard">CMD-App</Link>
-                    </li>
-                    <li className="breadcrumb-item">CMD-Category</li>
-                  </ol>
-                </div> */}
+                                <h4 className="mb-3">CMP-Offers</h4>
+                                <Link to="/addOffer"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add New Offer</button></Link>
+
                             </div>
                         </div>
                     </div>
@@ -97,16 +90,21 @@ function News() {
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Image</th>
+                                                    <th>Business Name</th>
+                                                    <th>Location</th>
                                                     <th>Added On</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {news && news.map((item, index) =>
+                                                {offer && offer.map((item, index) =>
                                                     <tr>
                                                         <td>{item?.title}</td>
+
                                                         <td>
                                                             <img src={`${item?.image.url}`} width="50" alt="" /></td>
+                                                        <td>{item?.bisunessName}</td>
+                                                        <td>{item?.location}</td>
                                                         <td>
                                                             {/* {item?.addedOn} */}
                                                             {new Date(`${item?.addedOn}`).toDateString()}<span> , {`${formatAMPM(item?.addedOn)}`}</span>
@@ -115,7 +113,7 @@ function News() {
 
 
                                                         <td>
-                                                            <Link to={`/news/view/${item._id}`}>
+                                                            <Link to={`/offer/view/${item._id}`}>
 
                                                                 <button
                                                                     type="button"
@@ -124,7 +122,7 @@ function News() {
                                                                     View
                                                                 </button>
                                                             </Link>
-                                                            <Link to={`/news/edit/${item._id}`}>
+                                                            <Link to={`/offer/edit/${item._id}`}>
 
                                                                 <button
                                                                     type="button"
@@ -161,4 +159,4 @@ function News() {
     );
 }
 
-export default News;
+export default Offer;

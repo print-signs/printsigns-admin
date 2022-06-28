@@ -12,8 +12,10 @@ import { useHistory } from "react-router-dom";
 
 const Add_Business = () => {
     const [categoryName, setCategoryName] = useState([]);
+    const [image, setImage] = useState();
 
-    const { token } = isAutheticated();
+
+    const token = isAutheticated();
 
     let history = useHistory();
     const [state, setState] = useState({
@@ -32,6 +34,7 @@ const Add_Business = () => {
         LinkedinUrl: "",
         FacebookUrl: "",
         InstagramUrl: ""
+
     });
 
 
@@ -54,7 +57,7 @@ const Add_Business = () => {
             },
         });
 
-        console.log(res.data.category);
+        // console.log(res.data.category);
         setCategoryName(res.data.category)
         if (res.status === 200) changeState({ ...res.data });
     }, [token]);
@@ -70,19 +73,43 @@ const Add_Business = () => {
 
 
     const handleSubmit = async () => {
-        if (!(name || description || phone || email || Bname || Sname || city)) {
-            alert("Please fill required field ");
-            return;
-        }
+        const myForm = new FormData();
+        myForm.set('name', state.name)
+        myForm.set('phone', state.phone)
+        myForm.set('email', state.email)
+        myForm.set('Bname', state.Bname)
+        myForm.set('Sname', state.Sname)
+        myForm.set('country', state.country)
+        myForm.set('city', state.city)
+        myForm.set('description', state.description)
+
+        myForm.set('category', state.category)
+
+        myForm.set('status', state.status)
+
+        myForm.set('Glocation', state.Glocation)
+        myForm.set('LinkedinUrl', state.Glocation)
+        myForm.set('FacebookUrl', state.FacebookUrl)
+        myForm.set('InstagramUrl', state.InstagramUrl)
+        myForm.set("image", image);
+        // if (!(name || description || phone || email || Bname || Sname || city)) {
+        //     alert("Please fill required field ");
+        //     return;
+        // }
+        // const myForm = new FormData();
+        // myForm.set("image", image);
+
+
         changeState({ loading: true });
 
         let res = await axios.post(
             `/api/directory/create/`,
-            {
-                ...state,
-            },
+
+            myForm
+            ,
             {
                 headers: {
+                    "content-Type": 'multipart/form-data',
                     Authorization: `Bearer ${token}`,
                 },
             }
@@ -319,6 +346,30 @@ const Add_Business = () => {
                                                                     htmlFor="basicpill-phoneno-input"
                                                                     className="label-100"
                                                                 >
+                                                                    Bisuness Image
+                                                                </label>
+                                                                <input
+                                                                    required
+                                                                    type="file"
+                                                                    //name="image"
+                                                                    accept="image/*"
+                                                                    // value={image}
+                                                                    className="mt-0 my-3 form-control input-field"
+                                                                    // onChange={handleChange}
+                                                                    onChange={(e) => setImage(e.target.files[0])}
+                                                                    placeholder="Bisuness Image"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <div className="form-group">
+                                                                <label
+                                                                    htmlFor="basicpill-phoneno-input"
+                                                                    className="label-100"
+                                                                >
                                                                     Category*
                                                                 </label>
 
@@ -360,6 +411,12 @@ const Add_Business = () => {
                                                             </div>
                                                         </div>
                                                     </div>
+
+
+
+
+
+
                                                     <div className="row">
                                                         <div className="col-lg-12">
                                                             <div className="form-group">
@@ -462,3 +519,25 @@ const Add_Business = () => {
 }
 
 export default Add_Business
+
+
+//const myForm = new FormData();
+        // myForm.set('name', state.name)
+        // myForm.set('phone', state.phone)
+        // myForm.set('email', state.email)
+        // myForm.set('Bname', state.Bname)
+        // myForm.set('Sname', state.Sname)
+        // myForm.set('country', state.country)
+        // myForm.set('city', state.city)
+        // myForm.set('description', state.description)
+
+        // myForm.set('category', state.category)
+
+        // myForm.set('status', state.status)
+
+        // myForm.set('Glocation', state.Glocation)
+        // myForm.set('LinkedinUrl', state.Glocation)
+        // myForm.set('FacebookUrl', state.FacebookUrl)
+        // myForm.set('InstagramUrl', state.InstagramUrl)
+        // myForm.set("image", image);
+        // changeState({ loading: true });

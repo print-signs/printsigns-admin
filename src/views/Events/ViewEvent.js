@@ -6,30 +6,30 @@ import swal from 'sweetalert';
 import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
-function ViewNews() {
-    const [news, setNews] = useState([])
+function ViewEvent() {
+    const [event, setEvent] = useState([])
     const { id } = useParams();
     console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
-    const getNews = useCallback(async () => {
+    const getEvent = useCallback(async () => {
         let res = await axios.get(
-            `/api/news/getOne/${id}`,
+            `/api/event/getOne/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        console.log(res.data.news)
-        setNews(res.data.news)
+        // console.log(res.data.Event)
+        setEvent(res.data.Event)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getEvent();
+    }, [getEvent]);
 
 
 
@@ -56,8 +56,8 @@ function ViewNews() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
+                                <h4 className="mb-3">CMP-Event</h4>
+                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Event</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
                     <li className="breadcrumb-item">
@@ -81,34 +81,24 @@ function ViewNews() {
                                     <div className="table-responsive table-shoot">
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <td>{news?._id}</td>
-                                                </tr>
-                                                <tr><th>Title</th>
-                                                    <td>{news?.title}</td>
-                                                </tr>
 
-                                                <tr> <th>Image</th>
+                                                <tr><th>Id</th> <td>{event?._id}</td></tr>
+                                                <tr><th>Title</th>                                                        <td>{event?.title}</td></tr>
+
+                                                <tr><th>Image</th><td>
+                                                    <img src={`${event.image?.url}`} width="50" alt="" />
+                                                </td></tr>
+                                                <tr><th>Description</th><td>{event?.description}</td></tr>
+                                                <tr><th>Location</th><td>{event?.location}</td></tr>
+                                                <tr><th>Added On</th><td>
+                                                    {new Date(`${event?.addedOn}`).toDateString()}<span> , {`${formatAMPM(event?.addedOn)}`}</span>
+                                                </td></tr>
+                                                <tr><th>Updated At</th>
                                                     <td>
-                                                        <img src={`${news.image?.url}`} width="50" alt="" />
+                                                        {new Date(`${event?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(event?.updatedAt)}`}</span>
                                                     </td>
                                                 </tr>
 
-                                                <tr> <th>Description</th>
-                                                    <td>{news?.description}</td>
-                                                </tr>
-                                                <tr><th>Added On</th>
-                                                    <td>
-                                                        {new Date(`${news?.addedOn}`).toDateString()}<span> , {`${formatAMPM(news?.addedOn)}`}</span>
-                                                    </td>
-                                                </tr>
-                                                <tr> <th>Updated At</th>
-                                                    <td>
-                                                        {new Date(`${news?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(news?.updatedAt)}`}</span>
-                                                    </td>
-
-                                                </tr>
                                             </thead>
                                             <tbody>
 
@@ -129,4 +119,4 @@ function ViewNews() {
     );
 }
 
-export default ViewNews;
+export default ViewEvent;

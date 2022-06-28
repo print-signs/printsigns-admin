@@ -13,6 +13,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import ClipLoader from "react-spinners/ClipLoader";
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 import Swal from 'sweetalert2'
@@ -22,15 +23,16 @@ const Register = () => {
   const [oldPassword, setOldPassword] = useState();
   const [newPassword, setNewPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
 
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("authToken")
-    //console.log(token)
+    setLoading({ loading: true })
     if (newPassword == confirmPassword) {
-      let res = await axios.put('/api/user/update/password',
+      let res = await axios.put('/api/v1/user/password/update',
         {
           oldPassword
           , newPassword,
@@ -40,8 +42,9 @@ const Register = () => {
           Authorization: `Bearer ${token}`,
         }
       })
-      console.log(res)
-      if (res) {
+
+      // console.log(res.data.success)
+      if (res.data.success == true) {
         Swal.fire({
           title: 'Done',
           text: 'Password Changed',
@@ -52,10 +55,12 @@ const Register = () => {
         }).then(() => {
           history.push('/dashboard')
         });
-      }
 
+      }
+      setLoading(false);
     } else {
       alert('new password and confirm password are not matched')
+      setLoading(false);
     }
 
   }
@@ -98,7 +103,10 @@ const Register = () => {
                     />
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton color="success" onClick={handleSubmit}>Submit</CButton>
+                    <CButton color="success" onClick={handleSubmit}>
+                      <ClipLoader loading={loading} size={18} />
+                      {!loading && "Submit"}
+                    </CButton>
                   </div>
                 </CForm>
               </CCardBody>

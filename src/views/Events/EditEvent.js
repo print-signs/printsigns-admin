@@ -21,8 +21,8 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser } from '@coreui/icons'
-const EditNews = () => {
+import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription } from '@coreui/icons'
+const EditEvent = () => {
     const { id } = useParams();
     // console.log(id)
     const { token } = isAutheticated();
@@ -30,17 +30,20 @@ const EditNews = () => {
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
     const [loading, setLoading] = useState(false);
 
     //fetch one image
     useEffect(async () => {
-        const res = await axios.get(`/api/news/getOne/${id}`, {
+        const res = await axios.get(`/api/event/getOne/${id}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`,
             // },
         });
-        setTitle(res.data.news.title)
-        setDescription(res.data.news.description)
+        // console.log(res.data)
+        setTitle(res.data.Event.title)
+        setDescription(res.data.Event.description)
+        setLocation(res.data.Event.location)
 
     }, [id]);
 
@@ -49,11 +52,12 @@ const EditNews = () => {
 
         myForm.set("title", title);
         myForm.set("description", description);
+        myForm.set("location", location);
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
         let res = await axios.put(
-            `/api/news/update/${id}`, myForm,
+            `/api/event/update/${id}`, myForm,
             {
                 headers: {
                     "Content-Type": 'multipart/form-data',
@@ -63,7 +67,7 @@ const EditNews = () => {
         );
         // console.log(res.data)
         if (res.data) {
-            swal("success!", "News Edit Successfully!", "success");
+            swal("success!", "Event Edit Successfully!", "success");
             history.goBack();
         }
 
@@ -91,7 +95,7 @@ const EditNews = () => {
                             <CCard className="mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h3 className="mb-4 justify-content-center">Edit News</h3>
+                                        <h3 className="mb-4 justify-content-center">Edit Event</h3>
                                         <div>
                                             <div>
                                                 <CInputGroup className="mb-3">
@@ -106,13 +110,23 @@ const EditNews = () => {
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
-                                                        <CIcon icon={cilSettings} />
+                                                        <CIcon icon={cilAudioDescription} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
                                                         required
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
                                                         placeholder="Description" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilLocationPin} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="text"
+                                                        required
+                                                        onChange={(e) => setLocation(e.target.value)}
+                                                        value={location}
+                                                        placeholder="Location" />
                                                 </CInputGroup>
 
                                                 <CInputGroup className="mb-3">
@@ -161,4 +175,4 @@ const EditNews = () => {
     )
 }
 
-export default EditNews
+export default EditEvent

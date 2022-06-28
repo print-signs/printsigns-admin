@@ -1,12 +1,11 @@
-
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { API } from "../../data";
 import { isAutheticated } from "../../auth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useHistory } from "react-router-dom";
-import { Link, useParams } from "react-router-dom";
 import swal from 'sweetalert';
+
 
 import {
     CButton,
@@ -21,39 +20,35 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser } from '@coreui/icons'
-const EditNews = () => {
-    const { id } = useParams();
-    // console.log(id)
+import { cilPencil, cilNotes, cilCalendar } from '@coreui/icons'
+const AddBanner = () => {
     const { token } = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [subTitle, setSubTitle] = useState("");
+    const [section, setSection] = useState("");
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+
     const [loading, setLoading] = useState(false);
 
-    //fetch one image
-    useEffect(async () => {
-        const res = await axios.get(`/api/news/getOne/${id}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },
-        });
-        setTitle(res.data.news.title)
-        setDescription(res.data.news.description)
-
-    }, [id]);
 
     const handleSubmit = async () => {
         const myForm = new FormData();
 
         myForm.set("title", title);
-        myForm.set("description", description);
+        myForm.set("subTitle", subTitle);
+        myForm.set("section", section);
+        myForm.set("startDate", startDate);
+        myForm.set("endDate", endDate);
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
-        let res = await axios.put(
-            `/api/news/update/${id}`, myForm,
+        let res = await axios.post(
+            `/api/banner/create`, myForm,
             {
                 headers: {
                     "Content-Type": 'multipart/form-data',
@@ -63,7 +58,7 @@ const EditNews = () => {
         );
         // console.log(res.data)
         if (res.data) {
-            swal("success!", "News Edit Successfully!", "success");
+            swal("success!", "Banner Added Successfully!", "success");
             history.goBack();
         }
 
@@ -91,7 +86,7 @@ const EditNews = () => {
                             <CCard className="mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h3 className="mb-4 justify-content-center">Edit News</h3>
+                                        <h3 className="mb-4 justify-content-center">Add Banner</h3>
                                         <div>
                                             <div>
                                                 <CInputGroup className="mb-3">
@@ -106,14 +101,74 @@ const EditNews = () => {
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
-                                                        <CIcon icon={cilSettings} />
+                                                        <CIcon icon={cilPencil} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
                                                         required
-                                                        onChange={(e) => setDescription(e.target.value)}
-                                                        value={description}
-                                                        placeholder="Description" />
+                                                        onChange={(e) => setSubTitle(e.target.value)}
+                                                        value={subTitle}
+                                                        placeholder="sub title" />
                                                 </CInputGroup>
+
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilNotes} />
+                                                    </CInputGroupText>
+
+                                                    <select
+                                                        name="section"
+                                                        value={section}
+                                                        onChange={(e) => setSection(e.target.value)}
+                                                        className="form-control  input-field"
+                                                    >
+
+                                                        <option value="1">--select--</option>
+                                                        <option value="home">home</option>
+                                                        <option value="news">news</option>
+                                                        <option value="events">events</option>
+                                                        <option value="offers">offers</option>
+                                                        <option value="category">category</option>
+                                                        <option value="directory">directory</option>
+                                                        {/* <option value="6">--select--</option> */}
+
+                                                    </select>
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        Start Date*
+                                                        <CIcon icon={cilCalendar} />
+                                                    </CInputGroupText>
+                                                    {/* <DatePicker selected={startDate} /> */}
+
+                                                    <CFormInput type="date"
+                                                        required
+                                                        onChange={(e) => setStartDate(e.target.value)}
+                                                        value={startDate}
+                                                        placeholder="Start Date" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+
+                                                    <CInputGroupText>
+                                                        End Date*
+                                                        <CIcon icon={cilCalendar} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="date"
+                                                        startDate
+                                                        required
+                                                        onChange={(e) => setEndDate(e.target.value)}
+                                                        value={endDate}
+                                                        placeholder="EndDate" />
+                                                </CInputGroup>
+                                                {/* <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilLocationPin} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="text"
+                                                        required
+                                                        onChange={(e) => setLocation(e.target.value)}
+                                                        value={location}
+                                                        placeholder="Location" />
+                                                </CInputGroup> */}
 
                                                 <CInputGroup className="mb-3">
 
@@ -161,4 +216,4 @@ const EditNews = () => {
     )
 }
 
-export default EditNews
+export default AddBanner

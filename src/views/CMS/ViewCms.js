@@ -6,30 +6,30 @@ import swal from 'sweetalert';
 import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
-function ViewNews() {
-    const [news, setNews] = useState([])
+function ViewOffer() {
+    const [cmsRes, setCmsRes] = useState([])
     const { id } = useParams();
-    console.log(id)
-    const { token } = isAutheticated();
+    // console.log(id)
+    const token = isAutheticated();
 
-    const getNews = useCallback(async () => {
+    const getOffer = useCallback(async () => {
         let res = await axios.get(
-            `/api/news/getOne/${id}`,
+            `/api/restriction/getOne/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        console.log(res.data.news)
-        setNews(res.data.news)
+        //console.log(res.data)
+        setCmsRes(res.data.CmpRestriction)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getOffer();
+    }, [getOffer]);
 
 
 
@@ -56,8 +56,8 @@ function ViewNews() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
+                                <h4 className="mb-3">CMP-CMS</h4>
+                                {/* <Link to="/"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Edit Restriction</button></Link> */}
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
                     <li className="breadcrumb-item">
@@ -81,34 +81,28 @@ function ViewNews() {
                                     <div className="table-responsive table-shoot">
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <td>{news?._id}</td>
-                                                </tr>
-                                                <tr><th>Title</th>
-                                                    <td>{news?.title}</td>
-                                                </tr>
 
-                                                <tr> <th>Image</th>
-                                                    <td>
-                                                        <img src={`${news.image?.url}`} width="50" alt="" />
-                                                    </td>
+                                                {/* <th>Id</th> */}
+                                                <tr><th>About Us</th>
+                                                    <td>{cmsRes?.About_Us}</td>
                                                 </tr>
-
-                                                <tr> <th>Description</th>
-                                                    <td>{news?.description}</td>
+                                                <tr> <th>Terms and Conditions</th>
+                                                    <td>{cmsRes?.Terms_and_Conditions}</td>
+                                                </tr>
+                                                <tr><th>Privacy Policy</th>
+                                                    <td>{cmsRes?.Privacy_Policy}</td>
                                                 </tr>
                                                 <tr><th>Added On</th>
                                                     <td>
-                                                        {new Date(`${news?.addedOn}`).toDateString()}<span> , {`${formatAMPM(news?.addedOn)}`}</span>
+                                                        {new Date(`${cmsRes?.createdAt}`).toDateString()}<span> , {`${formatAMPM(cmsRes?.createdAt)}`}</span>
                                                     </td>
                                                 </tr>
-                                                <tr> <th>Updated At</th>
+                                                <tr><th>Updated At</th>
                                                     <td>
-                                                        {new Date(`${news?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(news?.updatedAt)}`}</span>
+                                                        {new Date(`${cmsRes?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(cmsRes?.updatedAt)}`}</span>
                                                     </td>
-
                                                 </tr>
+
                                             </thead>
                                             <tbody>
 
@@ -129,4 +123,5 @@ function ViewNews() {
     );
 }
 
-export default ViewNews;
+export default ViewOffer;
+

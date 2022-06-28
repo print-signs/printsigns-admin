@@ -5,78 +5,78 @@ import { Link } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
 const Bisuness = () => {
-    const [bisuness, setBisuness] = useState([])
+  const [bisuness, setBisuness] = useState([])
 
 
 
-    const { token } = isAutheticated();
+  const { token } = isAutheticated();
 
-    const getProducts = useCallback(async () => {
-        let res = await axios.get(
-            `/api/directory/getAll`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        // console.log(res.data.directory)
-        setBisuness(res.data.directory)
-        // changeState({
-        //     ...res.data,
-        //     pages: Math.ceil(res.data.totalProducts / limit),
-        // });
-    }, [token]);
+  const getProducts = useCallback(async () => {
+    let res = await axios.get(
+      `/api/directory/getAll`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(res.data.directory)
+    setBisuness(res.data.directory)
+    // changeState({
+    //     ...res.data,
+    //     pages: Math.ceil(res.data.totalProducts / limit),
+    // });
+  }, [token]);
 
-    useEffect(() => {
-        getProducts();
-    }, [getProducts]);
+  useEffect(() => {
+    getProducts();
+  }, [getProducts]);
 
 
 
-    const handleDelete = async (id) => {
-        let status = window.confirm("Do you want to delete");
-        if (!status) return;
+  const handleDelete = async (id) => {
+    let status = window.confirm("Do you want to delete");
+    if (!status) return;
 
-        let res = await axios.delete(`/api/directory/delete/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        // console.log(res)
+    let res = await axios.delete(`/api/directory/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(res)
 
-        if (res.data.success == true) {
-            swal("success!", "Directory Deleted Successfully!", "success");
-            window.location.reload();
+    if (res.data.success == true) {
+      swal("success!", "Directory Deleted Successfully!", "success");
+      window.location.reload();
 
-        }
-    };
+    }
+  };
 
-    const toggleStatus = async (id) => {
-        let status = window.confirm("Do you want to delete");
-        if (!status) {
-            return;
-        }
-        let res = await axios.get(`/api/product/setStatus/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (res.status === 200) window.location.reload();
-    };
+  const toggleStatus = async (id) => {
+    let status = window.confirm("Do you want to delete");
+    if (!status) {
+      return;
+    }
+    let res = await axios.get(`/api/product/setStatus/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) window.location.reload();
+  };
 
-    return (
-        <>
-            <div className=" main-content">
-                <div className="  my-3 page-content">
-                    <div className="container-fluid">
-                        {/* <!-- start page title --> */}
-                        <div className="row">
-                            <div className="col-12">
-                                <div className="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 className="mb-3">Bisuness-Directory</h4>
-                                    <Link to="/add_bisuness"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Bisuness</button></Link>
-                                    {/* <div className="page-title-right">
+  return (
+    <>
+      <div className=" main-content">
+        <div className="  my-3 page-content">
+          <div className="container-fluid">
+            {/* <!-- start page title --> */}
+            <div className="row">
+              <div className="col-12">
+                <div className="page-title-box d-flex align-items-center justify-content-between">
+                  <h4 className="mb-3">Bisuness-Directory</h4>
+                  <Link to="/add_bisuness"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Bisuness</button></Link>
+                  {/* <div className="page-title-right">
                                         <ol className="breadcrumb m-0">
                                             <li className="breadcrumb-item">
                                                 <Link to="/dashboard">Dating App</Link>
@@ -84,17 +84,17 @@ const Bisuness = () => {
                                             <li className="breadcrumb-item">Commerce - Products</li>
                                         </ol>
                                     </div> */}
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!-- end page title --> */}
+                </div>
+              </div>
+            </div>
+            {/* <!-- end page title --> */}
 
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="row ml-0 mr-0  mb-10">
-                                            {/* <div className="col-sm-12 col-md-6">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="row ml-0 mr-0  mb-10">
+                      {/* <div className="col-sm-12 col-md-6">
                       <div className="dataTables_length">
                         <label className="w-100">
                           Show{" "}
@@ -113,7 +113,7 @@ const Bisuness = () => {
                         </label>
                       </div>
                     </div> */}
-                                            {/* <div className="col-sm-12 col-md-6">
+                      {/* <div className="col-sm-12 col-md-6">
                       <div className="dropdown d-block">
                         <a href="/comproducts/add">
                           <button
@@ -126,78 +126,78 @@ const Bisuness = () => {
                         </a>
                       </div>
                     </div> */}
-                                        </div>
-                                        <div className="table-responsive table-shoot">
-                                            <table className="table table-centered table-nowrap mb-0">
-                                                <thead className="thead-light">
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Category</th>
-                                                        <th>City</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {bisuness.map((item) =>
+                    </div>
+                    <div className="table-responsive table-shoot">
+                      <table className="table table-centered table-nowrap mb-0">
+                        <thead className="thead-light">
+                          <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>City</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bisuness.map((item) =>
 
-                                                        <tr>
-                                                            <td>{item?.name} </td>
-                                                            <td>{item?.category}</td>
-                                                            <td>{item?.city}</td>
-                                                            <td>
-                                                                <span
-                                                                    className={`badge rounded-pill bg-${status ? "success" : "danger"
-                                                                        } font-size-10`}
-                                                                >
-                                                                    {status ? "Live" : "Suspended"}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className={`btn btn-${status ? "danger" : "success"
-                                                                        }  btn-sm  waves-effect waves-light btn-table ml-1`}
-                                                                    onClick={() => toggleStatus('_id')}
-                                                                >
-                                                                    {status ? "Suspend" : "Activate"}
-                                                                </button>
-                                                                <Link to={`/view_bisuness/${item._id}`}>
+                            <tr>
+                              <td>{item?.name} </td>
+                              <td>{item?.category}</td>
+                              <td>{item?.city}</td>
+                              <td>
+                                <span
+                                  className={`badge rounded-pill bg-${status ? "success" : "danger"
+                                    } font-size-10`}
+                                >
+                                  {status ? "Live" : "Suspended"}
+                                </span>
+                              </td>
+                              <td>
+                                <button
+                                  type="button"
+                                  className={`btn btn-${status ? "danger" : "success"
+                                    }  btn-sm  waves-effect waves-light btn-table ml-1`}
+                                  onClick={() => toggleStatus('_id')}
+                                >
+                                  {status ? "Suspend" : "Activate"}
+                                </button>
+                                <Link to={`/view_bisuness/${item._id}`}>
 
-                                                                    <button
-                                                                        type="button"
-                                                                        className=" mx-2 btn btn-info btn-sm  waves-effect waves-light btn-table ml-1"
-                                                                    >
-                                                                        View
-                                                                    </button>
-                                                                </Link>
+                                  <button
+                                    type="button"
+                                    className=" mx-1 mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-1"
+                                  >
+                                    View
+                                  </button>
+                                </Link>
 
-                                                                <Link to={`/bisuness/edit/${item._id}`}>
+                                <Link to={`/bisuness/edit/${item._id}`}>
 
-                                                                    <button
-                                                                        type="button"
-                                                                        className=" mx-2 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-1"
-                                                                    >
-                                                                        Edit
-                                                                    </button>
-                                                                </Link>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => handleDelete(item._id)}
-                                                                    className="  btn btn-danger btn-sm  waves-effect waves-light btn-table ml-1"
-                                                                    id="sa-params"
-                                                                >
-                                                                    Delete
-                                                                </button>
-                                                            </td>
-                                                        </tr>
+                                  <button
+                                    type="button"
+                                    className=" mx-1 mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-1"
+                                  >
+                                    Edit
+                                  </button>
+                                </Link>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDelete(item._id)}
+                                  className="mx-1 mt-1 btn btn-danger btn-sm  waves-effect waves-light btn-table ml-1"
+                                  id="sa-params"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
 
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
 
-                                        {/* <div className="row mt-20">
+                    {/* <div className="row mt-20">
                     <div className="col-sm-12 col-md-6 mb-20">
                       <div
                         className="dataTables_info"
@@ -276,17 +276,17 @@ const Bisuness = () => {
                     </div>
                   </div> */}
 
-                                        {/* <!-- end table-responsive --> */}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* <!-- container-fluid --> */}
+                    {/* <!-- end table-responsive --> */}
+                  </div>
                 </div>
+              </div>
             </div>
-        </>
-    )
+          </div>
+          {/* <!-- container-fluid --> */}
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default Bisuness

@@ -6,6 +6,8 @@ import './scss/style.scss'
 import ForgotPassword from './views/pages/register/ForgotPassword'
 import NewRegister from './views/pages/register/NewRegister'
 import ProtectedRoute from './components/ProtectedRoute';
+import { isAutheticated } from './auth';
+
 
 const loading = (
   <div className="pt-3 text-center">
@@ -22,33 +24,72 @@ const Register = React.lazy(() => import('./views/pages/register/Change_password
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
-class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <React.Suspense fallback={loading}>
-          <Switch>
-            < Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
+const App = () => {
 
-            <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
-            <Route exact path="/newRegister" name="Register Page" render={(props) => <NewRegister {...props} />} />
+  const [userdata, setUserData] = useState(null)
+  const token = isAutheticated();
 
-            <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
-            <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
+  useEffect(() => {
+    const getUser = async () => {
+      let existanceData = localStorage.getItem("authToken");
+      if (!existanceData) {
+        // console.log(existanceData.userData)
+        setUserData(false)
+      } else {
+        try {
+          console.log('requesting user data from server')
+          let response = await axios.get(`/api/v1/user/details`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          //console.log(response)
+          const data = response.data
+          if (data.success) {
+
+            setUserData(data.user);
+          } else {
+            setUserData(false)
+          }
+
+        }
+        catch (err) {
+          setUserData(false)
+          console.log(err);
+        };
+      }
+
+    }
+    getUser()
+  }, [])
+
+  return (
+    <BrowserRouter>
+      <React.Suspense fallback={loading}>
+        <Switch>
+          < Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
+
+          <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
+          <Route exact path="/newRegister" name="Register Page" render={(props) => <NewRegister {...props} />} />
+
+          <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
+          <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
 
 
-            {/* localStorage.getItem('authToken') ? */}
-            <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
-            {/* < ProtectedRoute path="/" name="Home" render={(props) => <DefaultLayout {...props} />} /> */}
+          {/* localStorage.getItem('authToken') ? */}
+          <Route path="/" name="Home" render={(props) => (
+            userdata && userdata?._id ? <DefaultLayout {...props} /> :
+              userdata === false ? <Login {...props} /> : <div></div>
+          )} />
+          {/* < ProtectedRoute path="/" name="Home" render={(props) => <DefaultLayout {...props} />} /> */}
 
 
 
 
-          </Switch>
-        </React.Suspense>
-      </BrowserRouter>
-    )
-  }
+        </Switch>
+      </React.Suspense>
+    </BrowserRouter>
+  )
 }
 //@coreui/coreui-free-react-admin-template@4.1.1
 export default App

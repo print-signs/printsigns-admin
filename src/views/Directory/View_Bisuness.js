@@ -25,7 +25,7 @@ const View_Bisuness = () => {
                 },
             }
         );
-        console.log(res.data.directory.name)
+        console.log(res.data.directory)
         setBisuness(res.data.directory)
         // changeState({
         //     ...res.data,
@@ -66,52 +66,37 @@ const View_Bisuness = () => {
                                         <div className="table-responsive table-shoot">
                                             <table className="table table-centered table-nowrap mb-0">
                                                 <thead className="thead-light">
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Category</th>
-                                                        <th>email</th>
-                                                        <th>phone</th>
-                                                        <th>Building_Name</th>
-                                                        <th>Street_Name</th>
-                                                        <th>city</th>
-                                                        <th>description</th>
-                                                        <th>Status</th>
-                                                        <th>Google Location</th>
-                                                        <th>LinkedinUrl</th>
-                                                        <th>FacebookUrl</th>
-                                                        <th>intagramUrl</th>
 
-                                                    </tr>
+
+                                                    <tr><th>Name</th><td>{bisuness?.name} </td></tr>
+                                                    <tr><th>Bisuness image</th><td>
+                                                        <img src={`${bisuness.image?.url}`} width="50" alt="" />
+                                                    </td></tr>
+                                                    <tr><th>Category</th><td>{bisuness?.category}</td></tr>
+                                                    <tr><th>email</th> <td>{bisuness?.email}</td></tr>
+                                                    <tr><th>phone</th> <td>{bisuness?.phone}</td></tr>
+                                                    <tr><th>Building_Name</th><td>{bisuness?.Building_Name}</td></tr>
+                                                    <tr><th>Street_Name</th><td>{bisuness?.Street_Name}</td></tr>
+                                                    <tr><th>city</th> <td>{bisuness?.city}</td></tr>
+                                                    <tr><th>description</th> <td>{bisuness?.description}</td></tr>
+                                                    <tr><th>Status</th><td>
+                                                        <span
+                                                            className={`badge rounded-pill bg-${bisuness?.status ? "success" : "danger"
+                                                                } font-size-10`}
+                                                        >
+                                                            {bisuness?.status ? "Live" : "Suspended"}
+                                                        </span>
+                                                    </td></tr>
+                                                    <tr><th>Google Location</th><td>{bisuness?.Glocation}</td></tr>
+                                                    <tr><th>LinkedinUrl</th>                                                        <td>{bisuness?.LinkedinUrl}</td></tr>
+                                                    <tr> <th>FacebookUrl</th><td>{bisuness?.FacebookUrl}</td></tr>
+                                                    <tr><th>intagramUrl</th> <td>{bisuness?.InstagramUrl}</td></tr>
+
+
                                                 </thead>
                                                 <tbody>
 
 
-                                                    <tr>
-                                                        <td>{bisuness?.name} </td>
-                                                        <td>{bisuness?.category}</td>
-                                                        <td>{bisuness?.email}</td>
-                                                        <td>{bisuness?.phone}</td>
-                                                        <td>{bisuness?.Building_Name}</td>
-                                                        <td>{bisuness?.Street_Name}</td>
-                                                        <td>{bisuness?.city}</td>
-                                                        <td>{bisuness?.description}</td>
-
-                                                        <td>
-                                                            <span
-                                                                className={`badge rounded-pill bg-${bisuness?.status ? "success" : "danger"
-                                                                    } font-size-10`}
-                                                            >
-                                                                {bisuness?.status ? "Live" : "Suspended"}
-                                                            </span>
-                                                        </td>
-                                                        <td>{bisuness?.Glocation}</td>
-                                                        <td>{bisuness?.LinkedinUrl}</td>
-                                                        <td>{bisuness?.FacebookUrl}</td>
-                                                        <td>{bisuness?.InstagramUrl}</td>
-                                                        <td>
-
-                                                        </td>
-                                                    </tr>
 
 
                                                 </tbody>

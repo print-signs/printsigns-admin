@@ -142,7 +142,7 @@ function Products() {
 
                                 <button
                                   type="button"
-                                  className=" mx-2 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
+                                  className=" mx-1 mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
                                 >
                                   Edit
                                 </button>
@@ -150,7 +150,7 @@ function Products() {
                               <button
                                 type="button"
                                 onClick={() => handleDelete(`${item._id}`)}
-                                className="  btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
+                                className="mx-1 mt-1 btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
                                 id="sa-params"
                               >
                                 Delete

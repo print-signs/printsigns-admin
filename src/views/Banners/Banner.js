@@ -6,43 +6,43 @@ import swal from 'sweetalert';
 // import { API } from "../../data";
 import { isAutheticated } from "../../auth";
 
-function News() {
-    const [news, setNews] = useState([])
+function banner() {
+    const [banner, setBanner] = useState([])
 
     const { token } = isAutheticated();
 
-    const getNews = useCallback(async () => {
+    const getEvent = useCallback(async () => {
         let res = await axios.get(
-            `/api/news/getAll`,
+            `/api/banner/getAll`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-
-        setNews(res.data.news)
+        console.log(res.data)
+        setBanner(res.data.banner)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getEvent();
+    }, [getEvent]);
 
 
     const handleDelete = async (id) => {
         let status = window.confirm("Do you want to delete");
         if (!status) return;
 
-        let res = await axios.delete(`/api/news/delete/${id}`, {
+        let res = await axios.delete(`/api/banner/delete/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
         console.log(res)
         if (res.data.success == true) {
-            swal("success!", "News Deleted Successfully!", "success");
+            swal("success!", "Banner Deleted Successfully!", "success");
             window.location.reload();
         }
     };
@@ -69,8 +69,8 @@ function News() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
+                                <h4 className="mb-3">CMP-BANNER</h4>
+                                <Link to="/addbanner"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Banner</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
                     <li className="breadcrumb-item">
@@ -97,16 +97,18 @@ function News() {
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Image</th>
+                                                    <th>Section</th>
                                                     <th>Added On</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {news && news.map((item, index) =>
+                                                {banner && banner.map((item, index) =>
                                                     <tr>
                                                         <td>{item?.title}</td>
                                                         <td>
                                                             <img src={`${item?.image.url}`} width="50" alt="" /></td>
+                                                        <td>{item?.section}</td>
                                                         <td>
                                                             {/* {item?.addedOn} */}
                                                             {new Date(`${item?.addedOn}`).toDateString()}<span> , {`${formatAMPM(item?.addedOn)}`}</span>
@@ -115,20 +117,20 @@ function News() {
 
 
                                                         <td>
-                                                            <Link to={`/news/view/${item._id}`}>
+                                                            <Link to={`/banner/view/${item._id}`}>
 
                                                                 <button
                                                                     type="button"
-                                                                    className=" mx-1 mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
+                                                                    className=" mx-2 mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
                                                                 >
                                                                     View
                                                                 </button>
                                                             </Link>
-                                                            <Link to={`/news/edit/${item._id}`}>
+                                                            <Link to={`/banner/edit/${item._id}`}>
 
                                                                 <button
                                                                     type="button"
-                                                                    className=" mx-1 mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
+                                                                    className=" mx-2 mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
                                                                 >
                                                                     Edit
                                                                 </button>
@@ -136,7 +138,7 @@ function News() {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => handleDelete(`${item._id}`)}
-                                                                className="mx-1 mt-1 btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
+                                                                className=" mt-1 btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
                                                                 id="sa-params"
                                                             >
                                                                 Delete
@@ -161,4 +163,4 @@ function News() {
     );
 }
 
-export default News;
+export default banner;
