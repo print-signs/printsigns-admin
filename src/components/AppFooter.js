@@ -8,7 +8,7 @@ const AppFooter = () => {
 
         <span className="ms-1">{new Date().getFullYear()} &copy; CMP.</span>
       </div>
-      \
+
     </CFooter>
   )
 }

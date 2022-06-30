@@ -98,6 +98,8 @@ function banner() {
                                                     <th>Title</th>
                                                     <th>Image</th>
                                                     <th>Section</th>
+                                                    <th>Sub Section</th>
+                                                    <th>Status</th>
                                                     <th>Added On</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -108,7 +110,18 @@ function banner() {
                                                         <td>{item?.title}</td>
                                                         <td>
                                                             <img src={`${item?.image.url}`} width="50" alt="" /></td>
+
+
                                                         <td>{item?.section}</td>
+                                                        <th>{item?.subSection}</th>
+                                                        <td>
+                                                            <span
+                                                                className={`badge rounded-pill bg-${new Date(`${item?.endDate}`) > new Date() ? "success" : "danger"
+                                                                    } font-size-10`}
+                                                            >
+                                                                {new Date(`${item?.endDate}`) > new Date() ? "Live" : "Suspended"}
+                                                            </span>
+                                                        </td>
                                                         <td>
                                                             {/* {item?.addedOn} */}
                                                             {new Date(`${item?.addedOn}`).toDateString()}<span> , {`${formatAMPM(item?.addedOn)}`}</span>

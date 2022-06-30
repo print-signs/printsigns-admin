@@ -93,7 +93,7 @@ function ViewUsers() {
                                                     </td></tr>
 
                                                 {/* <th>Description</th> */}
-                                                <tr><th>Pnone No.</th>
+                                                <tr><th>Phone No.</th>
                                                     <td>{user?.phone}</td></tr>
                                                 <tr><th>Role</th>
                                                     <td>{user?.role}</td></tr>
