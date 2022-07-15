@@ -22,7 +22,7 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilNotes, cilCalendar } from '@coreui/icons'
+import { cilPencil, cilNotes, cilCalendar, cilNoteAdd } from '@coreui/icons'
 const EditBanner = () => {
     const { id } = useParams();
     const { token } = isAutheticated();
@@ -35,6 +35,8 @@ const EditBanner = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
+    const [subSection, setSubSection] = useState("");
+    const [category, setCategory] = useState(false);
 
     const [loading, setLoading] = useState(false);
     //fetch one Offer
@@ -49,38 +51,51 @@ const EditBanner = () => {
         setTitle(res.data.banner.title)
         setSubTitle(res.data.banner.subTitle)
         setSection(res.data.banner.section)
+        setSubSection(res.data.banner.subSection)
         setStartDate(new Date(res.data.banner.startDate).toLocaleDateString())
         setEndDate(new Date(res.data.banner.endDate).toLocaleDateString())
 
     }, [id]);
 
     const handleSubmit = async () => {
+        if (!(title && subTitle && image && section && subSection && startDate && endDate)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
 
         myForm.set("title", title);
         myForm.set("subTitle", subTitle);
         myForm.set("section", section);
+        myForm.set("subSection", subSection);
         myForm.set("startDate", startDate);
         myForm.set("endDate", endDate);
         myForm.set("image", image);
         setLoading({ loading: true });
-        // console.log(image)
-        let res = await axios.put(
-            `/api/banner/update/${id}`, myForm,
-            {
-                headers: {
-                    "Content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+        try {
+            let res = await axios.put(
+                `/api/banner/update/${id}`, myForm,
+                {
+                    headers: {
+                        "Content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // console.log(res.data)
+            if (res.data) {
+                swal("success!", "Banner Updated Successfully!", "success");
+                setLoading(false);
+                history.goBack();
             }
-        );
-        // console.log(res.data)
-        if (res.data) {
-            swal("success!", "Banner Updated Successfully!", "success");
-            history.goBack();
+        } catch (error) {
+            alert(error)
+            setLoading(false);
         }
+        // console.log(image)
 
-        setLoading(false);
+
+
     };
     const handleImage = (e) => {
         const files = e.target.files[0];
@@ -94,6 +109,27 @@ const EditBanner = () => {
         history.goBack()
 
     };
+
+
+    useEffect(() => {
+        const getData = async () => {
+            let res = await axios.get(
+                `/api/category/getAll`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log(res.data)
+            setCategory(res.data.category)
+        }
+        if (section === "category") {
+            getData()
+        } else {
+            setCategory(false)
+        }
+    }, [section])
 
     return (
         <>
@@ -141,16 +177,35 @@ const EditBanner = () => {
                                                         className="form-control  input-field"
                                                     >
 
-                                                        <option value="1">--select--</option>
+                                                        <option value="1">--Select--</option>
                                                         <option value="home">home</option>
                                                         <option value="news">news</option>
                                                         <option value="events">events</option>
                                                         <option value="offers">offers</option>
-                                                        <option value="category">category</option>
-                                                        <option value="directory">directory</option>
+                                                        <option value="category" >category</option>
                                                         {/* <option value="6">--select--</option> */}
 
                                                     </select>
+                                                    {category && <>
+                                                        <CInputGroupText className="ml-2 mt-1">
+                                                            SubSection
+                                                            <CIcon icon={cilNoteAdd} />
+                                                        </CInputGroupText>
+                                                        <select
+                                                            name="subSection"
+                                                            value={subSection}
+                                                            onChange={(e) => setSubSection(e.target.value)}
+                                                            className="form-control  input-field mt-1"
+                                                        >
+                                                            <option value="1">--Select SubCategory--</option>
+                                                            {category.map((item, index) => (
+
+                                                                <option value={item.name}>{item.name}</option>
+                                                            ))}
+                                                            {/* <option value="6">--select--</option> */}
+
+
+                                                        </select></>}
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>

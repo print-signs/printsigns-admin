@@ -76,13 +76,13 @@ const App = () => {
           <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
 
 
-          {/* localStorage.getItem('authToken') ? */}
-          <Route path="/" name="Home" render={(props) => (
+
+          {/* <Route path="/" name="Home" render={(props) => (
             userdata && userdata?._id ? <DefaultLayout {...props} /> :
               userdata === false ? <Login {...props} /> : <div></div>
-          )} />
-          {/* < ProtectedRoute path="/" name="Home" render={(props) => <DefaultLayout {...props} />} /> */}
+          )} /> */}
 
+          <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
 
 
 

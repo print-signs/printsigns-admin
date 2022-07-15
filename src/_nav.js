@@ -6,6 +6,7 @@ import {
   cilChartPie,
   cilCursor,
   cilDrop,
+  cilFilterSquare,
   cilMoney,
   cilNewspaper,
   cilNotes,
@@ -79,10 +80,17 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: 'Requirements',
+    icon: <CIcon icon={cilFilterSquare} customClassName="nav-icon" />,
+    to: '/requirement',
+  },
+  {
+    component: CNavItem,
     name: 'Users',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     to: '/users',
   },
+
 
 
 ]

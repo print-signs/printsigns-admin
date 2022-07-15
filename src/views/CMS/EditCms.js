@@ -47,27 +47,32 @@ const EditCms = () => {
 
 
     const handleSubmit = async () => {
-
         changeState({ loading: true });
-        let res = await axios.put(
-            `/api/restriction/update/${id}`,
-            {
-                ...state,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+        try {
+            let res = await axios.put(
+                `/api/restriction/update/${id}`,
+                {
+                    ...state,
                 },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            //if (res.status === 200) window.location.reload();
+            // console.log(res.data)
+            // console.log(res.status == 200)
+            if (res.data.success == true) {
+                changeState({ loading: false });
+                swal("Edit CMP-Condition successfully!");
+                history.goBack()
             }
-        );
-        //if (res.status === 200) window.location.reload();
-        // console.log(res.data)
-        // console.log(res.status == 200)
-        if (res.data.success == true) {
+        } catch (error) {
+            alert(error)
             changeState({ loading: false });
-            swal("Edit CMP-Condition successfully!");
-            history.goBack()
         }
+
     };
     const onCancel = () => {
         // window.location = "/comproducts";

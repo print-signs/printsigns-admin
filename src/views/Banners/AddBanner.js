@@ -42,6 +42,10 @@ const AddBanner = () => {
 
 
     const handleSubmit = async () => {
+        if (!(title && subTitle && image && section && subSection && startDate && endDate)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
 
         myForm.set("title", title);
@@ -53,22 +57,29 @@ const AddBanner = () => {
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
-        let res = await axios.post(
-            `/api/banner/create`, myForm,
-            {
-                headers: {
-                    "Content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+        try {
+            let res = await axios.post(
+                `/api/banner/create`, myForm,
+                {
+                    headers: {
+                        "Content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // console.log(res.data)
+            if (res.data) {
+                swal("success!", "Banner Added Successfully!", "success");
+                setLoading(false);
+                history.goBack();
             }
-        );
-        // console.log(res.data)
-        if (res.data) {
-            swal("success!", "Banner Added Successfully!", "success");
-            history.goBack();
+
+        } catch (error) {
+            alert(error)
+            setLoading(false);
         }
 
-        setLoading(false);
+
     };
     const handleImage = (e) => {
         const files = e.target.files[0];

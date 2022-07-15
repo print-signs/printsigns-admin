@@ -31,6 +31,10 @@ const AddProduct = () => {
 
 
     const handleSubmit = async () => {
+        if (!(name && image)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
 
         myForm.set("name", name);
@@ -39,22 +43,29 @@ const AddProduct = () => {
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
-        let res = await axios.post(
-            `/api/category/create`, myForm,
-            {
-                headers: {
-                    "Content-Type": 'multipart/form-data',
-                    // Authorization: `Bearer ${token}`,
-                },
+        try {
+            let res = await axios.post(
+                `/api/category/create`, myForm,
+                {
+                    headers: {
+                        "Content-Type": 'multipart/form-data',
+                        // Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            //console.log(res.data.data.name)
+            if (res.data) {
+                swal("success!", "Category Added Successfully!", "success");
+                setLoading(false);
+                history.goBack();
             }
-        );
-        //console.log(res.data.data.name)
-        if (res.data) {
-            swal("success!", "Category Added Successfully!", "success");
-            history.goBack();
+        } catch (error) {
+            alert("something went wrong")
+            setLoading(false);
         }
 
-        setLoading(false);
+
+
     };
     const handleImage = (e) => {
         const files = e.target.files[0];

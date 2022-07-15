@@ -38,6 +38,11 @@ import ViewFeedback from './views/Feedback/ViewFeedback'
 //cms 
 import Users from './views/Users/users'
 import ViewUsers from './views/Users/ViewUsers'
+//Requirement 
+import ViewRequirement from './views/Requirement/ViewRequirement'
+import Requirement from './views/Requirement/Requirement'
+import AddRequirement from './views/Requirement/AddRequirement'
+import EditRequirement from './views/Requirement/EditRequirement'
 
 //  DashBoard
 const Change_Password = React.lazy(() => import('./views/pages/register/Change_password'))
@@ -91,10 +96,17 @@ const routes = [
   //CMS 
   { path: '/feedback/view/:id', name: 'ViewFeedback', component: ViewFeedback },
   { path: '/feedback', name: 'Feedback', component: Feedback },
+  //Requirement
+  { path: '/requirement/view/:id', name: 'ViewRequirement', component: ViewRequirement },
+  { path: '/requirement/edit/:id', name: 'EditRequirement', component: EditRequirement },
+  { path: '/requirement/add/', name: 'AddRequirement', component: AddRequirement },
+  { path: '/requirement', name: 'Requirement', component: Requirement },
 
   //Users 
   { path: '/users/view/:id', name: 'ViewUsers', component: ViewUsers },
   { path: '/users', name: 'users', component: Users },
+
+
 
   //dashboard
 

@@ -34,20 +34,28 @@ const Login = () => {
 
   const Login = async () => {
     setLoading({ loading: true })
-    const res = await axios.post("/api/v1/user/login/", auth);
-    if (res.data.success == true) {
-      localStorage.setItem("authToken", res.data.token)
-      history.push('/dashboard')
+    try {
+      const res = await axios.post("/api/v1/user/login/", auth);
+      if (res.data.success == true) {
+        localStorage.setItem("authToken", res.data.token)
+        history.push('/dashboard')
+        setLoading(false);
+        window.location.reload()
+
+
+      }
+      else {
+        setLoading(false);
+        alert("Invalid Credential");
+
+      }
+    } catch (error) {
       setLoading(false);
-      window.location.reload()
-
-
-    }
-    else {
       alert("Invalid Credentials");
-      setLoading(false);
+
     }
   }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>

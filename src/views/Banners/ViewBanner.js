@@ -93,6 +93,7 @@ function ViewBanner() {
                                                     <img src={`${banner.image?.url}`} width="50" alt="" />
                                                 </td></tr>
                                                 <tr><th>Section</th><td>{banner?.section}</td></tr>
+                                                <tr> <th>Sub Section</th><td>{banner?.subSection}</td></tr>
                                                 <tr><th>Start Date</th> <td>
                                                     {new Date(`${banner?.startDate}`).toDateString()}
                                                 </td></tr>

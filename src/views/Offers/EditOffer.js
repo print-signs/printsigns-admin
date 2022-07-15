@@ -71,6 +71,10 @@ const EditOffer = () => {
 
 
     const handleSubmit = async () => {
+        if (!(title && description && image && location && sendBisunessName)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
 
         myForm.set("title", title);
@@ -80,22 +84,29 @@ const EditOffer = () => {
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
-        let res = await axios.put(
-            `/api/offer/update/${id}`, myForm,
-            {
-                headers: {
-                    "Content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+        try {
+            let res = await axios.put(
+                `/api/offer/update/${id}`, myForm,
+                {
+                    headers: {
+                        "Content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // console.log(res.data)
+            if (res.data) {
+                swal("success!", "Event Added Successfully!", "success");
+                setLoading(false);
+                history.goBack();
             }
-        );
-        // console.log(res.data)
-        if (res.data) {
-            swal("success!", "Event Added Successfully!", "success");
-            history.goBack();
+        } catch (error) {
+            alert("something Went Wrong")
+            setLoading(false);
         }
 
-        setLoading(false);
+
+
     };
     const handleImage = (e) => {
         const files = e.target.files[0];

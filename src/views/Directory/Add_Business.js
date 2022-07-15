@@ -73,6 +73,12 @@ const Add_Business = () => {
 
 
     const handleSubmit = async () => {
+        if (!(state.name && state.phone && state.email && state.Bname && state.Sname && state.country && state.city && state.description
+            && state.category && state.status && image)) {
+            alert("Please fill All required field ");
+            return;
+        }
+
         const myForm = new FormData();
         myForm.set('name', state.name)
         myForm.set('phone', state.phone)
@@ -92,35 +98,34 @@ const Add_Business = () => {
         myForm.set('FacebookUrl', state.FacebookUrl)
         myForm.set('InstagramUrl', state.InstagramUrl)
         myForm.set("image", image);
-        // if (!(name || description || phone || email || Bname || Sname || city)) {
-        //     alert("Please fill required field ");
-        //     return;
-        // }
-        // const myForm = new FormData();
-        // myForm.set("image", image);
 
 
         changeState({ loading: true });
+        try {
+            let res = await axios.post(
+                `/api/directory/create/`,
 
-        let res = await axios.post(
-            `/api/directory/create/`,
-
-            myForm
-            ,
-            {
-                headers: {
-                    "content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+                myForm
+                ,
+                {
+                    headers: {
+                        "content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            //if (res.status === 200) window.location.reload();
+            console.log(res.status == 201)
+            if (res.status == 201) {
+                changeState({ loading: false });
+                swal("Add Business successfully!");
+                history.goBack()
             }
-        );
-        //if (res.status === 200) window.location.reload();
-        console.log(res.status == 201)
-        if (res.status == 201) {
+        } catch (error) {
+            alert(error)
             changeState({ loading: false });
-            swal("Add Business successfully!");
-            history.goBack()
         }
+
     };
     const onCancel = () => {
         // window.location = "/comproducts";

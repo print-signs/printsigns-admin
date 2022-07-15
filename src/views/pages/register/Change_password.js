@@ -29,6 +29,10 @@ const Register = () => {
 
 
   const handleSubmit = async () => {
+    if (!(oldPassword && newPassword && confirmPassword)) {
+      alert("Please fill All required field ");
+      return;
+    }
     const token = localStorage.getItem("authToken")
     setLoading({ loading: true })
     if (newPassword == confirmPassword) {

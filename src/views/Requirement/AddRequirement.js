@@ -20,64 +20,60 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription } from '@coreui/icons'
-const AddOffer = () => {
+import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription, cilObjectGroup } from '@coreui/icons'
+const AddRequirement = () => {
     const token = isAutheticated();
+    // console.log(token)
     let history = useHistory();
-    //console.log(token)
-    const [image, setImage] = useState("");
-    const [title, setTitle] = useState("");
-    const [bisunessName, setBisunessName] = useState([]);
-    const [sendBisunessName, setSendBisunessName] = useState('');
 
+    const [areaOfInterest, setAreaOfInterest] = useState("");
     const [description, setDescription] = useState("");
-    const [location, setLocation] = useState("");
+    const [title, setTitle] = useState("");
+    const [imagesPreview, setImagesPreview] = useState([]);
+    const [allimage, setAllImage] = useState([]);
+    // const [images, setImages] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
-    const changeState = (newState) =>
-        setBisunessName((prevState) => ({ ...prevState, ...newState }));
+    const handleImage = (e) => {
 
-    const handleChange = (e) => {
-        changeState({ ...bisunessName, [e.target.name]: e.target.value })
+        setAllImage([...allimage, ...e.target.files]);
 
-    };
-    const fetchBusuness = useCallback(async () => {
-        const res = await axios.get(`/api/directory/getAll`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        // only for file preview------------------------------------
+        const files = Array.from(e.target.files);
+        files.forEach((file) => {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setImagesPreview((old) => [...old, reader.result]);
+
+                }
+            };
+
+            reader.readAsDataURL(file)
         });
-
-        // console.log(res.data.directory);
-        setBisunessName(res.data.directory)
-
-    }, [token]);
-
-    useEffect(async () => {
-        fetchBusuness();
-
-    }, [fetchBusuness]);
-
-
+        // -----------------------------------------------------------------------------
+    };
 
     const handleSubmit = async () => {
-        if (!(title && description && image && location && sendBisunessName)) {
-            alert("Please fill All required field ");
-            return;
-        }
         const myForm = new FormData();
 
         myForm.set("title", title);
         myForm.set("description", description);
-        myForm.set("bisunessName", sendBisunessName);
-        myForm.set("location", location);
-        myForm.set("image", image);
-        setLoading({ loading: true });
-        // console.log(image)
+        myForm.set("areaOfInterest", areaOfInterest);
+        allimage.forEach((Singleimage) => {
+            myForm.append("image", Singleimage);
+
+        });
+        if (!(title && description && areaOfInterest && allimage[0])) {
+            alert("please fill all fields")
+            return
+        }
+        setLoading(true);
         try {
             let res = await axios.post(
-                `/api/offer/create`, myForm,
+                `/api/requirement/create`, myForm,
                 {
                     headers: {
                         "Content-Type": 'multipart/form-data',
@@ -85,33 +81,25 @@ const AddOffer = () => {
                     },
                 }
             );
-            // console.log(res.data)
-            if (res.data) {
-                swal("success!", "Event Added Successfully!", "success");
-                setLoading(false);
+            if (res.data.success === true) {
+                swal("success!", "Requirements Added Successfully!", "success");
                 history.goBack();
+                setLoading(false);
             }
 
         } catch (error) {
-            alert("something Went Wrong")
             setLoading(false);
+            alert(error)
+
         }
 
-
     };
-    const handleImage = (e) => {
-        const files = e.target.files[0];
-        // console.log(files)
-        setImage(files);
 
-    };
-    // 
     const onCancel = () => {
-        // window.location = "/comproducts";
         history.goBack()
 
     };
-    // console.log(bisunessName)
+
     return (
         <>
             <div className="bg-light min-vh-70 d-flex flex-row ">
@@ -121,7 +109,7 @@ const AddOffer = () => {
                             <CCard className="mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h3 className="mb-4 justify-content-center">Add New Offer</h3>
+                                        <h3 className="mb-4 justify-content-center">Add Requirements</h3>
                                         <div>
                                             <div>
                                                 <CInputGroup className="mb-3">
@@ -134,6 +122,16 @@ const AddOffer = () => {
                                                         value={title}
                                                         placeholder="Title" />
                                                 </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        <CIcon icon={cilObjectGroup} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="text"
+                                                        required
+                                                        onChange={(e) => setAreaOfInterest(e.target.value)}
+                                                        value={areaOfInterest}
+                                                        placeholder="Area Of Interest" />
+                                                </CInputGroup>
 
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
@@ -145,37 +143,7 @@ const AddOffer = () => {
                                                         value={description}
                                                         placeholder="Description" />
                                                 </CInputGroup>
-                                                <CInputGroup className="mb-3">
-                                                    <CInputGroupText>
-                                                        <CIcon icon={cilBell} />
-                                                    </CInputGroupText>
 
-                                                    <select
-                                                        name="bisunessName"
-                                                        value={sendBisunessName}
-                                                        // onChange={handleChange}
-                                                        // //onChange={(e) => setBisunessName(e.target.value)}
-                                                        onChange={(e) => setSendBisunessName(e.target.value)}
-                                                        className="form-control  input-field"
-                                                    >
-
-                                                        <option value="1">--select--</option>
-                                                        {bisunessName.map(item =>
-                                                            <option>{item?.name}</option>
-
-                                                        )}
-                                                    </select>
-                                                </CInputGroup>
-                                                <CInputGroup className="mb-3">
-                                                    <CInputGroupText>
-                                                        <CIcon icon={cilLocationPin} />
-                                                    </CInputGroupText>
-                                                    <CFormInput type="text"
-                                                        required
-                                                        onChange={(e) => setLocation(e.target.value)}
-                                                        value={location}
-                                                        placeholder="Location" />
-                                                </CInputGroup>
 
                                                 <CInputGroup className="mb-3">
 
@@ -185,19 +153,30 @@ const AddOffer = () => {
                                                         type="file"
                                                         placeholder="image"
                                                         accept="image/*"
+                                                        name="image"
                                                         required
+                                                        multiple
                                                         onChange={handleImage}
 
 
                                                     />
                                                 </CInputGroup>
+                                                <div><strong className="fs-6 fst-italic">*Please Upload maximum four images</strong></div>
+
+
+                                                <div id="createProductFormImage" className="w-25 d-flex">
+
+                                                    {imagesPreview.map((image, index) => (
+                                                        <img className=" w-50 p-1 " key={index} src={image} alt="Product Preview" />
+                                                    ))}
+                                                </div>
                                             </div>
 
                                             <div className=" d-flex">
                                                 <button
                                                     onClick={handleSubmit}
                                                     type="button"
-                                                    className="btn btn-success btn-login waves-effect waves-light"
+                                                    className="btn mt-1 btn-success btn-login waves-effect waves-light"
                                                 >
                                                     <ClipLoader loading={loading} size={18} />
                                                     {!loading && "Save"}
@@ -205,7 +184,7 @@ const AddOffer = () => {
                                                 <button
                                                     onClick={onCancel}
                                                     type="button"
-                                                    className=" ml-2 btn btn-warning btn-cancel waves-effect waves-light"
+                                                    className=" ml-2 mt-1 btn btn-warning btn-cancel waves-effect waves-light"
                                                 >
                                                     Cancel
                                                 </button>
@@ -223,4 +202,4 @@ const AddOffer = () => {
     )
 }
 
-export default AddOffer
+export default AddRequirement

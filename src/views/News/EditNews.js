@@ -45,6 +45,10 @@ const EditNews = () => {
     }, [id]);
 
     const handleSubmit = async () => {
+        if (!(title && description && image)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
 
         myForm.set("title", title);
@@ -52,22 +56,29 @@ const EditNews = () => {
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
-        let res = await axios.put(
-            `/api/news/update/${id}`, myForm,
-            {
-                headers: {
-                    "Content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+        try {
+            let res = await axios.put(
+                `/api/news/update/${id}`, myForm,
+                {
+                    headers: {
+                        "Content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // console.log(res.data)
+            if (res.data) {
+                swal("success!", "News Edit Successfully!", "success");
+                setLoading(false);
+                history.goBack();
             }
-        );
-        // console.log(res.data)
-        if (res.data) {
-            swal("success!", "News Edit Successfully!", "success");
-            history.goBack();
+        } catch (error) {
+            alert(error)
+            setLoading(false);
         }
 
-        setLoading(false);
+
+
     };
     const handleImage = (e) => {
         const files = e.target.files[0];

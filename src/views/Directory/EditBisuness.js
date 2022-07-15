@@ -94,6 +94,11 @@ const EditBisuness = () => {
 
 
     const handleSubmit = async () => {
+        if (!(state.name && state.phone && state.email && state.Building_Name && state.Street_Name && state.country && state.city && state.description
+            && state.category && state.status && image)) {
+            alert("Please fill All required field ");
+            return;
+        }
         const myForm = new FormData();
         myForm.set('name', state.name)
         myForm.set('phone', state.phone)
@@ -115,23 +120,28 @@ const EditBisuness = () => {
         myForm.set("image", image);
 
         changeState({ loading: true });
+        try {
+            let res = await axios.put(
+                `/api/directory/update/${id}`,
+                myForm,
+                {
+                    headers: {
+                        "content-Type": 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-        let res = await axios.put(
-            `/api/directory/update/${id}`,
-            myForm,
-            {
-                headers: {
-                    "content-Type": 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
+            if (res.status == 200) {
+                changeState({ loading: false });
+                swal("Edit Business successfully!");
+                history.goBack()
             }
-        );
-
-        if (res.status == 200) {
+        } catch (error) {
+            alert(error)
             changeState({ loading: false });
-            swal("Edit Business successfully!");
-            history.goBack()
         }
+
     };
     const onCancel = () => {
         history.goBack()
