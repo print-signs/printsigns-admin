@@ -91,5 +91,4 @@ const App = () => {
     </BrowserRouter>
   )
 }
-//@coreui/coreui-free-react-admin-template@4.1.1
 export default App
