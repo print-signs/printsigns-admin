@@ -1,17 +1,11 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
+  "name": "cmp",
   "version": "4.1.1",
-  "description": "CoreUI Free React Admin Template",
+  "description": "Cmp project",
   "homepage": ".",
-  "bugs": {
-    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
-  },
-  "license": "MIT",
-  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  
+  
+  "author": "pawan",
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
