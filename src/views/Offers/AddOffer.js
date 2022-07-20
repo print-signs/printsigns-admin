@@ -129,10 +129,11 @@ const AddOffer = () => {
                                                         <CIcon icon={cilPencil} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
+                                                        maxlength="250"
                                                         required
                                                         onChange={(e) => setTitle(e.target.value)}
                                                         value={title}
-                                                        placeholder="Title" />
+                                                        placeholder="Title (maximum 50 characters)" />
                                                 </CInputGroup>
 
                                                 <CInputGroup className="mb-3">
@@ -140,10 +141,11 @@ const AddOffer = () => {
                                                         <CIcon icon={cilAudioDescription} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
+                                                        maxlength="250"
                                                         required
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
-                                                        placeholder="Description" />
+                                                        placeholder="Description (maximum 250 characters)" />
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>

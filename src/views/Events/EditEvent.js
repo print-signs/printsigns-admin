@@ -25,7 +25,7 @@ import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin
 const EditEvent = () => {
     const { id } = useParams();
     // console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
@@ -115,20 +115,22 @@ const EditEvent = () => {
                                                         <CIcon icon={cilPencil} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
+                                                        maxlength="50"
                                                         required
                                                         onChange={(e) => setTitle(e.target.value)}
                                                         value={title}
-                                                        placeholder="Title" />
+                                                        placeholder="Title (maximum 50 characters)" />
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         <CIcon icon={cilAudioDescription} />
                                                     </CInputGroupText>
                                                     <CFormInput type="text"
+                                                        maxlength="250"
                                                         required
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
-                                                        placeholder="Description" />
+                                                        placeholder="Description (maximum 250 characters)" />
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>

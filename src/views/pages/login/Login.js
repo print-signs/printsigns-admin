@@ -33,6 +33,10 @@ const Login = () => {
   };
 
   const Login = async () => {
+    if (!(auth.email && auth.password)) {
+      alert("please filled both fields")
+      return
+    }
     setLoading({ loading: true })
     try {
       const res = await axios.post("/api/v1/user/login/", auth);

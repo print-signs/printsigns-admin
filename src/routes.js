@@ -15,6 +15,7 @@ import News from "./views/News/News"
 import ViewNews from "./views/News/ViewNews"
 //Events
 import Event from './views/Events/Event'
+import AllRegisterUser from './views/Events/AllRegisterUser'
 import EditEvent from './views/Events/EditEvent'
 import AddEvent from './views/Events/AddEvent'
 import ViewEvent from './views/Events/ViewEvent'
@@ -73,6 +74,8 @@ const routes = [
   { path: '/news/edit/:id', name: 'EditNews', component: EditNews },
   { path: '/news', name: 'news', component: News },
   //Events route
+
+  { path: '/event/registerUsers/view/:id', name: 'AllRegisterUser', component: AllRegisterUser },
   { path: '/event/view/:id', name: 'ViewEvent', component: ViewEvent },
   { path: '/addevent', name: 'AddEvent', component: AddEvent },
   { path: '/event/edit/:id', name: 'EditEvent', component: EditEvent },

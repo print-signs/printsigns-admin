@@ -1,54 +1,35 @@
 
+
 import axios from "axios";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
 import swal from 'sweetalert';
-import RegisterUser from "./RegisterUser";
 // import { API } from "../../data";
+import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
-function Event() {
-    const [event, setEvent] = useState([])
-
+const AllRegisterUser = () => {
+    const { id } = useParams();
     const token = isAutheticated();
-
-    const getEvent = useCallback(async () => {
+    const [registerUser, setRegisterUser] = useState([])
+    const getRegisterUser = useCallback(async () => {
         let res = await axios.get(
-            `/api/event/getAll`,
+            `/api/event/admin/registerUser/getAll/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        // console.log(res.data)
-        setEvent(res.data.Event)
+        console.log(res.data)
+        setRegisterUser(res.data.user)
 
 
     }, [token]);
 
     useEffect(() => {
-        getEvent();
-    }, [getEvent]);
-
-
-    const handleDelete = async (id) => {
-        let status = window.confirm("Do you want to delete");
-        if (!status) return;
-
-        let res = await axios.delete(`/api/event/delete/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        console.log(res)
-        if (res.data.success == true) {
-            swal("success!", "Event Deleted Successfully!", "success");
-            window.location.reload();
-        }
-    };
-
-
+        getRegisterUser();
+    }, [getRegisterUser]);
+    console.log(registerUser)
     //change time formate
     function formatAMPM(date) {
         var hours = new Date(date).getHours();
@@ -63,23 +44,15 @@ function Event() {
 
 
     return (
-        <div className=" main-content">
+        <><div className=" main-content">
             <div className="  my-3 page-content">
                 <div className="container-fluid">
                     {/* <!-- start page title --> */}
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-Event</h4>
-                                <Link to="/addEvent"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Event</button></Link>
-                                {/* <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/dashboard">CMD-App</Link>
-                    </li>
-                    <li className="breadcrumb-item">CMD-Category</li>
-                  </ol>
-                </div> */}
+                                <h4 className="mb-3">CMP-Event Register Users</h4>
+
                             </div>
                         </div>
                     </div>
@@ -96,17 +69,31 @@ function Event() {
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
                                                 <tr>
-                                                    <th>Title</th>
-                                                    <th>Image</th>
-                                                    <th>Location</th>
-                                                    <th>Added On</th>
-                                                    <th>Attended By</th>
-                                                    <th>Action</th>
+                                                    <th>Name</th>
+                                                    <th> Profile Image</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>register At</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {event && event.map((item, index) =>
-                                                    <RegisterUser item={item} handleDelete={handleDelete} formatAMPM={formatAMPM} />
+                                                {registerUser && registerUser.map((item, index) =>
+                                                    <tr>
+                                                        <td>{item.userId?.name}</td>
+                                                        <td>
+                                                            <img src={`${item.userId.avatar?.url}`} width="50" alt="" /></td>
+                                                        <td>{item.userId?.email}</td>
+                                                        <td>{item.userId?.phone}</td>
+                                                        <td>
+                                                            {/* {item?.addedOn} */}
+                                                            {new Date(`${item.userId?.createdAt}`).toDateString()}<span> , {`${formatAMPM(item.userId?.createdAt)}`}</span>
+
+                                                        </td>
+
+
+
+                                                    </tr>
                                                 )}
                                             </tbody>
                                         </table>
@@ -121,8 +108,8 @@ function Event() {
                 </div>
                 {/* <!-- container-fluid --> */}
             </div>
-        </div>
+        </div></>
     );
 }
 
-export default Event;
+export default AllRegisterUser;
