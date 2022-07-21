@@ -1,4 +1,5 @@
-
+import '@coreui/coreui/dist/css/coreui.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-app-polyfill/stable'
 import 'core-js'
 import React from 'react'
