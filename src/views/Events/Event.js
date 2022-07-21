@@ -21,7 +21,7 @@ function Event() {
                 },
             }
         );
-        // console.log(res.data)
+        console.log(res.data)
         setEvent(res.data.Event)
 
 
@@ -41,7 +41,7 @@ function Event() {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(res)
+        // console.log(res)
         if (res.data.success == true) {
             swal("success!", "Event Deleted Successfully!", "success");
             window.location.reload();
@@ -98,6 +98,8 @@ function Event() {
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Image</th>
+                                                    <th>Event Date</th>
+                                                    <th>Event Time</th>
                                                     <th>Location</th>
                                                     <th>Added On</th>
                                                     <th>Attended By</th>

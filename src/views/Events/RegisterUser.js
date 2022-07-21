@@ -17,7 +17,7 @@ const RegisterUser = ({ item, handleDelete, formatAMPM }) => {
                 },
             }
         );
-        console.log(res.data)
+        // console.log(res.data)
         setTotalRegisterUser(res.data.totalUserRegister)
 
 
@@ -32,6 +32,8 @@ const RegisterUser = ({ item, handleDelete, formatAMPM }) => {
                 <td>{item?.title}</td>
                 <td>
                     <img src={`${item?.image.url}`} width="50" alt="" /></td>
+                <td>{new Date(`${item?.date}`).toDateString()}</td>
+                <td>{item?.time}</td>
                 <td>{item?.location}</td>
                 <td>
                     {/* {item?.addedOn} */}

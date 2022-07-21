@@ -21,7 +21,7 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription } from '@coreui/icons'
+import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription, cilCalendar, cilAlarm } from '@coreui/icons'
 const EditEvent = () => {
     const { id } = useParams();
     // console.log(id)
@@ -31,6 +31,8 @@ const EditEvent = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState('');
     const [loading, setLoading] = useState(false);
 
     //fetch one image
@@ -43,12 +45,14 @@ const EditEvent = () => {
         // console.log(res.data)
         setTitle(res.data.Event.title)
         setDescription(res.data.Event.description)
+        setDate(res.data.Event.date)
+        setTime(res.data.Event.time)
         setLocation(res.data.Event.location)
 
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!(title && description && image && location)) {
+        if (!(title && description && image && location && time && date)) {
             alert("Please fill All required field ");
             return;
         }
@@ -56,6 +60,8 @@ const EditEvent = () => {
 
         myForm.set("title", title);
         myForm.set("description", description);
+        myForm.set("date", date)
+        myForm.set("time", time)
         myForm.set("location", location);
         myForm.set("image", image);
         setLoading({ loading: true });
@@ -131,6 +137,32 @@ const EditEvent = () => {
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
                                                         placeholder="Description (maximum 250 characters)" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        {/* Date* */}
+                                                        <CIcon icon={cilCalendar} />
+                                                    </CInputGroupText>
+                                                    {/* <DatePicker selected={startDate} /> */}
+
+                                                    <CFormInput type="date"
+                                                        required
+                                                        onChange={(e) => setDate(e.target.value)}
+                                                        value={date}
+                                                        placeholder="Event Date" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+
+                                                    <CInputGroupText>
+                                                        {/* Time* */}
+                                                        <CIcon icon={cilAlarm} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="time"
+                                                        startDate
+                                                        required
+                                                        onChange={(e) => setTime(e.target.value)}
+                                                        value={time}
+                                                        placeholder=" Event time" />
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>

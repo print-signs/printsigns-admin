@@ -20,7 +20,7 @@ import {
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription } from '@coreui/icons'
+import { cilPencil, cilSettings, cilLockLocked, cilUser, cilBell, cilLocationPin, cilAudioDescription, cilCalendar, cilWatch, cilAlarm } from '@coreui/icons'
 const AddEvent = () => {
     const token = isAutheticated();
     let history = useHistory();
@@ -28,12 +28,12 @@ const AddEvent = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState('');
 
     const [loading, setLoading] = useState(false);
-
-
     const handleSubmit = async () => {
-        if (!(title && description && image && location)) {
+        if (!(title && description && image && location && time && date)) {
             alert("Please fill All required field ");
             return;
         }
@@ -42,6 +42,8 @@ const AddEvent = () => {
         myForm.set("title", title);
         myForm.set("description", description);
         myForm.set("location", location);
+        myForm.set("date", date)
+        myForm.set("time", time)
         myForm.set("image", image);
         setLoading({ loading: true });
         // console.log(image)
@@ -116,6 +118,32 @@ const AddEvent = () => {
                                                         onChange={(e) => setDescription(e.target.value)}
                                                         value={description}
                                                         placeholder="Description (maximum 250 characters)" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+                                                    <CInputGroupText>
+                                                        {/* Date* */}
+                                                        <CIcon icon={cilCalendar} />
+                                                    </CInputGroupText>
+                                                    {/* <DatePicker selected={startDate} /> */}
+
+                                                    <CFormInput type="date"
+                                                        required
+                                                        onChange={(e) => setDate(e.target.value)}
+                                                        value={date}
+                                                        placeholder="Event Date" />
+                                                </CInputGroup>
+                                                <CInputGroup className="mb-3">
+
+                                                    <CInputGroupText>
+                                                        {/* Time* */}
+                                                        <CIcon icon={cilAlarm} />
+                                                    </CInputGroupText>
+                                                    <CFormInput type="time"
+                                                        startDate
+                                                        required
+                                                        onChange={(e) => setTime(e.target.value)}
+                                                        value={time}
+                                                        placeholder="Event Time" />
                                                 </CInputGroup>
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>

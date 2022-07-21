@@ -20,7 +20,7 @@ const AllRegisterUser = () => {
                 },
             }
         );
-        console.log(res.data)
+        // console.log(res.data)
         setRegisterUser(res.data.user)
 
 

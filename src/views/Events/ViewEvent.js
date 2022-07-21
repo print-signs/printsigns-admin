@@ -89,6 +89,8 @@ function ViewEvent() {
                                                     <img src={`${event.image?.url}`} width="50" alt="" />
                                                 </td></tr>
                                                 <tr><th>Description</th><td>{event?.description}</td></tr>
+                                                <tr><th>Event Date</th><td>{new Date(`${event?.date}`).toDateString()}</td></tr>
+                                                <tr><th>Event Time</th><td>{event?.time}</td></tr>
                                                 <tr><th>Location</th><td>{event?.location}</td></tr>
                                                 <tr><th>Added On</th><td>
                                                     {new Date(`${event?.addedOn}`).toDateString()}<span> , {`${formatAMPM(event?.addedOn)}`}</span>

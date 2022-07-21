@@ -1,7 +1,17 @@
 {
-  "name": "cmp",
-  "description": "Cmp project",
-  "author": "pawan",
+  "name": "@coreui/coreui-free-react-admin-template",
+  "version": "4.1.1",
+  "description": "CoreUI Free React Admin Template",
+  "homepage": ".",
+  "bugs": {
+    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
+  },
+  "license": "MIT",
+  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
@@ -21,16 +31,16 @@
   },
   "dependencies": {
     "@coreui/chartjs": "^3.0.0",
-    "@coreui/coreui": "^4.2.0",
+    "@coreui/coreui": "^4.1.0",
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-react": "^2.0.0",
-    "@coreui/react": "^4.3.0",
+    "@coreui/react": "^4.1.0",
     "@coreui/react-chartjs": "^2.0.0",
     "@coreui/utils": "^1.3.1",
     "@reduxjs/toolkit": "^1.8.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "axios": "^0.25.0",
-    "bootstrap": "^5.2.0",
+    "bootstrap": "^5.1.3",
     "chart.js": "^3.6.0",
     "classnames": "^2.3.1",
     "core-js": "^3.19.1",
@@ -47,6 +57,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
     "react-spinners": "^0.11.0",
+    "react-time-picker": "^4.5.0",
     "redux": "4.1.2",
     "serve": "^13.0.2",
     "simplebar-react": "^2.3.6",
