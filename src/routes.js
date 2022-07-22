@@ -44,6 +44,11 @@ import ViewRequirement from './views/Requirement/ViewRequirement'
 import Requirement from './views/Requirement/Requirement'
 import AddRequirement from './views/Requirement/AddRequirement'
 import EditRequirement from './views/Requirement/EditRequirement'
+//FAQs 
+import ViewFaqs from "./views/FAQs/ViewFaqs"
+import Faqs from './views/FAQs/Faqs'
+import AddFaqs from './views/FAQs/AddFaqs'
+import EditFaqs from './views/FAQs/EditFaqs'
 
 //  DashBoard
 const Change_Password = React.lazy(() => import('./views/pages/register/Change_password'))
@@ -104,6 +109,11 @@ const routes = [
   { path: '/requirement/edit/:id', name: 'EditRequirement', component: EditRequirement },
   { path: '/requirement/add/', name: 'AddRequirement', component: AddRequirement },
   { path: '/requirement', name: 'Requirement', component: Requirement },
+  //FAQs
+  { path: '/FAQs/view/:id', name: 'ViewFaqs', component: ViewFaqs },
+  { path: '/FAQs/edit/:id', name: 'EditFaqs', component: EditFaqs },
+  { path: '/FAQs/add/', name: 'AddFaqs', component: AddFaqs },
+  { path: '/FAQs', name: 'Faqs', component: Faqs },
 
   //Users 
   { path: '/users/view/:id', name: 'ViewUsers', component: ViewUsers },

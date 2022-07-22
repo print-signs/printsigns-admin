@@ -24,7 +24,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import swal from 'sweetalert';
 
-import avatar8 from './../../assets/images/avatars/8.jpg'
+import avatar8 from './../../assets/images/avatars/1.jpg'
 import { Link } from 'react-router-dom'
 // import { signout } from 'src/auth'
 import { useHistory } from "react-router-dom";
