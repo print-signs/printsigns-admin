@@ -104,11 +104,11 @@ const Login = () => {
                     </Link>
                     <br />
 
-                    {/* <CButton color="link" className="px-0">
+                    <CButton color="link" className="px-0">
                       <Link to="/forgot">
-                        Forgot password?
+                        Forgot password.?
                       </Link>
-                    </CButton> */}
+                    </CButton>
 
 
                   </CForm>

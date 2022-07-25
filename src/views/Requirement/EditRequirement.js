@@ -138,6 +138,11 @@ const EditRequirement = () => {
                                                         value={title}
                                                         placeholder="Title (maximum 50 characters)" />
                                                 </CInputGroup>
+                                                {title ? <><i className="charLeft mt-4 fst-italic">
+                                                    {50 - title.length} characters left
+                                                </i></> : <></>
+
+                                                }
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         <CIcon icon={cilObjectGroup} />
@@ -160,7 +165,11 @@ const EditRequirement = () => {
                                                         value={description}
                                                         placeholder="Description (maximum 250 characters)" />
                                                 </CInputGroup>
+                                                {description ? <><span className="charLeft mt-4 fst-italic">
+                                                    {250 - description.length} characters left
+                                                </span></> : <></>
 
+                                                }
 
                                                 <CInputGroup className="mb-3">
 

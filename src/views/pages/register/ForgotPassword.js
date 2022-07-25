@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react'
+import axios from 'axios';
+import ClipLoader from "react-spinners/ClipLoader";
+
 import {
+
     CButton,
     CCard,
     CCardBody,
@@ -13,9 +17,41 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilEnvelopeLetter, cilEnvelopeOpen, cilLockLocked, cilUser } from '@coreui/icons'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const ForgotPassword = () => {
+    const history = useHistory()
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState()
+    // console.log(email)
+    const handleSubmit = async () => {
+        if (email) {
+            try {
+                setLoading(true)
+
+                const res = await axios.post(`/api/v1/user/password/forgot`, { email: email })
+                //console.log(res);
+                if (res.data.success === true) {
+                    setLoading(false)
+                    // alert("Email Send Successfully! please check your mail for reset password")
+                    swal("success!", "Email Send Successfully! please check your Email for new password", "success");
+                    history.push("/");
+
+                }
+            } catch (e) {
+                alert("You are not a User")
+                setLoading(false)
+
+
+            }
+        } else {
+            alert("please fill Email field..")
+            setLoading(false)
+        }
+
+
+    }
     return <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
         <CContainer>
             <CRow className="justify-content-center">
@@ -24,7 +60,7 @@ const ForgotPassword = () => {
                         <CCardBody className="p-4">
                             <CForm>
                                 <h1>Forgot Password?</h1>
-                                <p className="text-medium-emphasis"> Enter your email Below we will send you a link to reset your password</p>
+                                <p className="text-medium-emphasis"> Enter your email Below, we will send you password in your Email</p>
                                 {/* <CInputGroup className="mb-3">
                 <CInputGroupText>
                   <CIcon icon={cilUser} />
@@ -37,15 +73,20 @@ const ForgotPassword = () => {
                                         <CIcon icon={cilEnvelopeOpen} />
                                     </CInputGroupText>
                                     <CFormInput
-                                        type="password"
+                                        type="email"
                                         placeholder="Email"
                                         autoComplete="email"
+                                        // value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </CInputGroup>
 
-                                <CButton color="dark">Send</CButton>
+                                <CButton color="primary" disabled={!email} onClick={() => handleSubmit()}>
+                                    <ClipLoader loading={loading} size={18} />
+                                    {!loading && "Send"}
+                                </CButton>
                                 <Link to='/'>
-                                    <CButton color="dark" className='ms-2'>Back to Login</CButton>
+                                    <CButton color="secondary" className='ms-2'>Back to Login</CButton>
                                 </Link>
                             </CForm>
                         </CCardBody>

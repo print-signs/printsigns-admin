@@ -113,9 +113,14 @@ const EditFaqs = () => {
                                                         value={topic}
                                                         placeholder="Topic ( maximum 50 character )" />
                                                 </CInputGroup>
+                                                {topic ? <><span className="charLeft mb-3 fst-italic">
+                                                    {50 - topic.length} characters left
+                                                </span></> : <></>
+
+                                                }
                                                 <CInputGroup className="mb-3 d-flex">
 
-                                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description*</label>
+                                                    <label htmlFor="exampleFormControlTextarea1" className="form-label fw-bold">Description*</label>
                                                     <textarea
                                                         className="h-50 w-100"
                                                         maxlength='500'
@@ -125,7 +130,11 @@ const EditFaqs = () => {
                                                         rows="5"
                                                         placeholder="Description ( maximum 500 character )">ewf3g</textarea>
                                                 </CInputGroup>
+                                                {description ? <><span className="charLeft fst-italic mb-3">
+                                                    {500 - description.length} characters left
+                                                </span></> : <></>
 
+                                                }
                                                 {/* <CInputGroup className="mb-3">
 
                                                     

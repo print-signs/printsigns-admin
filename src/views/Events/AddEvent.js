@@ -107,6 +107,11 @@ const AddEvent = () => {
                                                         placeholder="Title (maximum 50 characters)" />
 
                                                 </CInputGroup>
+                                                {title ? <><span className="charLeft mt-4 fst-italic">
+                                                    {50 - title.length} characters left
+                                                </span></> : <></>
+
+                                                }
 
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
@@ -119,6 +124,11 @@ const AddEvent = () => {
                                                         value={description}
                                                         placeholder="Description (maximum 250 characters)" />
                                                 </CInputGroup>
+                                                {description ? <><span className="charLeft mt-4 fst-italic">
+                                                    {250 - description.length} characters left
+                                                </span></> : <></>
+
+                                                }
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         {/* Date* */}
