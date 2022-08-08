@@ -25,7 +25,7 @@ import CIcon from '@coreui/icons-react'
 import { cilPencil, cilNotes, cilCalendar, cilNoteAdd } from '@coreui/icons'
 const EditBanner = () => {
     const { id } = useParams();
-    const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
@@ -42,9 +42,9 @@ const EditBanner = () => {
     //fetch one Offer
     useEffect(async () => {
         const res = await axios.get(`/api/banner/getOne/${id}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         // console.log(res.data.banner)
         // console.log(res.data.banner.startDate)

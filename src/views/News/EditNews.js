@@ -25,7 +25,7 @@ import { cilPencil, cilSettings, cilLockLocked, cilUser } from '@coreui/icons'
 const EditNews = () => {
     const { id } = useParams();
     // console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");

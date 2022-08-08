@@ -115,7 +115,7 @@ const Add_Business = () => {
                 }
             );
             //if (res.status === 200) window.location.reload();
-            console.log(res.status == 201)
+            // console.log(res.status == 201)
             if (res.status == 201) {
                 changeState({ loading: false });
                 swal("Add Business successfully!");

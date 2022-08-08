@@ -23,7 +23,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 const AddProduct = () => {
-    // const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
@@ -49,7 +49,7 @@ const AddProduct = () => {
                 {
                     headers: {
                         "Content-Type": 'multipart/form-data',
-                        // Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );

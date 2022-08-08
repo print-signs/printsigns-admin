@@ -40,7 +40,7 @@ const ForgotPassword = () => {
 
                 }
             } catch (e) {
-                alert("You are not a User")
+                alert("Wrong Email ID. Enter valid email to get the password")
                 setLoading(false)
 
 

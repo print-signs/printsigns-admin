@@ -21,7 +21,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilPencil, cilSettings, cilLockLocked, cilUser } from '@coreui/icons'
 const AddNews = () => {
-    const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");

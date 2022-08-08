@@ -151,7 +151,7 @@ const EditBisuness = () => {
 
 
 
-    console.log(image)
+    // console.log(image)
     return (
         <>
             <div className=" main-content">

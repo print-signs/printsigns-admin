@@ -10,7 +10,7 @@ function ViewNews() {
     const [news, setNews] = useState([])
     const { id } = useParams();
     console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
     const getNews = useCallback(async () => {
         let res = await axios.get(

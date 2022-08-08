@@ -23,7 +23,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 const AddProduct = () => {
-    // const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const { id } = useParams();
     // console.log(id)
@@ -32,9 +32,9 @@ const AddProduct = () => {
     const [loading, setLoading] = useState(false);
     useEffect(async () => {
         const res = await axios.get(`/api/category/getOne/${id}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
 

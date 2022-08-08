@@ -9,7 +9,7 @@ import { isAutheticated } from "../../auth";
 function News() {
     const [news, setNews] = useState([])
 
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
     const getNews = useCallback(async () => {
         let res = await axios.get(

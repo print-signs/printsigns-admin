@@ -13,7 +13,7 @@ function ViewBanner() {
     const [banner, setBanner] = useState([])
     const { id } = useParams();
     // console.log(id)
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
     const getBanner = useCallback(async () => {
         let res = await axios.get(

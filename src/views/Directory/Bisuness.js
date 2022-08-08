@@ -9,7 +9,7 @@ const Bisuness = () => {
 
 
 
-  const { token } = isAutheticated();
+  const token = isAutheticated();
 
   const getProducts = useCallback(async () => {
     let res = await axios.get(
@@ -53,15 +53,16 @@ const Bisuness = () => {
   };
 
   const toggleStatus = async (id) => {
-    let status = window.confirm("Do you want to delete");
+    let status = window.confirm("Do you want to change status");
     if (!status) {
       return;
     }
-    let res = await axios.get(`/api/product/setStatus/${id}`, {
+    let res = await axios.get(`/api/directory/admin/setStatus/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    // console.log(res)
     if (res.status === 200) window.location.reload();
   };
 
@@ -76,14 +77,7 @@ const Bisuness = () => {
                 <div className="page-title-box d-flex align-items-center justify-content-between">
                   <h4 className="mb-3">Bisuness-Directory</h4>
                   <Link to="/add_bisuness"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Bisuness</button></Link>
-                  {/* <div className="page-title-right">
-                                        <ol className="breadcrumb m-0">
-                                            <li className="breadcrumb-item">
-                                                <Link to="/dashboard">Dating App</Link>
-                                            </li>
-                                            <li className="breadcrumb-item">Commerce - Products</li>
-                                        </ol>
-                                    </div> */}
+
                 </div>
               </div>
             </div>
@@ -94,38 +88,7 @@ const Bisuness = () => {
                 <div className="card">
                   <div className="card-body">
                     <div className="row ml-0 mr-0  mb-10">
-                      {/* <div className="col-sm-12 col-md-6">
-                      <div className="dataTables_length">
-                        <label className="w-100">
-                          Show{" "}
-                          <select
-                            onChange={(e) =>
-                              changeState({ limit: e.target.value, page: 1 })
-                            }
-                            className="select-w custom-select custom-select-sm form-control form-control-sm"
-                          >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                          </select>{" "}
-                          entries
-                        </label>
-                      </div>
-                    </div> */}
-                      {/* <div className="col-sm-12 col-md-6">
-                      <div className="dropdown d-block">
-                        <a href="/comproducts/add">
-                          <button
-                            type="button"
-                            className="btn btn-primary add-btn waves-effect waves-light float-right"
-                          >
-                            <i className="fa fa-plus" aria-hidden="true"></i>{" "}
-                            Add New Product
-                          </button>
-                        </a>
-                      </div>
-                    </div> */}
+
                     </div>
                     <div className="table-responsive table-shoot">
                       <table className="table table-centered table-nowrap mb-0">
@@ -147,20 +110,20 @@ const Bisuness = () => {
                               <td>{item?.city}</td>
                               <td>
                                 <span
-                                  className={`badge rounded-pill bg-${status ? "success" : "danger"
+                                  className={`badge rounded-pill bg-${item.status === "true" ? "success" : "danger"
                                     } font-size-10`}
                                 >
-                                  {status ? "Live" : "Suspended"}
+                                  {item.status === "true" ? "Live" : "Suspended"}
                                 </span>
                               </td>
                               <td>
                                 <button
                                   type="button"
-                                  className={`btn btn-${status ? "danger" : "success"
+                                  className={`btn btn-${item.status === "true" ? "danger" : "success"
                                     }  btn-sm  waves-effect waves-light btn-table ml-1`}
-                                  onClick={() => toggleStatus('_id')}
+                                  onClick={() => toggleStatus(item._id)}
                                 >
-                                  {status ? "Suspend" : "Activate"}
+                                  {item.status === "true" ? "Suspend" : "Activate"}
                                 </button>
                                 <Link to={`/view_bisuness/${item._id}`}>
 

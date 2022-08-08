@@ -9,7 +9,7 @@ import { isAutheticated } from "../../auth";
 function banner() {
     const [banner, setBanner] = useState([])
 
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
     const getEvent = useCallback(async () => {
         let res = await axios.get(
@@ -20,7 +20,7 @@ function banner() {
                 },
             }
         );
-        console.log(res.data)
+        // console.log(res.data)
         setBanner(res.data.banner)
 
 

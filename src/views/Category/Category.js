@@ -22,7 +22,7 @@ function Products() {
   const changeState = (newState) =>
     setState((prevState) => ({ ...prevState, ...newState }));
 
-  const { token } = isAutheticated();
+  const token = isAutheticated();
 
   const getProducts = useCallback(async () => {
     let res = await axios.get(

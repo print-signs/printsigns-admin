@@ -14,7 +14,7 @@ const View_Bisuness = () => {
     // const { products, page, limit, totalProducts, pages } = state;
 
 
-    const { token } = isAutheticated();
+    const token = isAutheticated();
 
     const view_business = useCallback(async () => {
         let res = await axios.get(

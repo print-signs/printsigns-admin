@@ -22,7 +22,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilPencil, cilNotes, cilCalendar, cilAddressBook, cil3d, cilActionUndo, cilNoteAdd } from '@coreui/icons'
 const AddBanner = () => {
-    const { token } = isAutheticated();
+    const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
