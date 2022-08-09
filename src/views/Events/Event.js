@@ -21,7 +21,7 @@ function Event() {
                 },
             }
         );
-        console.log(res.data)
+        // console.log(res.data)
         setEvent(res.data.Event)
 
 
@@ -108,7 +108,7 @@ function Event() {
                                             </thead>
                                             <tbody>
                                                 {event && event.map((item, index) =>
-                                                    <RegisterUser item={item} handleDelete={handleDelete} formatAMPM={formatAMPM} />
+                                                    <RegisterUser key={index} item={item} handleDelete={handleDelete} formatAMPM={formatAMPM} />
                                                 )}
                                             </tbody>
                                         </table>

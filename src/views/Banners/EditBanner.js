@@ -200,7 +200,7 @@ const EditBanner = () => {
                                                             <option value="1">--Select SubCategory--</option>
                                                             {category.map((item, index) => (
 
-                                                                <option value={item.name}>{item.name}</option>
+                                                                <option key={index} value={item.name}>{item.name}</option>
                                                             ))}
                                                             {/* <option value="6">--select--</option> */}
 

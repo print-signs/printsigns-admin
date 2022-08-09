@@ -43,9 +43,9 @@ const App = () => {
               Authorization: `Bearer ${token}`,
             },
           })
-          //console.log(response)
+          // console.log(response.data)
           const data = response.data
-          if (data.success) {
+          if (data.success && data.user.role === 'admin') {
 
             setUserData(data.user);
           } else {
@@ -77,10 +77,10 @@ const App = () => {
 
 
 
-          {/* <Route path="/" name="Home" render={(props) => (
-            userdata && userdata?._id ? <DefaultLayout {...props} /> :
+          <Route path="/" name="Home" render={(props) => (
+            userdata?.role === "admin" ? <DefaultLayout {...props} /> :
               userdata === false ? <Login {...props} /> : <div></div>
-          )} /> */}
+          )} />
 
           <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
 

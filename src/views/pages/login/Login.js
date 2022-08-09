@@ -42,9 +42,23 @@ const Login = () => {
       const res = await axios.post("/api/v1/user/login/", auth);
       if (res.data.success == true) {
         localStorage.setItem("authToken", res.data.token)
-        history.push('/dashboard')
-        setLoading(false);
-        window.location.reload()
+        let response = await axios.get(`/api/v1/user/details`, {
+          headers: {
+            Authorization: `Bearer ${res.data.token}`,
+          },
+        })
+        // console.log(response.data)
+        const data = response.data
+        if (data.user.role === 'admin') {
+          history.push('/dashboard')
+          setLoading(false);
+          window.location.reload()
+        }
+        else {
+          alert("please try with admin credential!!")
+          setLoading(false);
+        }
+
 
 
       }
@@ -70,7 +84,7 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to Your CMP Dashboard Account.</p>
+                    <p className="text-medium-emphasis">Sign In to Your Sales Champions Dashboard Account.</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -129,3 +143,8 @@ const Login = () => {
 }
 
 export default Login
+
+  // < Route path = "/" name = "Home" render = {(props) => (
+  //   userdata && userdata.role === 'admin' ? <DefaultLayout {...props} /> :
+  //     <><Login {...props} /></>
+  // )} />

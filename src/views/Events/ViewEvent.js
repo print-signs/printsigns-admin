@@ -9,7 +9,6 @@ import { isAutheticated } from "../../auth";
 function ViewEvent() {
     const [event, setEvent] = useState([])
     const { id } = useParams();
-    console.log(id)
     const token = isAutheticated();
 
     const getEvent = useCallback(async () => {

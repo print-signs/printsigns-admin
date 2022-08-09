@@ -9,7 +9,6 @@ import { isAutheticated } from "../../auth";
 function ViewOffer() {
     const [offer, setOffer] = useState([])
     const { id } = useParams();
-    console.log(id)
     const token = isAutheticated();
 
     const getOffer = useCallback(async () => {

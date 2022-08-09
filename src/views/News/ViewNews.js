@@ -9,7 +9,6 @@ import { isAutheticated } from "../../auth";
 function ViewNews() {
     const [news, setNews] = useState([])
     const { id } = useParams();
-    console.log(id)
     const token = isAutheticated();
 
     const getNews = useCallback(async () => {
@@ -21,7 +20,7 @@ function ViewNews() {
                 },
             }
         );
-        console.log(res.data.news)
+
         setNews(res.data.news)
 
 

@@ -106,7 +106,7 @@ function banner() {
                                             </thead>
                                             <tbody>
                                                 {banner && banner.map((item, index) =>
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{item?.title}</td>
                                                         <td>
                                                             <img src={`${item?.image.url}`} width="50" alt="" /></td>

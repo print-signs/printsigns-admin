@@ -102,9 +102,9 @@ const Bisuness = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {bisuness.map((item) =>
+                          {bisuness.map((item, index) =>
 
-                            <tr>
+                            <tr key={index}>
                               <td>{item?.name} </td>
                               <td>{item?.category}</td>
                               <td>{item?.city}</td>

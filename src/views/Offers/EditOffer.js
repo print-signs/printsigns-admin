@@ -180,8 +180,8 @@ const EditOffer = () => {
                                                     >
 
                                                         <option value="1">--select--</option>
-                                                        {bisunessName.map(item =>
-                                                            <option>{item?.name}</option>
+                                                        {bisunessName.map((item, index) =>
+                                                            <option key={index}>{item?.name}</option>
 
                                                         )}
                                                     </select>

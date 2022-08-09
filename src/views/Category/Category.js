@@ -126,7 +126,7 @@ function Products() {
                       </thead>
                       <tbody>
                         {category && category.map((item, index) =>
-                          <tr>
+                          <tr key={index}>
                             <td>{item?.name}</td>
                             <td>
                               <img src={`${item?.image.url}`} width="50" alt="" /></td>

@@ -25,7 +25,7 @@ const View_Bisuness = () => {
                 },
             }
         );
-        console.log(res.data.directory)
+        // console.log(res.data.directory)
         setBisuness(res.data.directory)
         // changeState({
         //     ...res.data,

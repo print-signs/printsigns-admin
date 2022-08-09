@@ -385,8 +385,8 @@ const Add_Business = () => {
                                                                     className="form-control  input-field"
                                                                 >
                                                                     <option value="">--select--</option>
-                                                                    {categoryName && categoryName.map(item =>
-                                                                        <option>{item?.name}</option>
+                                                                    {categoryName && categoryName.map((item, index) =>
+                                                                        <option key={index}>{item?.name}</option>
 
                                                                     )}
                                                                 </select>

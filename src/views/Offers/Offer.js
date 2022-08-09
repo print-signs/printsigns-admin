@@ -98,7 +98,7 @@ function Offer() {
                                             </thead>
                                             <tbody>
                                                 {offer && offer.map((item, index) =>
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{item?.title}</td>
 
                                                         <td>
