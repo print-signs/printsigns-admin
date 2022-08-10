@@ -31,7 +31,7 @@ const ForgotPassword = () => {
                 setLoading(true)
 
                 const res = await axios.post(`/api/v1/user/password/forgot`, { email: email })
-                //console.log(res);
+                // console.log(res);
                 if (res.data.success === true) {
                     setLoading(false)
                     // alert("Email Send Successfully! please check your mail for reset password")

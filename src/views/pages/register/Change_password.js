@@ -83,7 +83,7 @@ const Register = () => {
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Old Password" autoComplete="email" onChange={(e) => setOldPassword(e.target.value)} />
+                    <CFormInput placeholder="Old Password" type="password" onChange={(e) => setOldPassword(e.target.value)} />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
