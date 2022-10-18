@@ -69,7 +69,8 @@ const EditCms = () => {
                 history.goBack()
             }
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
+
             changeState({ loading: false });
         }
 

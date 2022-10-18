@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -22,20 +22,80 @@ import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [validForm, setValidForm] = useState(false)
   const [auth, setAuth] = useState({
     email: "",
     password: ""
   });
-  const history = useHistory();
+  const [errors, setErrors] = useState({
+    emailError: '',
+    passwordError: '',
 
-  const handleChange = (e) => (event) => {
-    setAuth({ ...auth, [e]: event.target.value });
-  };
+  })
+  const validEmailRegex = RegExp(
+    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+  )
+  const validPasswordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{7,}$/)
+  const history = useHistory();
+  // const handleChange = (e) => (event) => {
+
+  //   setAuth({ ...auth, [e]: event.target.value });
+  // };
+  const validateForm = () => {
+    let valid = true
+    Object.values(errors).forEach((val) => {
+      if (val.length > 0) {
+        valid = false
+        return false
+      }
+    })
+    Object.values(auth).forEach((val) => {
+      if (val.length <= 0) {
+        valid = false
+        return false
+      }
+    })
+    return valid
+  }
+
+  //cheking email and password
+  useEffect(() => {
+    if (validateForm()) {
+      setValidForm(true)
+    } else {
+      setValidForm(false)
+    }
+  }, [errors])
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    switch (name) {
+      case 'email':
+        setErrors({
+          ...errors,
+          emailError: validEmailRegex.test(value) ? '' : 'Email is not valid!',
+        })
+
+        break
+      case 'password':
+        setErrors((errors) => ({
+          ...errors,
+          passwordError: validPasswordRegex.test(value)
+            ? ''
+            : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+        }))
+        break
+      default:
+        break
+    }
+
+    setAuth({ ...auth, [name]: value })
+  }
 
   const Login = async () => {
     if (!(auth.email && auth.password)) {
-      alert("please filled both fields")
-      return
+
+      return swal('Error!', 'All fields are required', 'error')
     }
     setLoading({ loading: true })
     try {
@@ -55,7 +115,7 @@ const Login = () => {
           window.location.reload()
         }
         else {
-          alert("please try with admin credential!!")
+          swal('Error!', 'please try with admin credential!!', 'error')
           setLoading(false);
         }
 
@@ -64,12 +124,14 @@ const Login = () => {
       }
       else {
         setLoading(false);
-        alert("Invalid Credential");
+
+        swal('Error!', 'Invalid Credentials', 'error')
 
       }
     } catch (error) {
       setLoading(false);
-      alert("Invalid Credentials");
+
+      swal('Error!', 'Invalid Credentials', 'error')
 
     }
   }
@@ -84,27 +146,34 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to Your Sales Champions Dashboard Account.</p>
+                    <p className="text-medium-emphasis">Sign In to Your CMP Dashboard Account.</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Email" onChange={handleChange("email")} autoComplete="email" />
+                      <CFormInput type="email" placeholder="Email" onChange={handleChange} value={auth.email} name="email" autoComplete="email" />
                     </CInputGroup>
+                    {errors.emailError && (
+                      <p className="text-center py-2 text-danger">{errors.emailError}</p>
+                    )}
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        onChange={handleChange("password")}
+                        name="password"
+                        value={auth.password}
+                        onChange={handleChange}
                         placeholder="Password"
                         autoComplete="current-password"
                       />
                     </CInputGroup>
 
-
-                    <CButton color="primary" className="px-4" onClick={Login}>
+                    {errors.passwordError && (
+                      <p className="text-center py-2 text-danger">{errors.passwordError}</p>
+                    )}
+                    <CButton color="primary" className="px-4" disabled={!validForm} onClick={Login}>
                       <ClipLoader loading={loading} size={18} />
                       {!loading && "Login"}
 

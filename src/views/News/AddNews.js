@@ -31,8 +31,8 @@ const AddNews = () => {
 
     const handleSubmit = async () => {
         if (!(title && description && image)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -58,7 +58,8 @@ const AddNews = () => {
                 history.goBack();
             }
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
+
             setLoading(false);
         }
 

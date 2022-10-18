@@ -31,8 +31,8 @@ const AddFaqs = () => {
 
     const handleSubmit = async () => {
         if (!(topic && description)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -58,7 +58,8 @@ const AddFaqs = () => {
                 history.goBack();
             }
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
+
             setLoading(false);
         }
 

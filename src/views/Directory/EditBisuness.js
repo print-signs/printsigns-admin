@@ -96,8 +96,8 @@ const EditBisuness = () => {
     const handleSubmit = async () => {
         if (!(state.name && state.phone && state.email && state.Building_Name && state.Street_Name && state.country && state.city && state.description
             && state.category && state.status && image)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
         myForm.set('name', state.name)
@@ -138,7 +138,8 @@ const EditBisuness = () => {
                 history.goBack()
             }
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
+
             changeState({ loading: false });
         }
 

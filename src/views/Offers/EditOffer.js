@@ -72,8 +72,8 @@ const EditOffer = () => {
 
     const handleSubmit = async () => {
         if (!(title && description && image && location && sendBisunessName)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -101,7 +101,8 @@ const EditOffer = () => {
                 history.goBack();
             }
         } catch (error) {
-            alert("something Went Wrong")
+            swal('Error!', 'something Went Wrong', 'error')
+
             setLoading(false);
         }
 

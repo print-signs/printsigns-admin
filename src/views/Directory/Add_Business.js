@@ -75,8 +75,8 @@ const Add_Business = () => {
     const handleSubmit = async () => {
         if (!(state.name && state.phone && state.email && state.Bname && state.Sname && state.country && state.city && state.description
             && state.category && state.status && image)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
 
         const myForm = new FormData();
@@ -122,7 +122,8 @@ const Add_Business = () => {
                 history.goBack()
             }
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
+
             changeState({ loading: false });
         }
 

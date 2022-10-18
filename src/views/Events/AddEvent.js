@@ -34,8 +34,8 @@ const AddEvent = () => {
     const [loading, setLoading] = useState(false);
     const handleSubmit = async () => {
         if (!(title && description && image && location && time && date)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -64,7 +64,8 @@ const AddEvent = () => {
                 history.goBack();
             }
         } catch (error) {
-            alert("Something went Wrong")
+            swal('Error!', 'Something went Wrong', 'error')
+
             setLoading(false);
         }
 

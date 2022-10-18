@@ -67,8 +67,8 @@ const AddRequirement = () => {
 
         });
         if (!(title && description && areaOfInterest && allimage[0])) {
-            alert("please fill all fields")
-            return
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         setLoading(true);
         try {
@@ -89,7 +89,8 @@ const AddRequirement = () => {
 
         } catch (error) {
             setLoading(false);
-            alert(error)
+            swal('Error!', error, 'error')
+
 
         }
 

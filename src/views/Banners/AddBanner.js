@@ -43,8 +43,8 @@ const AddBanner = () => {
 
     const handleSubmit = async () => {
         if (!(title && subTitle && image && section && subSection && startDate && endDate)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -75,7 +75,7 @@ const AddBanner = () => {
             }
 
         } catch (error) {
-            alert(error)
+            swal('Error!', error, 'error')
             setLoading(false);
         }
 

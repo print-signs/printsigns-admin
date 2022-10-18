@@ -32,8 +32,8 @@ const AddProduct = () => {
 
     const handleSubmit = async () => {
         if (!(name && image)) {
-            alert("Please fill All required field ");
-            return;
+            return swal('Error!', 'All fields are required', 'error')
+
         }
         const myForm = new FormData();
 
@@ -60,7 +60,8 @@ const AddProduct = () => {
                 history.goBack();
             }
         } catch (error) {
-            alert("something went wrong")
+            swal('Error!', "something went wrong", 'error')
+
             setLoading(false);
         }
 
