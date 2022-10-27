@@ -26,12 +26,13 @@ const AddProduct = () => {
     const token = isAutheticated();
     let history = useHistory();
     const [image, setImage] = useState("");
+    const [ctegoryBannerImage, setCtegoryBannerImage] = useState("");
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
 
 
     const handleSubmit = async () => {
-        if (!(name && image)) {
+        if (!(name && image && ctegoryBannerImage)) {
             return swal('Error!', 'All fields are required', 'error')
 
         }
@@ -41,6 +42,7 @@ const AddProduct = () => {
 
 
         myForm.set("image", image);
+        myForm.set("category_banner", ctegoryBannerImage);
         setLoading({ loading: true });
         // console.log(image)
         try {
@@ -103,8 +105,9 @@ const AddProduct = () => {
                                                         value={name}
                                                         placeholder="Name" />
                                                 </CInputGroup>
+                                                <div>category image *</div>
 
-                                                <CInputGroup className="mb-3">
+                                                <CInputGroup className="mb-3 mt-2">
 
                                                     {/* <CIcon icon={cilLockLocked} /> */}
 
@@ -114,6 +117,21 @@ const AddProduct = () => {
                                                         accept="image/*"
                                                         required
                                                         onChange={handleImage}
+
+
+                                                    />
+                                                </CInputGroup>
+                                                <div>category Banner image *</div>
+                                                <CInputGroup className="mb-3 mt-2">
+
+
+
+                                                    <CFormInput
+                                                        type="file"
+                                                        placeholder="image"
+                                                        accept="image/*"
+                                                        required
+                                                        onChange={(e) => setCtegoryBannerImage(e.target.files[0])}
 
 
                                                     />

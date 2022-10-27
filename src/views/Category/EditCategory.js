@@ -29,6 +29,8 @@ const AddProduct = () => {
     // console.log(id)
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
+    const [ctegoryBannerImage, setCtegoryBannerImage] = useState("");
+
     const [loading, setLoading] = useState(false);
     useEffect(async () => {
         const res = await axios.get(`/api/category/getOne/${id}`, {
@@ -43,8 +45,8 @@ const AddProduct = () => {
 
 
     const handleSubmit = async () => {
-        if (!(name && image)) {
-            return swal('Error!', 'All fields are required', 'error')
+        if (!(name)) {
+            return swal('Error!', 'Name fields are required', 'error')
 
         }
         const myForm = new FormData();
@@ -53,6 +55,8 @@ const AddProduct = () => {
 
 
         myForm.set("image", image);
+        myForm.set("category_banner", ctegoryBannerImage);
+
         setLoading({ loading: true });
         // console.log(image)
         try {
@@ -112,7 +116,9 @@ const AddProduct = () => {
                                                         placeholder="Name" />
                                                 </CInputGroup>
 
-                                                <CInputGroup className="mb-3">
+                                                <div>category image *</div>
+
+                                                <CInputGroup className="mb-3 mt-2">
 
                                                     {/* <CIcon icon={cilLockLocked} /> */}
 
@@ -122,6 +128,21 @@ const AddProduct = () => {
                                                         accept="image/*"
                                                         required
                                                         onChange={handleImage}
+
+
+                                                    />
+                                                </CInputGroup>
+                                                <div>category Banner image *</div>
+                                                <CInputGroup className="mb-3 mt-2">
+
+
+
+                                                    <CFormInput
+                                                        type="file"
+                                                        placeholder="image"
+                                                        accept="image/*"
+                                                        required
+                                                        onChange={(e) => setCtegoryBannerImage(e.target.files[0])}
 
 
                                                     />

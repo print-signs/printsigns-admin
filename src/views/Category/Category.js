@@ -33,7 +33,7 @@ function Products() {
         },
       }
     );
-    // console.log(res.data.category[0].image.url)
+    // console.log(res.data.category)
     setCategory(res.data.category)
     // console.log(category[0].addedOn)
     changeState({
@@ -62,11 +62,15 @@ function Products() {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res)
+    // console.log(res)
     if (res.data.success == true) {
       swal("success!", "Category Deleted Successfully!", "success");
       window.location.reload();
       // if (res.status === 200) window.location.reload();
+    }
+    else {
+      swal("error!", "failled!", "error");
+
     }
   };
 
@@ -119,7 +123,8 @@ function Products() {
                       <thead className="thead-light">
                         <tr>
                           <th>Name</th>
-                          <th>Image</th>
+                          <th>Category Image</th>
+                          <th>Category Banner</th>
                           <th>Added On</th>
                           <th>Actions</th>
                         </tr>
@@ -129,7 +134,12 @@ function Products() {
                           <tr key={index}>
                             <td>{item?.name}</td>
                             <td>
-                              <img src={`${item?.image.url}`} width="50" alt="" /></td>
+                              <img src={`${item?.image.url}`} width="50" alt="" />
+                            </td>
+                            <td>
+
+                              {item.category_banner && <img src={`${item?.category_banner.url}`} width="50" alt="" />}
+                            </td>
                             <td>
                               {/* {item?.addedOn} */}
                               {new Date(`${item?.addedOn}`).toDateString()}<span> , {`${formatAMPM(item?.addedOn)}`}</span>
