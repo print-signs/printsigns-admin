@@ -63,7 +63,7 @@ const _nav = [
 
   {
     component: CNavItem,
-    name: 'Home Page Banners',
+    name: 'Home Screen Banners',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     to: '/banner',
   },

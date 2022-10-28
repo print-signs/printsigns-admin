@@ -69,7 +69,7 @@ function banner() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">Home Page Banners</h4>
+                                <h4 className="mb-3">Home Screen Banners</h4>
                                 <Link to="/addbanner"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Banner</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
