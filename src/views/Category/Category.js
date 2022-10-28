@@ -96,7 +96,7 @@ function Products() {
           <div className="row">
             <div className="col-12">
               <div className="page-title-box d-flex align-items-center justify-content-between">
-                <h4 className="mb-3">CMP-Category</h4>
+                <h4 className="mb-3">Categories</h4>
                 <Link to="/addCategory"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Category</button></Link>
                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">

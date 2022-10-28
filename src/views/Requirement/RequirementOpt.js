@@ -9,6 +9,7 @@ const RequirementOpt = ({ item, handleApprove }) => {
     const [user, setUser] = useState()
     const [approve, setApprove] = useState(false)
     const token = isAutheticated();
+
     useEffect(async () => {
         let resp = await axios.get(
             `/api/v1/admin/user/${item.addedBy}`,
@@ -18,7 +19,7 @@ const RequirementOpt = ({ item, handleApprove }) => {
                 },
             }
         );
-        // console.log(resp.data)
+
         setUser(resp.data.user)
 
         ///approved
@@ -36,7 +37,7 @@ const RequirementOpt = ({ item, handleApprove }) => {
                     setApprove(false)
                 }
             } catch (e) {
-                console.log(e)
+
                 setApprove(false)
             }
         }
@@ -79,7 +80,7 @@ const RequirementOpt = ({ item, handleApprove }) => {
                     <img src={`${item.image[0]?.url}`} width="50" alt="" />
                 </td>
                 <td>{item?.areaOfInterest}</td>
-                <td>{user?.name}</td>
+                {user && <td>{user?.name}</td>}
                 <td>
                     {/* {item?.addedOn} */}
                     {new Date(`${item?.createdAt}`).toDateString()}<span> , {`${formatAMPM(item?.createdAt)}`}</span>

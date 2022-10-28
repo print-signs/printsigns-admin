@@ -59,7 +59,7 @@ function ViewBanner() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-BANNER</h4>
+                                <h4 className="mb-3">Home Page Banner</h4>
                                 <Link to="/addbanner"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add New Banner</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
@@ -92,8 +92,8 @@ function ViewBanner() {
                                                 <tr> <th>Image</th> <td>
                                                     <img src={`${banner.image?.url}`} width="50" alt="" />
                                                 </td></tr>
-                                                <tr><th>Section</th><td>{banner?.section}</td></tr>
-                                                <tr> <th>Sub Section</th><td>{banner?.subSection}</td></tr>
+                                                {/* <tr><th>Section</th><td>{banner?.section}</td></tr>
+                                                <tr> <th>Sub Section</th><td>{banner?.subSection}</td></tr> */}
                                                 <tr><th>Start Date</th> <td>
                                                     {new Date(`${banner?.startDate}`).toDateString()}
                                                 </td></tr>

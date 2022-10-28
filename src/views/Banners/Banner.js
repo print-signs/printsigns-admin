@@ -69,7 +69,7 @@ function banner() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-BANNER</h4>
+                                <h4 className="mb-3">Home Page Banners</h4>
                                 <Link to="/addbanner"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Banner</button></Link>
                                 {/* <div className="page-title-right">
                   <ol className="breadcrumb m-0">
@@ -97,8 +97,8 @@ function banner() {
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Image</th>
-                                                    <th>Section</th>
-                                                    <th>Sub Section</th>
+                                                    {/* <th>Section</th>
+                                                    <th>Sub Section</th> */}
                                                     <th>Status</th>
                                                     <th>Added On</th>
                                                     <th>Action</th>
@@ -112,8 +112,8 @@ function banner() {
                                                             <img src={`${item?.image.url}`} width="50" alt="" /></td>
 
 
-                                                        <td>{item?.section}</td>
-                                                        <th>{item?.subSection}</th>
+                                                        {/* <td>{item?.section}</td>
+                                                        <th>{item?.subSection}</th> */}
                                                         <td>
                                                             <span
                                                                 className={`badge rounded-pill bg-${new Date(`${item?.endDate}`) > new Date() ? "success" : "danger"

@@ -37,7 +37,7 @@ const App = () => {
         setUserData(false)
       } else {
         try {
-          console.log('requesting user data from server')
+          // console.log('requesting user data from server')
           let response = await axios.get(`/api/v1/user/details`, {
             headers: {
               Authorization: `Bearer ${token}`,

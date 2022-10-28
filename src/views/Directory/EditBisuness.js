@@ -95,7 +95,7 @@ const EditBisuness = () => {
 
     const handleSubmit = async () => {
         if (!(state.name && state.phone && state.email && state.Building_Name && state.Street_Name && state.country && state.city && state.description
-            && state.category && state.status && image)) {
+            && state.category && state.status)) {
             return swal('Error!', 'All fields are required', 'error')
 
         }

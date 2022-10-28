@@ -29,7 +29,9 @@ const AddProduct = () => {
     // console.log(id)
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
+    const [imagesPreview, setImagesPreview] = useState();
     const [ctegoryBannerImage, setCtegoryBannerImage] = useState("");
+    const [ctegoryBannerImagePreview, setCtegoryBannerImagePreview] = useState("");
 
     const [loading, setLoading] = useState(false);
     useEffect(async () => {
@@ -39,7 +41,9 @@ const AddProduct = () => {
             },
         });
 
-
+        // setImage(res.data.category.image.url)
+        setImagesPreview(res.data.category.image.url)
+        setCtegoryBannerImagePreview(res.data.category.category_banner.url)
         setName(res.data.category.name)
     }, [id]);
 
@@ -83,10 +87,42 @@ const AddProduct = () => {
     }
     const handleImage = (e) => {
         const files = e.target.files[0];
+
         // console.log(files)
         setImage(files);
+        // only for file preview------------------------------------
+        const Reader = new FileReader();
+        Reader.readAsDataURL(files);
 
+        Reader.onload = () => {
+            if (Reader.readyState === 2) {
+                setImagesPreview(Reader.result);
+            }
+        };
+
+
+        // -----------------------------------------------------------------------------
     };
+    const handleBannerImage = (e) => {
+        const files = e.target.files[0];
+
+        // console.log(files)
+        setCtegoryBannerImage(files);
+        // only for file preview------------------------------------
+        const Reader = new FileReader();
+        Reader.readAsDataURL(files);
+
+        Reader.onload = () => {
+            if (Reader.readyState === 2) {
+                setCtegoryBannerImagePreview(Reader.result);
+            }
+        };
+
+
+        // -----------------------------------------------------------------------------
+    };
+
+
     // 
     const onCancel = () => {
         history.goBack()
@@ -102,7 +138,7 @@ const AddProduct = () => {
                             <CCard className="mr-4 mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h3 className="mb-4 justify-content-center">Edit {name} Category</h3>
+                                        <h3 className="mb-4 justify-content-center">Edit Category</h3>
                                         <div>
                                             <div>
                                                 <CInputGroup className="mb-3">
@@ -118,7 +154,7 @@ const AddProduct = () => {
 
                                                 <div>category image *</div>
 
-                                                <CInputGroup className="mb-3 mt-2">
+                                                <CInputGroup className="mb-1 mt-2">
 
                                                     {/* <CIcon icon={cilLockLocked} /> */}
 
@@ -132,8 +168,13 @@ const AddProduct = () => {
 
                                                     />
                                                 </CInputGroup>
+                                                <div id="createProductFormImage" className="w-50 d-flex">
+
+                                                    {imagesPreview && <img className=" w-25 p-1 " src={imagesPreview} alt="Product Preview" />}
+
+                                                </div>
                                                 <div>category Banner image *</div>
-                                                <CInputGroup className="mb-3 mt-2">
+                                                <CInputGroup className="mb-1 mt-2">
 
 
 
@@ -142,14 +183,22 @@ const AddProduct = () => {
                                                         placeholder="image"
                                                         accept="image/*"
                                                         required
-                                                        onChange={(e) => setCtegoryBannerImage(e.target.files[0])}
+                                                        onChange={handleBannerImage}
 
 
                                                     />
                                                 </CInputGroup>
+                                                <div id="createProductFormImage" className="w-50 d-flex">
+
+                                                    {ctegoryBannerImagePreview && <img className=" w-25 p-1 " src={ctegoryBannerImagePreview} alt="Product Preview" />}
+
+                                                </div>
+
+
+
                                             </div>
 
-                                            <div className=" d-flex">
+                                            <div className="mt-3 d-flex">
                                                 <button
                                                     onClick={handleSubmit}
                                                     type="button"

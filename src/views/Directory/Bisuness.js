@@ -3,10 +3,12 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 // import { API } from "../../data";
 import { isAutheticated } from "../../auth";
+import Pagination from "./Pagination";
 
 const Bisuness = () => {
   const [bisuness, setBisuness] = useState([])
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(20);
 
 
   const token = isAutheticated();
@@ -32,7 +34,14 @@ const Bisuness = () => {
     getProducts();
   }, [getProducts]);
 
+  // Get current posts
+  //pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = bisuness.slice(indexOfFirstPost, indexOfLastPost);
 
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleDelete = async (id) => {
     let status = window.confirm("Do you want to delete");
@@ -102,7 +111,7 @@ const Bisuness = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {bisuness.map((item, index) =>
+                          {currentPosts.map((item, index) =>
 
                             <tr key={index}>
                               <td>{item?.name} </td>
@@ -248,6 +257,9 @@ const Bisuness = () => {
           {/* <!-- container-fluid --> */}
         </div>
       </div>
+      <Pagination postsPerPage={postsPerPage}
+        totalPosts={bisuness.length}
+        paginate={paginate} />
     </>
   )
 }

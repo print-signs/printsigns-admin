@@ -12,7 +12,7 @@ function feedback() {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(10);
+    const [postsPerPage] = useState(20);
     const token = isAutheticated();
 
     const getRestriction = useCallback(async () => {
@@ -96,7 +96,7 @@ function feedback() {
                                                 </thead>
                                                 <tbody>
                                                     {currentPosts && currentPosts.map((item, index) =>
-                                                        <tr>
+                                                        <tr key={index}>
 
                                                             <td>{item?.name}</td>
                                                             <td>{item?.description}</td>

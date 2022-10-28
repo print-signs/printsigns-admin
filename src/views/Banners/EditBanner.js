@@ -29,14 +29,16 @@ const EditBanner = () => {
     let history = useHistory();
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
-    const [subTitle, setSubTitle] = useState("");
-    const [section, setSection] = useState("");
+    // const [subTitle, setSubTitle] = useState("");
+    const [imagesPreview, setImagesPreview] = useState();
+
+    // const [section, setSection] = useState("");
 
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    const [subSection, setSubSection] = useState("");
-    const [category, setCategory] = useState(false);
+    // const [subSection, setSubSection] = useState("");
+    // const [category, setCategory] = useState(false);
 
     const [loading, setLoading] = useState(false);
     //fetch one Offer
@@ -46,28 +48,29 @@ const EditBanner = () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        // console.log(res.data.banner)
+
         // console.log(res.data.banner.startDate)
         setTitle(res.data.banner.title)
-        setSubTitle(res.data.banner.subTitle)
-        setSection(res.data.banner.section)
-        setSubSection(res.data.banner.subSection)
-        setStartDate(new Date(res.data.banner.startDate).toLocaleDateString())
-        setEndDate(new Date(res.data.banner.endDate).toLocaleDateString())
+        // setSubTitle(res.data.banner.subTitle)
+        // setSection(res.data.banner.section)
+        // setSubSection(res.data.banner.subSection)
+        setImagesPreview(res.data.banner.image.url)
+        setStartDate(res.data.banner.startDate)
+        setEndDate(res.data.banner.endDate)
 
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!(title && subTitle && image && section && subSection && startDate && endDate)) {
+        if (!(title && startDate && endDate)) {
             return swal('Error!', 'All fields are required', 'error')
 
         }
         const myForm = new FormData();
 
         myForm.set("title", title);
-        myForm.set("subTitle", subTitle);
-        myForm.set("section", section);
-        myForm.set("subSection", subSection);
+        // myForm.set("subTitle", subTitle);
+        // myForm.set("section", section);
+        // myForm.set("subSection", subSection);
         myForm.set("startDate", startDate);
         myForm.set("endDate", endDate);
         myForm.set("image", image);
@@ -97,13 +100,31 @@ const EditBanner = () => {
 
 
     };
+    // const handleImage = (e) => {
+    //     const files = e.target.files[0];
+    //     // console.log(files)
+    //     setImage(files);
+
+    // };
+    // // 
     const handleImage = (e) => {
         const files = e.target.files[0];
+
         // console.log(files)
         setImage(files);
+        // only for file preview------------------------------------
+        const Reader = new FileReader();
+        Reader.readAsDataURL(files);
 
+        Reader.onload = () => {
+            if (Reader.readyState === 2) {
+                setImagesPreview(Reader.result);
+            }
+        };
+
+
+        // -----------------------------------------------------------------------------
     };
-    // 
     const onCancel = () => {
         // window.location = "/comproducts";
         history.goBack()
@@ -111,25 +132,25 @@ const EditBanner = () => {
     };
 
 
-    useEffect(() => {
-        const getData = async () => {
-            let res = await axios.get(
-                `/api/category/getAll`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            console.log(res.data)
-            setCategory(res.data.category)
-        }
-        if (section === "category") {
-            getData()
-        } else {
-            setCategory(false)
-        }
-    }, [section])
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         let res = await axios.get(
+    //             `/api/category/getAll`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             }
+    //         );
+    //         console.log(res.data)
+    //         setCategory(res.data.category)
+    //     }
+    //     if (section === "category") {
+    //         getData()
+    //     } else {
+    //         setCategory(false)
+    //     }
+    // }, [section])
 
     return (
         <>
@@ -153,7 +174,7 @@ const EditBanner = () => {
                                                         value={title}
                                                         placeholder="Title" />
                                                 </CInputGroup>
-                                                <CInputGroup className="mb-3">
+                                                {/* <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         <CIcon icon={cilPencil} />
                                                     </CInputGroupText>
@@ -162,9 +183,9 @@ const EditBanner = () => {
                                                         onChange={(e) => setSubTitle(e.target.value)}
                                                         value={subTitle}
                                                         placeholder="sub title" />
-                                                </CInputGroup>
+                                                </CInputGroup> */}
 
-                                                <CInputGroup className="mb-3">
+                                                {/* <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         <CIcon icon={cilNotes} />
 
@@ -183,7 +204,7 @@ const EditBanner = () => {
                                                         <option value="events">events</option>
                                                         <option value="offers">offers</option>
                                                         <option value="category" >category</option>
-                                                        {/* <option value="6">--select--</option> */}
+                                                      
 
                                                     </select>
                                                     {category && <>
@@ -202,11 +223,11 @@ const EditBanner = () => {
 
                                                                 <option key={index} value={item.name}>{item.name}</option>
                                                             ))}
-                                                            {/* <option value="6">--select--</option> */}
+                                                            
 
 
                                                         </select></>}
-                                                </CInputGroup>
+                                                </CInputGroup> */}
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         Start Date*
@@ -258,6 +279,12 @@ const EditBanner = () => {
 
                                                     />
                                                 </CInputGroup>
+                                                <div id="createProductFormImage" className="w-50 d-flex">
+
+
+                                                    {imagesPreview && <img className=" w-50 p-1 " src={imagesPreview} alt="Product Preview" />}
+
+                                                </div>
                                             </div>
 
                                             <div className=" d-flex">

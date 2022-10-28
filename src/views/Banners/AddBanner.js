@@ -27,12 +27,12 @@ const AddBanner = () => {
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
     const [subTitle, setSubTitle] = useState("");
-    const [section, setSection] = useState("");
+    // const [section, setSection] = useState("");
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [subSection, setSubSection] = useState("");
-    const [category, setCategory] = useState(false);
+    // const [subSection, setSubSection] = useState("");
+    // const [category, setCategory] = useState(false);
 
 
 
@@ -42,16 +42,16 @@ const AddBanner = () => {
 
 
     const handleSubmit = async () => {
-        if (!(title && subTitle && image && section && subSection && startDate && endDate)) {
+        if (!(title && image && startDate && endDate)) {
             return swal('Error!', 'All fields are required', 'error')
 
         }
         const myForm = new FormData();
 
         myForm.set("title", title);
-        myForm.set("subTitle", subTitle);
-        myForm.set("section", section);
-        myForm.set("subSection", subSection);
+        // myForm.set("subTitle", subTitle);
+        // myForm.set("section", section);
+        // myForm.set("subSection", subSection);
         myForm.set("startDate", startDate);
         myForm.set("endDate", endDate);
         myForm.set("image", image);
@@ -94,25 +94,25 @@ const AddBanner = () => {
 
     };
 
-    useEffect(() => {
-        const getData = async () => {
-            let res = await axios.get(
-                `/api/category/getAll`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            console.log(res.data)
-            setCategory(res.data.category)
-        }
-        if (section === "category") {
-            getData()
-        } else {
-            setCategory(false)
-        }
-    }, [section])
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         let res = await axios.get(
+    //             `/api/category/getAll`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             }
+    //         );
+    //         // console.log(res.data)
+    //         setCategory(res.data.category)
+    //     }
+    //     if (section === "category") {
+    //         getData()
+    //     } else {
+    //         setCategory(false)
+    //     }
+    // }, [section])
 
     return (
         <>
@@ -136,7 +136,7 @@ const AddBanner = () => {
                                                         value={title}
                                                         placeholder="Title" />
                                                 </CInputGroup>
-                                                <CInputGroup className="mb-3">
+                                                {/* <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         <CIcon icon={cilPencil} />
                                                     </CInputGroupText>
@@ -145,9 +145,9 @@ const AddBanner = () => {
                                                         onChange={(e) => setSubTitle(e.target.value)}
                                                         value={subTitle}
                                                         placeholder="sub title" />
-                                                </CInputGroup>
+                                                </CInputGroup> */}
 
-                                                <CInputGroup className="mb-3">
+                                                {/* <CInputGroup className="mb-3">
                                                     <CInputGroupText >
                                                         Section
                                                         <CIcon icon={cilNotes} />
@@ -167,7 +167,7 @@ const AddBanner = () => {
                                                         <option value="offers">offers</option>
                                                         <option value="category" >category</option>
 
-                                                        {/* <option value="6">--select--</option> */}
+                                                
 
 
                                                     </select>
@@ -187,11 +187,11 @@ const AddBanner = () => {
 
                                                                 <option key={index} value={item.name}>{item.name}</option>
                                                             ))}
-                                                            {/* <option value="6">--select--</option> */}
+                                                        
 
 
                                                         </select></>}
-                                                </CInputGroup>
+                                                </CInputGroup> */}
                                                 <CInputGroup className="mb-3">
                                                     <CInputGroupText>
                                                         Start Date*

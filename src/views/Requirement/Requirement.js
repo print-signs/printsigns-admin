@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import swal from 'sweetalert';
 // import { API } from "../../data";
 import { isAutheticated } from "../../auth";
+import Pagination from "./Pagination";
 import RequirementOpt from "./RequirementOpt";
 
 function Requirement() {
     const [requirement, setRequirement] = useState([])
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(20);
     const token = isAutheticated();
     // console.log(token)
     const getRequirement = useCallback(async () => {
@@ -29,6 +31,21 @@ function Requirement() {
     useEffect(() => {
         getRequirement();
     }, [getRequirement]);
+
+
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = requirement.slice(indexOfFirstPost, indexOfLastPost);
+
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+
+
+
+
+
+
     const handleApprove = async (id) => {
         let status = window.confirm("Do you want to Approve");
         if (!status) return;
@@ -99,7 +116,7 @@ function Requirement() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {requirement && requirement.map((item, index) =>
+                                                {currentPosts && currentPosts.map((item, index) =>
                                                     <RequirementOpt key={index} item={item} handleApprove={handleApprove} />
                                                 )}
                                             </tbody>
@@ -115,6 +132,9 @@ function Requirement() {
                 </div>
                 {/* <!-- container-fluid --> */}
             </div>
+            <Pagination postsPerPage={postsPerPage}
+                totalPosts={requirement.length}
+                paginate={paginate} />
         </div>
     );
 }
