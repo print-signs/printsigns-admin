@@ -2,21 +2,18 @@
 import React, { useEffect, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { isAutheticated } from "../../auth";
 import swal from 'sweetalert'
 import axios from 'axios'
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { useCallback } from 'react';
 
 
-const EditCms = () => {
-    const { id } = useParams()
+const AddNewPageCms = () => {
     const token = isAutheticated()
     const history = useHistory()
     const [image, setImage] = useState()
-    const [imagesPreview, setImagesPreview] = useState();
     const [data, setData] = useState({
         title: '',
         page_data: '',
@@ -27,44 +24,6 @@ const EditCms = () => {
 
         setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
-    const handleImage = (e) => {
-        const files = e.target.files[0];
-        setImage(files);
-        // only for file preview------------------------------------
-        const Reader = new FileReader();
-        Reader.readAsDataURL(files);
-
-        Reader.onload = () => {
-            if (Reader.readyState === 2) {
-                setImagesPreview(Reader.result);
-            }
-        };
-        // -----------------------------------------------------------------------------
-    };
-    const getCms = useCallback(async () => {
-
-
-        let res = await axios.get(
-            `/api/restriction/getOne/${id}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        if (res.data.CmpRestriction) {
-            setData((prev) => ({ ...res.data.CmpRestriction }))
-            if (res.data.CmpRestriction.image) {
-                setImagesPreview(res.data.CmpRestriction.image.url)
-            }
-
-        }
-    }, [token]
-    )
-
-    useEffect(() => {
-        getCms();
-    }, []);
 
     const handleSubmit = async () => {
         if (data.title.trim() === '' || data.page_data.trim() === '') {
@@ -84,7 +43,7 @@ const EditCms = () => {
         formData.append('image', image)
         try {
             const res = await axios
-                .put(`/api/restriction/cms/update/${id}`, formData, {
+                .post(`/api/restriction/cms/create/`, formData, {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
                         Authorization: `Bearer ${token}`,
@@ -95,8 +54,8 @@ const EditCms = () => {
 
                 setLoading(false)
                 swal({
-                    title: 'Edited',
-                    text: 'Page edited successfully!',
+                    title: 'Added',
+                    text: 'Page added successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
@@ -104,7 +63,7 @@ const EditCms = () => {
 
             }
         } catch (error) {
-            const message = error?.response?.data?.message || 'Something went wrong!'
+            const message = 'Something went wrong!'
             setLoading(false)
             swal({
                 title: 'Warning',
@@ -130,7 +89,7 @@ const EditCms = () => {
                   "
                     >
                         <div style={{ fontSize: '28px' }} className="fw-bold mb-3">
-                            Edit Page
+                            Add Page in CMS
                         </div>
 
                         <div className="page-title-right">
@@ -180,25 +139,7 @@ const EditCms = () => {
                             </div>
                         </div>
                         <div>Page data *</div>
-                        <div className="input-group  mt-1 mb-3">
-
-
-                            <textarea
-                                rows="3" cols="40"
-                                type="text"
-                                placeholder='Page data...'
-                                className="form-control row-145"
-                                id="page_data"
-                                value={data.page_data}
-                                aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default"
-                                onChange={(e) => {
-                                    handleChange(e)
-                                }}
-                            ></textarea>
-                        </div>
-
-                        {/* <div className="row ">
+                        <div className="row ">
                             <div className="App">
                                 <CKEditor
                                     editor={ClassicEditor}
@@ -211,14 +152,14 @@ const EditCms = () => {
                                     // config={{
                                     //     extraPlugins: [MyCustomUploadAdapterPlugin],
                                     // }}
-
+                                    placeholder='page data...'
                                     onChange={(event, editor) => {
                                         let e = { target: { value: editor.getData(), id: 'page_data' } }
                                         handleChange(e)
                                     }}
                                 />
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className="row mt-3">
                             <div>image *</div>
@@ -227,14 +168,9 @@ const EditCms = () => {
                                     type="file"
                                     className="form-control"
                                     id="file"
-                                    onChange={handleImage}
+                                    onChange={(e) => setImage(e.target.files[0])}
                                 />
                                 {/* <p className="pt-1 pl-2 text-secondary">Upload videos, images and pdf only</p> */}
-                            </div>
-                            <div id="createProductFormImage" className="w-50 d-flex mt-1">
-
-                                {imagesPreview && <img className=" w-50 p-1 " src={imagesPreview} alt="Product Preview" />}
-
                             </div>
                         </div>
                     </div>
@@ -244,4 +180,4 @@ const EditCms = () => {
     )
 }
 
-export default EditCms
+export default AddNewPageCms

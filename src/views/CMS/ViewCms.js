@@ -66,6 +66,7 @@ function ViewOffer() {
                     <li className="breadcrumb-item">CMD-Category</li>
                   </ol>
                 </div> */}
+
                             </div>
                         </div>
                     </div>
@@ -83,14 +84,21 @@ function ViewOffer() {
                                             <thead className="thead-light">
 
                                                 {/* <th>Id</th> */}
-                                                <tr><th>About Us</th>
-                                                    <td>{cmsRes?.About_Us}</td>
+                                                <tr><th>Title</th>
+                                                    <td>{cmsRes?.title}</td>
                                                 </tr>
-                                                <tr> <th>Terms and Conditions</th>
-                                                    <td>{cmsRes?.Terms_and_Conditions}</td>
+                                                <tr> <th>page Content</th>
+                                                    <td>{`${cmsRes?.page_data}`}</td>
                                                 </tr>
-                                                <tr><th>Privacy Policy</th>
+                                                {/* <tr><th>Privacy Policy</th>
                                                     <td>{cmsRes?.Privacy_Policy}</td>
+                                                </tr> */}
+                                                <tr>
+                                                    <th>image</th>
+                                                    {cmsRes.image ? <td>
+                                                        <img src={`${cmsRes?.image.url}`} width="50" alt="" /></td> :
+                                                        <><p></p></>
+                                                    }
                                                 </tr>
                                                 <tr><th>Added On</th>
                                                     <td>

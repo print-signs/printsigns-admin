@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 import swal from 'sweetalert';
 // import { API } from "../../data";
 import { isAutheticated } from "../../auth";
+import Pagination from "./Pagination";
 
 function cms() {
     const [cmsRes, setCmsRes] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(15);
     const token = isAutheticated();
 
     const getRestriction = useCallback(async () => {
@@ -20,8 +23,8 @@ function cms() {
                 },
             }
         );
-        // console.log(res.data.CmpRestriction[0])
-        setCmsRes(res.data.CmpRestriction[0])
+
+        setCmsRes(res.data.CmpRestriction)
 
 
     }, [token]);
@@ -31,8 +34,43 @@ function cms() {
     }, [getRestriction]);
 
 
-    // console.log(cmsRes)
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = cmsRes.slice(indexOfFirstPost, indexOfLastPost);
 
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const handleDelete = async (id) => {
+        let status = window.confirm("Do you want to delete");
+        if (!status) return;
+
+        let res = await axios.delete(`/api/restriction/cms/delete/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        // console.log(res)
+        if (res.data.success == true) {
+            swal("success!", "Cms Deleted Successfully!", "success");
+            window.location.reload();
+            // if (res.status === 200) window.location.reload();
+        }
+        else {
+            swal("error!", "failled!", "error");
+
+        }
+    };
+    //change time formate
+    function formatAMPM(date) {
+        var hours = new Date(date).getHours();
+        var minutes = new Date(date).getMinutes();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
     return (
         <div className=" main-content">
             <div className="  my-3 page-content">
@@ -42,15 +80,8 @@ function cms() {
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 className="mb-3">CMP-CMS</h4>
-                                {/* <Link to="/addEvent"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Event</button></Link> */}
-                                {/* <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/dashboard">CMD-App</Link>
-                    </li>
-                    <li className="breadcrumb-item">CMD-Category</li>
-                  </ol>
-                </div> */}
+                                {/* <Link to="/cms/new"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add New Page</button></Link> */}
+
                             </div>
                         </div>
                     </div>
@@ -68,169 +99,68 @@ function cms() {
                                             <thead className="thead-light">
                                                 <tr>
 
-                                                    <th>About Us</th>
-                                                    <th>Terms and Conditions</th>
-                                                    <th>Privacy Policy</th>
+                                                    <th>Title</th>
+                                                    {/* <th>Page Data</th> */}
+
+                                                    {/* <th>image</th> */}
+                                                    <th>Added On</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                <tr>
-
-                                                    <td>{cmsRes?.About_Us}</td>
-                                                    <td>{cmsRes?.Terms_and_Conditions}</td>
-                                                    <td>{cmsRes?.Privacy_Policy}</td>
+                                                {currentPosts && currentPosts.map((item, index) =>
+                                                    <tr key={index}>
 
 
+                                                        <td>{item.title}</td>
+                                                        {/* <td>{item?.page_data}</td> */}
+                                                        {/* {item.image ? <td>
+                                                            <img src={`${item?.image.url}`} width="50" alt="" /></td> :
+                                                            <><p></p></>
+                                                        } */}
 
-                                                    <td>
-                                                        <Link to={`/cms/view/${cmsRes._id}`}>
+                                                        <td>
+                                                            {/* {item?.addedOn} */}
+                                                            {new Date(`${item?.createdAt}`).toDateString()}<span> , {`${formatAMPM(item?.createdAt)}`}</span>
 
+                                                        </td>
+
+                                                        <td>
+                                                            <Link to={`/cms/view/${item._id}`}>
+
+                                                                <button
+                                                                    type="button"
+                                                                    className="mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
+                                                                >
+                                                                    View
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={`/cms/edit/${item._id}`}>
+
+                                                                <button
+                                                                    type="button"
+                                                                    className="mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                            </Link>
                                                             <button
-                                                                type="button"
-                                                                className="mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                View
-                                                            </button>
-                                                        </Link>
-                                                        <Link to={`/cms/edit/${cmsRes._id}`}>
-
-                                                            <button
-                                                                type="button"
-                                                                className="mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        </Link>
-                                                        {/* <button
                                                                 type="button"
                                                                 onClick={() => handleDelete(`${item._id}`)}
                                                                 className="  btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
                                                                 id="sa-params"
                                                             >
                                                                 Delete
-                                                            </button> */}
-                                                    </td>
-                                                </tr>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )}
 
                                             </tbody>
                                         </table>
                                     </div>
 
-                                    {/* second table */}
 
-                                    {/* <div className="table-responsive table-shoot mt-4">
-                                        <table className="table table-centered table-nowrap mb-0">
-                                            <thead className="thead-light">
-                                                <tr>
-
-                                                    <th>Terms and Conditions</th>
-
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <tr>
-
-                                                    <td>{cmsRes?.Terms_and_Conditions}</td>
-
-
-                                                    <td>
-                                                        <Link to={`/cms/view/${cmsRes._id}`}>
-
-                                                            <button
-                                                                type="button"
-                                                                className="mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                View
-                                                            </button>
-                                                        </Link>
-                                                        <Link to={`/cms/edit/${cmsRes._id}`}>
-
-                                                            <button
-                                                                type="button"
-                                                                className="mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        </Link>
-                                                        {/* <button
-                                                                type="button"
-                                                                onClick={() => handleDelete(`${item._id}`)}
-                                                                className="  btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
-                                                                id="sa-params"
-                                                            >
-                                                                Delete
-                                                            </button> */}
-                                    {/* </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div> */}
-
-
-
-
-                                    {/* end second table */}
-
-                                    {/* third table */}
-                                    {/* <div className="table-responsive table-shoot mt-4">
-                                        <table className="table table-centered table-nowrap mb-0">
-                                            <thead className="thead-light">
-                                                <tr>
-
-                                                    <th>Privacy Policy</th>
-
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <tr>
-
-                                                    <td>{cmsRes?.Privacy_Policy}</td>
-
-
-                                                    <td>
-                                                        <Link to={`/cms/view/${cmsRes._id}`}>
-
-                                                            <button
-                                                                type="button"
-                                                                className="mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                View
-                                                            </button>
-                                                        </Link>
-                                                        <Link to={`/cms/edit/${cmsRes._id}`}>
-
-                                                            <button
-                                                                type="button"
-                                                                className=" mt-1 btn btn-primary btn-sm  waves-effect waves-light btn-table ml-2"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        </Link>
-                                                        {/* <button
-                                                                type="button"
-                                                                onClick={() => handleDelete(`${item._id}`)}
-                                                                className="  btn btn-danger btn-sm  waves-effect waves-light btn-table ml-2"
-                                                                id="sa-params"
-                                                            >
-                                                                Delete
-                                                            </button> */}
-                                    {/* </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div> */}
-
-
-                                    {/* end third table */}
-                                    {/* <!-- end table-responsive --> */}
                                 </div>
                             </div>
                         </div>
@@ -238,6 +168,9 @@ function cms() {
                 </div>
                 {/* <!-- container-fluid --> */}
             </div>
+            <Pagination postsPerPage={postsPerPage}
+                totalPosts={cmsRes.length}
+                paginate={paginate} />
         </div>
     );
 }

@@ -31,6 +31,7 @@ import EditBanner from './views/Banners/EditBanner'
 import AddBanner from './views/Banners/AddBanner'
 //cms 
 import CMS from './views/CMS/cms'
+import AddNewPageCms from './views/CMS/AddNewPageCms'
 import CMSView from './views/CMS/ViewCms'
 import CMSEdit from './views/CMS/EditCms'
 //cms 
@@ -98,10 +99,12 @@ const routes = [
   { path: '/banner/edit/:id', name: 'EditBanner', component: EditBanner },
   { path: '/banner', name: 'Banner', component: Banner },
   //CMS 
+
   { path: '/cms/view/:id', name: 'CMS', component: CMSView },
   { path: '/cms/edit/:id', name: 'CMS', component: CMSEdit },
+  { path: '/cms/new', name: 'CMS New', component: AddNewPageCms },
   { path: '/cms', name: 'CMS', component: CMS },
-  //CMS 
+  //feedback
   { path: '/feedback/view/:id', name: 'ViewFeedback', component: ViewFeedback },
   { path: '/feedback', name: 'Feedback', component: Feedback },
   //Requirement
