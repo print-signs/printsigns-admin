@@ -54,6 +54,7 @@ import EditFaqs from './views/FAQs/EditFaqs'
 //  DashBoard
 const Change_Password = React.lazy(() => import('./views/pages/register/Change_password'))
 const EditProfile = React.lazy(() => import('./views/Profile/EditProfile'))
+import Profile from './views/Profile/Profile'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
 
@@ -61,8 +62,8 @@ const routes = [
 
   { path: '/', exact: true, name: 'Home' },
   { path: '/change_password', name: 'Change Password', component: Change_Password },
-  { path: '/edit', name: 'Change Password', component: EditProfile },
-  // { path: '/profile', name: 'Change Password', component: Profile },
+  { path: '/profile/edit', name: 'Edit Profile', component: EditProfile },
+  // { path: '/profile', name: 'Profile', component: Profile },
 
   //Category route
   { path: '/addCategory', name: 'AddCategeory', component: AddCategeory },

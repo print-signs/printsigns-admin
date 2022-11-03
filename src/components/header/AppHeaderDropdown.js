@@ -129,6 +129,12 @@ const AppHeaderDropdown = () => {
           </CBadge> */}
         </CDropdownItem>
         {/* <CDropdownDivider /> */}
+        <Link to='/profile/edit'>
+          <CDropdownItem>
+            <CIcon icon={cilUser} className="me-2" />
+            Edit Profile
+          </CDropdownItem>
+        </Link>
         <Link to='/change_password'>
           <CDropdownItem>
             <CIcon icon={cilPencil} className="me-2" />
