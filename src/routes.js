@@ -53,7 +53,7 @@ import EditFaqs from './views/FAQs/EditFaqs'
 
 //  DashBoard
 const Change_Password = React.lazy(() => import('./views/pages/register/Change_password'))
-// const EditProfile = React.lazy(() => import('./views/Profile/EditProfile'))
+
 
 import Profile from './views/Profile/Profile'
 import EditProfile from './views/Profile/EditProfile'
