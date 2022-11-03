@@ -83,7 +83,7 @@ const EditProfile = () => {
         setLoading(true)
         try {
             const res = await axios
-                .put(`/api/v1//user/update/profile`, formData, {
+                .put(`/api/v1/user/update/profile`, formData, {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
                         Authorization: `Bearer ${token}`,
