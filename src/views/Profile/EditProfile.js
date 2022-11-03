@@ -1,6 +1,6 @@
 import React from 'react'
 import { CForm, CCol, CFormLabel, CContainer, CRow, CCardGroup, CCard, CCardBody, CFormInput, CFormSelect, CFormCheck, CButton } from '@coreui/react'
-import { Country, City } from 'country-state-city'
+
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
@@ -19,8 +19,7 @@ const EditProfile = () => {
 
     })
     const history = useHistory()
-    const [processing, setProcessing] = useState(false)
-    const countries = Country.getAllCountries()
+
     useEffect(() => {
 
         getData()
