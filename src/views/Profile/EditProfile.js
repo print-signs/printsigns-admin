@@ -117,7 +117,7 @@ const EditProfile = () => {
         }
     }
     const handleCancle = () => {
-        history.goBack()
+        history.push('/dashboard')
     }
 
     return (
@@ -143,7 +143,7 @@ const EditProfile = () => {
                                         </CCol>
                                         <CCol md={6}>
                                             <CFormLabel htmlFor="inputPassword4">Phone *</CFormLabel>
-                                            <CFormInput type="number" id="inputPassword4" minlength="8" name='phone' value={ownerDetails.phone} onChange={handleChange} />
+                                            <CFormInput type="number" id="inputPassword4" minLength={8} name='phone' value={ownerDetails.phone} onChange={handleChange} />
                                         </CCol>
 
 

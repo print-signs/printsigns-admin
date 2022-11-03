@@ -29,7 +29,7 @@ const AllRegisterUser = () => {
     useEffect(() => {
         getRegisterUser();
     }, [getRegisterUser]);
-    console.log(registerUser)
+    // console.log(registerUser)
     //change time formate
     function formatAMPM(date) {
         var hours = new Date(date).getHours();
