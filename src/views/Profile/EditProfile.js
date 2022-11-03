@@ -1,10 +1,11 @@
 import React from 'react'
-import { CForm, CCol, CFormLabel, CContainer, CRow, CCardGroup, CCard, CCardBody, CFormInput, CFormSelect, CFormCheck, CButton } from '@coreui/react'
+import { CForm, CCol, CFormLabel, CContainer, CRow, CCardGroup, CCard, CCardBody, CFormInput, CButton } from '@coreui/react'
 
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { isAutheticated } from 'src/auth'
+
 const EditProfile = () => {
 
     const [image, setImage] = useState("");
@@ -20,11 +21,7 @@ const EditProfile = () => {
     })
     const history = useHistory()
 
-    useEffect(() => {
 
-        getData()
-
-    }, [])
 
     const getData = async () => {
         let res = await axios.get(`/api/v1/user/details`, {
@@ -35,6 +32,7 @@ const EditProfile = () => {
         if (res.data.success) {
 
             setOwnerDetails({ ...res.data.user })
+
             if (res.data.user.avatar) {
                 setImagesPreview(res.data.user.avatar.url)
             }
@@ -47,6 +45,7 @@ const EditProfile = () => {
         const { name, value } = event.target;
         setOwnerDetails({ ...ownerDetails, [name]: value });
     };
+
     const handleImage = (e) => {
         const files = e.target.files[0];
 
@@ -66,7 +65,7 @@ const EditProfile = () => {
         // -----------------------------------------------------------------------------
     };
     async function handleSubmit() {
-        if (ownerDetails.name.trim() === '' || ownerDetails.email.trim() === '' || ownerDetails.phone === '') {
+        if (ownerDetails.name === '' || ownerDetails.email === '' || ownerDetails.phone === '') {
             swal({
                 title: 'Warning',
                 text: 'Fill all mandatory fields',
@@ -118,6 +117,11 @@ const EditProfile = () => {
     const handleCancle = () => {
         history.push('/dashboard')
     }
+    useEffect(() => {
+
+        getData()
+
+    }, [])
 
     return (
         <div >
