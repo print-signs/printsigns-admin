@@ -11,8 +11,7 @@ import store from './store'
 import axios from 'axios'
 
 const setupAxios = () => {
-  axios.defaults.baseURL = 'https://cmp-all-api.herokuapp.com/'
-  //axios.defaults.baseURL = 'http://localhost:5000'
+  axios.defaults.baseURL = 'http://localhost:5000'
   axios.defaults.headers = {
     'Cache-Control': 'no-cache,no-store',
     'Pragma': 'no-cache',
