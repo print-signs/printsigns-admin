@@ -31,12 +31,7 @@ const _nav = [
   },
 
 
-  // {
-  //   component: CNavItem,
-  //   name: 'FAQs',
-  //   icon: <CIcon icon={cilFace} customClassName="nav-icon" />,
-  //   to: '/FAQs',
-  // },
+
   {
     component: CNavItem,
     name: 'Users',
