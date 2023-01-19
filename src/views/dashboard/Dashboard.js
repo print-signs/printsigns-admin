@@ -25,98 +25,98 @@ const Dashboard = () => {
 
 
   }, [token]);
-  //2nd 
-  const [category, setCategory] = useState([])
-  const getAllCategory = useCallback(async () => {
-    let res = await axios.get(
-      `/api/category/getAll`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    // console.log(res.data.category[0].image.url)
-    setCategory(res.data.category)
-  }, [token]);
+  // //2nd 
+  // const [category, setCategory] = useState([])
+  // const getAllCategory = useCallback(async () => {
+  //   let res = await axios.get(
+  //     `/api/category/getAll`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   // console.log(res.data.category[0].image.url)
+  //   setCategory(res.data.category)
+  // }, [token]);
 
-  //3 requiment
-  const [requirement, setRequirement] = useState([])
-  // console.log(token)
-  const getRequirement = useCallback(async () => {
-    let res = await axios.get(
-      `/api/requirement/getAll`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  // //3 requiment
+  // const [requirement, setRequirement] = useState([])
+  // // console.log(token)
+  // const getRequirement = useCallback(async () => {
+  //   let res = await axios.get(
+  //     `/api/requirement/getAll`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
 
-    setRequirement(res.data.Requirement)
+  //   setRequirement(res.data.Requirement)
 
-  }, [token]);
-  //4 news
-  const [news, setNews] = useState([])
+  // }, [token]);
+  // //4 news
+  // const [news, setNews] = useState([])
 
-  const getNews = useCallback(async () => {
-    let res = await axios.get(
-      `/api/news/getAll`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  // const getNews = useCallback(async () => {
+  //   let res = await axios.get(
+  //     `/api/news/getAll`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
 
-    setNews(res.data.news)
-
-
-  }, [token]);
-  //5 offers
-  const [offer, setOffer] = useState([])
-
-  const getOffer = useCallback(async () => {
-    let res = await axios.get(
-      `/api/offer/getAll`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    // console.log(res.data)
-    setOffer(res.data.offer)
+  //   setNews(res.data.news)
 
 
-  }, [token]);
-  //6 event
-  const [event, setEvent] = useState([])
-  const getEvent = useCallback(async () => {
-    let res = await axios.get(
-      `/api/event/getAll`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    // console.log(res.data)
-    setEvent(res.data.Event)
+  // }, [token]);
+  // //5 offers
+  // const [offer, setOffer] = useState([])
+
+  // const getOffer = useCallback(async () => {
+  //   let res = await axios.get(
+  //     `/api/offer/getAll`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   // console.log(res.data)
+  //   setOffer(res.data.offer)
 
 
-  }, [token]);
-  useEffect(() => {
-    getAllUsers();
-    getAllCategory()
-    getRequirement()
-    getNews()
-    getOffer()
-    getEvent()
-  }, [getAllUsers, getAllCategory, getRequirement, getNews, getOffer, getEvent]);
+  // }, [token]);
+  // //6 event
+  // const [event, setEvent] = useState([])
+  // const getEvent = useCallback(async () => {
+  //   let res = await axios.get(
+  //     `/api/event/getAll`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   // console.log(res.data)
+  //   setEvent(res.data.Event)
+
+
+  // }, [token]);
+  // useEffect(() => {
+  //   getAllUsers();
+  //   getAllCategory()
+  //   getRequirement()
+  //   getNews()
+  //   getOffer()
+  //   getEvent()
+  // }, [getAllUsers, getAllCategory, getRequirement, getNews, getOffer, getEvent]);
   return (
     <>
-      <WidgetsDropdown users={users} category={category} requirement={requirement} news={news} offer={offer} event={event} />
+      <WidgetsDropdown users={users} />
 
     </>
   )

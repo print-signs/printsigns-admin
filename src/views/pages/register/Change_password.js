@@ -17,12 +17,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 import Swal from 'sweetalert2'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
 
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const history = useNavigate();
   const [user, setUser] = useState({
     oldPassword: '',
     newPassword: '',
@@ -107,7 +107,7 @@ const Register = () => {
           confirmButtonColor: '#303c54',
           iconColor: '#303c54'
         }).then(() => {
-          history.push('/dashboard')
+          history('/dashboard')
         });
 
       }

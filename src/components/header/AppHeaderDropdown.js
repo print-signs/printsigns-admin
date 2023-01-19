@@ -27,7 +27,7 @@ import swal from 'sweetalert';
 import userImage from './../../assets/images/avatars/1.jpg'
 import { Link } from 'react-router-dom'
 // import { signout } from 'src/auth'
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
@@ -35,11 +35,11 @@ import { useState } from 'react';
 
 const AppHeaderDropdown = () => {
   const [userData, setUserData] = useState()
-  let history = useHistory();
+  let history = useNavigate();
   const signout = async () => {
     localStorage.removeItem('authToken')
     swal("success!", "Logged Out", "success");
-    history.push("/");
+    history("/");
   }
 
   //for user image 

@@ -17,11 +17,11 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilEnvelopeLetter, cilEnvelopeOpen, cilLockLocked, cilUser } from '@coreui/icons'
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 
 const ForgotPassword = () => {
-    const history = useHistory()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState()
     // console.log(email)
@@ -36,7 +36,7 @@ const ForgotPassword = () => {
                     setLoading(false)
                     // alert("Email Send Successfully! please check your mail for reset password")
                     swal("success!", "Email Send Successfully! please check your Email for new password", "success");
-                    history.push("/");
+                    navigate("/");
 
                 }
             } catch (e) {

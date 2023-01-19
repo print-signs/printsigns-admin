@@ -12,8 +12,10 @@ import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import { BeatLoader } from 'react-spinners'
+{/* <BeatLoader color="#36d7b7" /> */ }
 
-const WidgetsDropdown = ({ users, category, requirement, news, offer, event }) => {
+const WidgetsDropdown = ({ users }) => {
   return (
     <CRow>
       <CCol sm={6} lg={3}>
@@ -22,6 +24,7 @@ const WidgetsDropdown = ({ users, category, requirement, news, offer, event }) =
           color="primary"
           value={
             <>
+
               {users.length}
             </>
           }

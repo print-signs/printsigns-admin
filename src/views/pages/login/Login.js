@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -36,7 +36,7 @@ const Login = () => {
     /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
   )
   const validPasswordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{7,}$/)
-  const history = useHistory();
+  const history = useNavigate();
   // const handleChange = (e) => (event) => {
 
   //   setAuth({ ...auth, [e]: event.target.value });
@@ -110,7 +110,7 @@ const Login = () => {
         // console.log(response.data)
         const data = response.data
         if (data.user.role === 'admin') {
-          history.push('/dashboard')
+          history('/dashboard')
           setLoading(false);
           window.location.reload()
         }
@@ -188,7 +188,7 @@ const Login = () => {
                     <br />
 
                     <CButton color="link" className="px-0">
-                      <Link to="/forgot">
+                      <Link to="/password/forgot">
                         Forgot password.?
                       </Link>
                     </CButton>

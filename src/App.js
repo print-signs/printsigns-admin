@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Suspense } from 'react'
 import axios from 'axios';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Router, Route, Routes, HashRouter } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import './scss/style.scss'
 import ForgotPassword from './views/pages/register/ForgotPassword'
@@ -14,7 +14,7 @@ const loading = (
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
 )
-
+// import EditProducts from './views/Commerce/Editproducts'
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -64,31 +64,26 @@ const App = () => {
   }, [])
 
   return (
-    <BrowserRouter>
-      <React.Suspense fallback={loading}>
-        <Switch>
-          < Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
 
-          <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
-          <Route exact path="/register" name="Register Page" render={(props) => <NewRegister {...props} />} />
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <Routes>
+          <Route exact path="/" name="Login Page" element={<Login />} />
+          <Route exact path="/register" name="Register Page" element={<NewRegister />} />
+          <Route exact path="/password/forgot" name="Forgot Page" element={<ForgotPassword />} />
+          <Route exact path="/404" name="Page 404" element={<Page404 />} />
+          <Route exact path="/500" name="Page 500" element={<Page500 />} />
 
-          <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
-          <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
-
-
-
-          <Route path="/" name="Home" render={(props) => (
-            userdata?.role === "admin" ? <DefaultLayout {...props} /> :
-              userdata === false ? <Login {...props} /> : <div></div>
-          )} />
-
-          <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
+          <Route path="/" name="Home" element={userdata?.role === "admin" ? <DefaultLayout />
+            :
+            userdata === false ? <Login /> : <div></div>} />
 
 
+          <Route path="*" name="Home" element={<DefaultLayout />} />
+        </Routes>
+      </Suspense>
+    </HashRouter>
 
-        </Switch>
-      </React.Suspense>
-    </BrowserRouter>
   )
 }
 export default App

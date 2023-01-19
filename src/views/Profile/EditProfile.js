@@ -3,7 +3,7 @@ import { CForm, CCol, CFormLabel, CContainer, CRow, CCardGroup, CCard, CCardBody
 
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { isAutheticated } from 'src/auth'
 
 const EditProfile = () => {
@@ -19,7 +19,7 @@ const EditProfile = () => {
         phone: ''
 
     })
-    const history = useHistory()
+    const history = useNavigate()
 
 
 
@@ -99,7 +99,7 @@ const EditProfile = () => {
                     icon: 'success',
                     button: 'Return',
                 })
-                history.goBack()
+                history(-1)
 
             }
         } catch (error) {

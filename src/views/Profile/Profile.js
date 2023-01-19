@@ -19,13 +19,13 @@ import {
 import { useState } from 'react'
 import axios from 'axios';
 import { isAutheticated } from 'src/auth';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     // const user = JSON.parse(localStorage.getItem('auth')).user
     const [user, setUser] = useState({});
     const { token } = isAutheticated();
-    const history = useHistory()
+    const history = useNavigate()
     // console.log(token);
     useEffect(async () => {
         let res = await axios.get('/owner', {
@@ -51,7 +51,7 @@ const Profile = () => {
                 </CCol>
                 <CCol>
                     <CButton color='dark'
-                        className="float-right" onClick={() => history.push('/edit')}>Edit Profile</CButton>
+                        className="float-right" onClick={() => history('/edit')}>Edit Profile</CButton>
                 </CCol>
             </CRow>
             <CCard className="p-4">
