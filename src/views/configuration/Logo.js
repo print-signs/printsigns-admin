@@ -31,7 +31,7 @@ function Logo() {
             configDetails.data.result.map((item) => {
                 setHeaderlogo(item?.logo[0]?.Headerlogo)
                 setFooterlogo(item?.logo[0]?.Footerlogo)
-                setAdminlogo(item?.logo[0].Adminlogo)
+                setAdminlogo(item?.logo[0]?.Adminlogo)
             })
         }
         getConfiguration()
@@ -58,17 +58,19 @@ function Logo() {
         formdata.append('Footerlogo', Footerlogo)
         formdata.append('Adminlogo', Adminlogo)
 
-        let res = await axios.post(`/api/config/logo`, formdata, {
+        await axios.post(`/api/config/logo`, formdata, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/formdata',
                 'Access-Control-Allow-Origin': '*',
             },
-        })
-        if (res) {
+        }).then((res) => {
             setLoading(false)
             swal('Success!', res.data.message, res.data.status)
         }
+        ).catch(error => {
+            console.log(error)
+        })
     }
 
     return (
@@ -93,25 +95,26 @@ function Logo() {
                                                                         htmlFor="basicpill-phoneno-input"
                                                                         className="label-100 mt-3"
                                                                     >
-                                                                        Logo htmlFor Website Header(148 x 48 px)
+                                                                        {/* Logo htmlFor Website Header(148 x 48 px) */}
                                                                     </label>
                                                                     <div>
                                                                         <input
                                                                             type="file"
-                                                                            name="Logo htmlFor Website Header(148 x 48 px)"
+                                                                            name="Logo  htmlFor Website Header(148 x 48 px)"
                                                                             onChange={(e) => {
                                                                                 setHeaderlogo(e.target.files[0])
                                                                                 if (e.target.files && e.target.files[0]) {
                                                                                     setHeaderlogoUrl({
                                                                                         image: URL.createObjectURL(e.target.files[0]),
                                                                                     })
+                                                                                    console.log(setHeaderlogoUrl)
                                                                                 }
                                                                             }}
-                                                                            className="form-control input-field col-md-6 d-inline-block"
+                                                                            className="form-control input-field mb-3 col-md-6 d-inline-block"
                                                                             id="basicpill-phoneno-input"
                                                                         />
                                                                         {display ? (
-                                                                            <img
+                                                                            <img className='ms-1'
                                                                                 style={{ width: '100px' }}
                                                                                 src={HeaderlogoUrl.image ? HeaderlogoUrl.image : Headerlogo}
                                                                                 alt="header logo"
@@ -124,7 +127,7 @@ function Logo() {
                                                                         htmlFor="basicpill-phoneno-input"
                                                                         className="label-100 mt-3"
                                                                     >
-                                                                        Logo htmlFor Website Footer(148 x 48 px)
+                                                                        {/* Logo htmlFor Website Footer(148 x 48 px) */}
                                                                     </label>
                                                                     <input
                                                                         type="file"
@@ -138,7 +141,7 @@ function Logo() {
                                                                                 })
                                                                             }
                                                                         }}
-                                                                        className="form-control input-field col-md-6 d-inline-block"
+                                                                        className="form-control input-field mt-1 col-md-6 d-inline-block"
                                                                         id="basicpill-phoneno-input"
                                                                     />{' '}
                                                                     {display ? (
@@ -154,7 +157,7 @@ function Logo() {
                                                                         htmlFor="basicpill-phoneno-input"
                                                                         className="label-100 mt-2 row ms-1"
                                                                     >
-                                                                        Logo htmlFor Admin Header(148 x 48 px)
+                                                                        {/* Logo htmlFor Admin Header(148 x 48 px) */}
                                                                     </label>
                                                                     <input
                                                                         type="file"

@@ -22,6 +22,10 @@ import Socialmedia from './views/configuration/Socialmedia.js'
 import Address from './views/configuration/Address.js'
 import Logo from './views/configuration/Logo.js'
 import Login from './views/pages/login/Login'
+//temple
+import Temples from './views/Temples/Temples'
+import AddTemple from './views/Temples/AddTemple'
+import EditTemple from './views/Temples/EditTemple'
 
 const routes = [
 
@@ -29,7 +33,10 @@ const routes = [
   { path: '/change_password', name: 'Change Password', element: Change_Password },
   { path: '/profile/edit', name: 'Edit Profile', element: EditProfile },
   // { path: '/profile', name: 'Profile', element: Profile },
-
+  //Temple
+  { path: '/temples', name: 'Temples', element: Temples },
+  { path: '/temple/add', name: 'Add Temple', element: AddTemple },
+  { path: '/temple/edit/:id', name: 'Edit Temples', element: EditTemple },
 
   //dashboard
 

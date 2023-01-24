@@ -15,8 +15,7 @@ const EditCity = () => {
     const [data, setData] = useState({
         city_name: '',
         state: '',
-        _id: 'Loading',
-        createdAt: new Date(),
+
     })
     const [loading, setLoading] = useState(false)
     const [limiter, setLimiter] = useState({
@@ -206,7 +205,7 @@ const EditCity = () => {
                                     )}
                                 </select>
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label>Unique ID</label>
                                 <input type="text" value={data._id} className="form-control" disabled />
                             </div>
@@ -218,7 +217,7 @@ const EditCity = () => {
                                     className="form-control"
                                     disabled
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

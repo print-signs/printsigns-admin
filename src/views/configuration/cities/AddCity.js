@@ -14,8 +14,7 @@ const AddCity = () => {
     const [data, setData] = useState({
         city_name: '',
         state: '',
-        _id: 'Loading',
-        createdAt: new Date(),
+
     })
     const [loading, setLoading] = useState(false)
     const [limiter, setLimiter] = useState({
@@ -89,10 +88,11 @@ const AddCity = () => {
                     button: 'Return',
                 })
                 setLoading(false)
-                navigate.push('/cities', { replace: true })
+                navigate('/cities', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
+
                 swal({
                     title: 'Warning',
                     text: 'Something went wrong!',
@@ -198,14 +198,8 @@ const AddCity = () => {
                                     )}
                                 </select>
                             </div>
-                            <div className="mb-3">
-                                <label>Unique ID</label>
-                                <input type="text" value={data._id} className="form-control" disabled />
-                            </div>
-                            <div className="mb-3">
-                                <label>TimeStamp</label>
-                                <input type="text" value={data.createdAt} className="form-control" disabled />
-                            </div>
+
+
                         </div>
                     </div>
                 </div>

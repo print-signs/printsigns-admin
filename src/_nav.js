@@ -13,12 +13,16 @@ import {
   cilFilterSquare,
   cilMedicalCross,
   cilMoney,
+  cilMugTea,
   cilNewspaper,
   cilNotes,
   cilPencil,
   cilPuzzle,
+  cilSitemap,
   cilSpeedometer,
   cilStar,
+  cilTablet,
+  cilTennisBall,
   cilUser,
 
 
@@ -35,6 +39,12 @@ const _nav = [
   },
 
 
+  {
+    component: CNavItem,
+    name: 'Temples',
+    icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
+    to: '/temples',
+  },
 
   {
     component: CNavItem,

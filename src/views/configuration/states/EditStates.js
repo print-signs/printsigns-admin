@@ -61,7 +61,7 @@ const EditState = () => {
     }
 
     const handleSubmit = () => {
-        if (data.state_code.trim() === '' || data.state_name.trim() === '') {
+        if (data.state_name.trim() === '') {
             swal({
                 title: 'Warning',
                 text: 'Fill all mandatory fields',
@@ -172,7 +172,7 @@ const EditState = () => {
                                     Remaining characters : {limiter.state_nameHas}
                                 </p>
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="city_name" className="form-label">
                                     State Code (GST)*
                                 </label>
@@ -187,7 +187,7 @@ const EditState = () => {
                                 <p className="pt-1 pl-2 text-secondary">
                                     Remaining characters : {limiter.state_codeHas}
                                 </p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

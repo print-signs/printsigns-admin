@@ -1,22 +1,22 @@
+
 import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-
 import swal from 'sweetalert'
-import { isAutheticated } from 'src/auth'
+import OverLayButton from './OverLayButton.js'
+import { isAutheticated } from 'src/auth.js'
 
-const Cities = () => {
-    const token = isAutheticated();
-
+const Temples = () => {
+    const token = isAutheticated()
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [citiesData, setCitiesData] = useState([])
+    const [TemplesData, setTemplesData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(citiesData)
+    const [showData, setShowData] = useState(TemplesData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -25,11 +25,11 @@ const Cities = () => {
 
     const getCategories = () => {
         axios
-            .get(`/api/city`, {
+            .get(`/api/temple`, {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                setCitiesData(res.data.data)
+                setTemplesData(res.data.data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -46,10 +46,10 @@ const Cities = () => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(citiesData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(TemplesData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, citiesData])
+    }, [currentPage, itemPerPage, TemplesData])
 
     const handleDelete = (id) => {
         swal({
@@ -59,7 +59,7 @@ const Cities = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/city/${id}`, {
+                    .delete(`/api/temple/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -96,11 +96,11 @@ const Cities = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Cities
+                                    Temples
                                 </div>
 
                                 <div className="page-title-right">
-                                    <Link to="/cities/add">
+                                    <Link to="/temple/add">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -110,7 +110,7 @@ const Cities = () => {
                                                 textTransform: 'capitalize',
                                             }}
                                         >
-                                            Add City
+                                            Add Temple
                                         </Button>
                                     </Link>
                                 </div>
@@ -152,12 +152,13 @@ const Cities = () => {
                                             className="table table-centered table-nowrap"
                                             style={{ border: '1px solid' }}
                                         >
-                                            <thead className="thead" style={{ background: 'rgb(140, 213, 213)' }}>
+                                            <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
-                                                    <th className="text-start">City Name</th>
-                                                    <th className="text-start">State Name</th>
+                                                    <th className="text-start">Temple Name</th>
+                                                    <th className="text-start">Logo</th>
+                                                    <th className="text-start">City </th>
                                                     <th className="text-start">Created On</th>
-                                                    <th className="text-start">Actions</th>
+                                                    <th className="text-center">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -175,61 +176,69 @@ const Cities = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((city, i) => {
+                                                    showData.map((temple, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{city.city_name}</td>
-                                                                <td className="text-start">{city.state?.state_name}</td>
+                                                                <td className="text-start">{temple.name}</td>
                                                                 <td className="text-start">
-                                                                    {new Date(city.createdAt).toLocaleString('en-IN', {
-                                                                        weekday: 'short',
-                                                                        month: 'short',
+                                                                    <img src={temple.banner.url} alt="Test Image" height="50" />
+                                                                </td>
+                                                                <td className="text-start">{temple?.city?.city_name}</td>
+                                                                <td className="text-start">
+                                                                    {new Date(temple.createdAt).toLocaleString('en-IN', {
+                                                                        month: '2-digit',
                                                                         day: 'numeric',
                                                                         year: 'numeric',
-                                                                        hour: 'numeric',
-                                                                        minute: 'numeric',
-                                                                        hour12: true,
+                                                                        // hour: 'numeric',
+                                                                        // minute: 'numeric',
+                                                                        // hour12: true,
                                                                     })}
                                                                 </td>
+                                                                <td className=" text-center">
+                                                                    <OverLayButton data={{ url: temple?.url }} />
 
-                                                                <td className="text-start">
-                                                                    <Link to={`/cities/edit/${city._id}`}>
+                                                                    <Link to={`/temple/products/${temple._id}`}>
                                                                         <button
-                                                                            style={{ color: 'white', margin: '0 1rem' }}
+                                                                            style={{ color: 'white' }}
                                                                             type="button"
                                                                             className="
-                                      btn btn-primary btn-sm
+                                                                                 btn btn-primary btn-sm
+                                                                              waves-effect waves-light
+                                    ms-2
+                                  "
+                                                                        >
+                                                                            Products
+                                                                        </button>
+                                                                    </Link>
+
+                                                                    <Link to={`/temple/edit/${temple._id}`}>
+                                                                        <button
+                                                                            style={{ color: 'white' }}
+                                                                            type="button"
+                                                                            className="
+                                      btn btn-success btn-sm
                                     waves-effect waves-light
-                                    btn-table
-                                    ml-2
+                                    ms-2
                                   "
                                                                         >
                                                                             Edit
                                                                         </button>
                                                                     </Link>
-                                                                    <Link
-                                                                        to={'#'}
-                                                                        style={{
-                                                                            margin: '1rem',
-                                                                        }}
-                                                                    >
-                                                                        <button
-                                                                            style={{ color: 'white' }}
-                                                                            type="button"
-                                                                            className="
+                                                                    <button
+                                                                        style={{ color: 'white' }}
+                                                                        type="button"
+                                                                        className="
                                     btn btn-danger btn-sm
                                     waves-effect waves-light
-                                    btn-table
-                                    ml-2
+                                    ms-2
                                     
                                   "
-                                                                            onClick={() => {
-                                                                                handleDelete(city._id)
-                                                                            }}
-                                                                        >
-                                                                            Delete
-                                                                        </button>
-                                                                    </Link>
+                                                                        onClick={() => {
+                                                                            handleDelete(temple._id)
+                                                                        }}
+                                                                    >
+                                                                        Delete
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         )
@@ -248,8 +257,8 @@ const Cities = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, citiesData.length)} of{' '}
-                                                {citiesData.length} entries
+                                                {Math.min(currentPage * itemPerPage, TemplesData.length)} of{' '}
+                                                {TemplesData.length} entries
                                             </div>
                                         </div>
 
@@ -292,7 +301,7 @@ const Cities = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        citiesData.length - 1
+                                                        TemplesData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -311,7 +320,7 @@ const Cities = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                citiesData.length - 1
+                                                                TemplesData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -339,4 +348,4 @@ const Cities = () => {
     )
 }
 
-export default Cities
+export default Temples

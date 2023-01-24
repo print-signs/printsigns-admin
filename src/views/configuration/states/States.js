@@ -152,10 +152,10 @@ const States = () => {
                                             className="table table-centered table-nowrap"
                                             style={{ border: '1px solid' }}
                                         >
-                                            <thead className="thead-info" style={{ background: '#ecdddd' }}>
+                                            <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
                                                     <th className="text-start">State Name</th>
-                                                    <th className="text-start">State Code (GST)</th>
+                                                    {/* <th className="text-start">State Code (GST)</th> */}
                                                     <th className="text-start">Created On</th>
                                                     <th className="text-start">Actions</th>
                                                 </tr>
@@ -179,7 +179,7 @@ const States = () => {
                                                         return (
                                                             <tr key={i}>
                                                                 <td className="text-start">{city.state_name}</td>
-                                                                <td className="text-start">{city.state_code}</td>
+                                                                {/* <td className="text-start">{city.state_code}</td> */}
                                                                 <td className="text-start">
                                                                     {new Date(city.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',
