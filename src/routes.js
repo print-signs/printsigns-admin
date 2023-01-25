@@ -26,6 +26,7 @@ import Login from './views/pages/login/Login'
 import Temples from './views/Temples/Temples'
 import AddTemple from './views/Temples/AddTemple'
 import EditTemple from './views/Temples/EditTemple'
+import Products from './views/Products/Products'
 
 const routes = [
 
@@ -33,6 +34,13 @@ const routes = [
   { path: '/change_password', name: 'Change Password', element: Change_Password },
   { path: '/profile/edit', name: 'Edit Profile', element: EditProfile },
   // { path: '/profile', name: 'Profile', element: Profile },
+
+
+  //Product
+  { path: '/products', name: 'products', element: Products },
+  { path: '/product/add', name: 'Add products', element: AddTemple },
+  { path: '/products/edit/:id', name: 'Edit products', element: EditTemple },
+
   //Temple
   { path: '/temples', name: 'Temples', element: Temples },
   { path: '/temple/add', name: 'Add Temple', element: AddTemple },

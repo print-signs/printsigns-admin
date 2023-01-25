@@ -6,6 +6,7 @@ import {
   cilBell,
   cilCalculator,
   cilChartPie,
+  cilClipboard,
   cilCommand,
   cilCursor,
   cilDrop,
@@ -38,7 +39,12 @@ const _nav = [
 
   },
 
-
+  {
+    component: CNavItem,
+    name: 'Products',
+    icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+    to: '/products',
+  },
   {
     component: CNavItem,
     name: 'Temples',
