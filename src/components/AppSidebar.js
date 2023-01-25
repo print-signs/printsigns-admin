@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
@@ -14,12 +14,45 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
+import { isAutheticated } from 'src/auth'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
+  ///----------------------//
+  const [loading, setLoading] = useState(false)
+
+  const token = isAutheticated()
+
+  // urlcreated images
+
+  const [HeaderlogoUrl, setHeaderlogoUrl] = useState('')
+  const [FooterlogoUrl, setFooterlogoUrl] = useState('')
+  const [AdminlogoUrl, setAdminlogoUrl] = useState('')
+
+  useEffect(() => {
+    async function getConfiguration() {
+      const configDetails = await axios.get(`/api/config`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log(configDetails.data.result)
+      configDetails.data.result.map((item) => {
+        setHeaderlogoUrl(item?.logo[0]?.Headerlogo)
+        setFooterlogoUrl(item?.logo[0]?.Footerlogo)
+        setAdminlogoUrl(item?.logo[0]?.Adminlogo)
+      })
+    }
+    getConfiguration()
+  }, [])
+
+  console.log(HeaderlogoUrl)
+  //---------------------------//
   return (
     <CSidebar
       position="fixed"
@@ -29,9 +62,10 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CSidebarBrand className="d-none bg-info d-md-flex" to="/">
+      <CSidebarBrand className="d-none  d-md-flex" style={{ background: 'rgb(140, 213, 213)' }} to="/">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h2>ATP Dashboard</h2>
+
+        {HeaderlogoUrl ? <Link to='/dashboard'><img src={HeaderlogoUrl} alt={`${<h1>ATP Dashboard</h1>}`} /></Link> : <h1>ATP Dashboard</h1>}
         {/* <CIcon className="sidebar-brand-narrow"  height={35} /> */}
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>

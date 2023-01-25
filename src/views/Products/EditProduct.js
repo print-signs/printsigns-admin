@@ -3,15 +3,16 @@
 
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import swal from 'sweetalert'
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 // import { WebsiteURL } from '../WebsiteURL'
 
-const AddProduct = () => {
+const EditProduct = () => {
     const token = isAutheticated()
     const navigate = useNavigate()
+    const id = useParams()?.id
     const [data, setData] = useState({
         image: '',
         imageURL: '',
@@ -26,6 +27,40 @@ const AddProduct = () => {
 
 
     const [loading, setLoading] = useState(false)
+
+    //get Productdata
+    const getProduct = async () => {
+
+        axios
+            .get(`/api/product/getOne/${id}`, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                setData((prev) => ({
+                    ...prev,
+                    ...res.data?.product,
+                    imageURL: res.data?.product?.image?.url,
+                }))
+            })
+            .catch((err) => { })
+    }
+
+    useEffect(() => {
+        getProduct()
+    }, [])
+
+
+
+
+
+
+
+
+
+
     const handleChange = (e) => {
 
         if (e.target.id === 'image') {
@@ -93,7 +128,7 @@ const AddProduct = () => {
 
 
         axios
-            .post(`/api/product/create/`, formData, {
+            .put(`/api//product/update/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',
@@ -103,7 +138,7 @@ const AddProduct = () => {
             .then((res) => {
                 swal({
                     title: 'Added',
-                    text: 'Product added successfully!',
+                    text: 'Product Edited successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
@@ -122,7 +157,7 @@ const AddProduct = () => {
                 })
             })
     }
-
+    console.log(data)
     return (
         <div className="container">
             <div className="row">
@@ -136,7 +171,7 @@ const AddProduct = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Add Product
+                            Edit Product
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -295,4 +330,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct
+export default EditProduct

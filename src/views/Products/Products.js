@@ -21,15 +21,17 @@ const Products = () => {
         setItemPerPage(e.target.value)
     }
 
+
+
     const getProductsData = async () => {
         axios
-            .get(`/api/product`, {
+            .get(`/api/product/getAll/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                setProductsData(res.data?.data)
+                setProductsData(res.data?.product)
                 setLoading(false)
             })
             .catch((err) => {
@@ -58,7 +60,7 @@ const Products = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/product/${id}`, {
+                    .delete(`/api/product/delete/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -108,7 +110,7 @@ const Products = () => {
                                             textTransform: 'capitalize',
                                         }}
                                         onClick={() => {
-                                            navigate('/products/add', { replace: true })
+                                            navigate('/product/add', { replace: true })
                                         }}
                                     >
                                         Add Product
@@ -155,10 +157,10 @@ const Products = () => {
                                         >
                                             <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
+
                                                     <th className="text-start">Product Name</th>
-                                                    <th className="text-start">Category</th>
-                                                    <th className="text-start">Preview</th>
-                                                    <th className="text-start">Master Price</th>
+                                                    <th className="text-start">Thumbnail</th>
+                                                    <th className="text-start">Base Price</th>
                                                     <th className="text-start">Added On</th>
                                                     <th className="text-start">Actions</th>
                                                 </tr>
@@ -182,15 +184,14 @@ const Products = () => {
                                                         return (
                                                             <tr key={i}>
                                                                 <td className="text-start">{product.name}</td>
-                                                                <td className="text-start">{product.category?.name}</td>
                                                                 <th>
-                                                                    {product?.images && (
+                                                                    {product?.image && (
                                                                         <>
-                                                                            <img src={product.images[0]?.url} width="50" alt="preview" />
+                                                                            <img src={product.image?.url} width="50" alt="preview" />
                                                                         </>
                                                                     )}
                                                                 </th>
-                                                                <th className="text-start">₹ {product.master_price}</th>
+                                                                <th className="text-start">₹{product.base_Price}</th>
                                                                 <td className="text-start">
                                                                     {new Date(product.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',
@@ -203,22 +204,8 @@ const Products = () => {
                                                                     })}
                                                                 </td>
                                                                 <td className="text-start">
-                                                                    <Link to={`/products/variants/${product._id}`}>
-                                                                        <button
-                                                                            style={{ color: 'white', marginRight: '1rem' }}
-                                                                            type="button"
-                                                                            className="
-                                      btn btn-primary btn-sm
-                                    waves-effect waves-light
-                                    btn-table
-                                    mx-1
-                                    mt-1
-                                  "
-                                                                        >
-                                                                            Variants
-                                                                        </button>
-                                                                    </Link>
-                                                                    <Link to={`/products/view/${product._id}`}>
+
+                                                                    <Link to={`/product/view/${product._id}`}>
                                                                         <button
                                                                             style={{ color: 'white', marginRight: '1rem' }}
                                                                             type="button"
@@ -233,7 +220,7 @@ const Products = () => {
                                                                             View
                                                                         </button>
                                                                     </Link>
-                                                                    <Link to={`/products/edit/${product._id}`}>
+                                                                    <Link to={`/product/edit/${product._id}`}>
                                                                         <button
                                                                             style={{ color: 'white', marginRight: '1rem' }}
                                                                             type="button"

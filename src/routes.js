@@ -27,6 +27,10 @@ import Temples from './views/Temples/Temples'
 import AddTemple from './views/Temples/AddTemple'
 import EditTemple from './views/Temples/EditTemple'
 import Products from './views/Products/Products'
+//product
+import AddProduct from './views/Products/AddProduct'
+import EditProduct from './views/Products/EditProduct'
+import ViewProduct from './views/Products/ViewProduct'
 
 const routes = [
 
@@ -38,8 +42,11 @@ const routes = [
 
   //Product
   { path: '/products', name: 'products', element: Products },
-  { path: '/product/add', name: 'Add products', element: AddTemple },
-  { path: '/products/edit/:id', name: 'Edit products', element: EditTemple },
+  { path: '/product/add', name: 'Add products', element: AddProduct },
+  { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
+  { path: '/product/view/:id', name: 'view products', element: ViewProduct },
+
+
 
   //Temple
   { path: '/temples', name: 'Temples', element: Temples },
