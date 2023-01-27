@@ -24,26 +24,56 @@ import {
 import CIcon from '@coreui/icons-react'
 import swal from 'sweetalert';
 
-import avatar8 from './../../assets/images/avatars/8.jpg'
+import userImage from './../../assets/images/avatars/1.jpg'
 import { Link } from 'react-router-dom'
 // import { signout } from 'src/auth'
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+
+
 const AppHeaderDropdown = () => {
-  let history = useHistory();
+  const [userData, setUserData] = useState()
+  let history = useNavigate();
   const signout = async () => {
     localStorage.removeItem('authToken')
-    // let res = await axios.get(
-    //   `http://localhost:5000/api/user/logOut`
-    // );
-    // if (res.success == true) {
     swal("success!", "Logged Out", "success");
-    history.push("/");
-    // }
+    history("/");
   }
+
+  //for user image 
+
+  const getUser = async () => {
+    let token = localStorage.getItem("authToken");
+    try {
+      let response = await axios.get(`/api/v1/user/details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (response.data.success === true) {
+        setUserData(response.data.user)
+
+      }
+    }
+    catch (err) {
+
+      console.log(err);
+    };
+  }
+
+
+  useEffect(() => {
+    getUser()
+  }, [])
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
-        <CAvatar src={avatar8} size="md" />
+        {/* {userData && userData ? <CAvatar src={userData.avatar.url} size="md" /> : */}
+        <CAvatar src={userImage} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
@@ -99,6 +129,12 @@ const AppHeaderDropdown = () => {
           </CBadge> */}
         </CDropdownItem>
         {/* <CDropdownDivider /> */}
+        <Link to='/profile/edit'>
+          <CDropdownItem>
+            <CIcon icon={cilUser} className="me-2" />
+            Edit Profile
+          </CDropdownItem>
+        </Link>
         <Link to='/change_password'>
           <CDropdownItem>
             <CIcon icon={cilPencil} className="me-2" />

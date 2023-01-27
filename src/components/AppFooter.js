@@ -6,9 +6,9 @@ const AppFooter = () => {
     <CFooter>
       <div>
 
-        <span className="ms-1">{new Date().getFullYear()} &copy; CMP.</span>
+        <span className="ms-1">{new Date().getFullYear()} &copy; Any Time Prasad ( ATP ) .</span>
       </div>
-      \
+
     </CFooter>
   )
 }

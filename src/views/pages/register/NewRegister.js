@@ -3,7 +3,7 @@ import { CForm, CCol, CFormLabel, CContainer, CRow, CCardGroup, CCard, CCardBody
 import { Country, City } from 'country-state-city'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 const NewRegister = () => {
     const [cities, setCities] = useState([])
     const [ownerDetails, setOwnerDetails] = useState({
@@ -14,7 +14,7 @@ const NewRegister = () => {
         country: 'India',
         city: ''
     })
-    const history = useHistory()
+    const history = useNavigate()
     const [processing, setProcessing] = useState(false)
     const countries = Country.getAllCountries()
     useEffect(() => {
@@ -48,7 +48,7 @@ const NewRegister = () => {
 
             //     token: res.data.token,
             // }));
-            history.push('/')
+            history('/')
         }
     }
 

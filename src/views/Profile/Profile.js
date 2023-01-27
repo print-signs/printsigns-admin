@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react'
 import {
     CButton,
+    CCard,
+    CCardBody,
     CCol,
+    CForm,
+    CFormInput,
+    CFormLabel,
+    CFormSelect,
     CRow,
     CTable,
     CTableBody,
@@ -13,13 +19,13 @@ import {
 import { useState } from 'react'
 import axios from 'axios';
 import { isAutheticated } from 'src/auth';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     // const user = JSON.parse(localStorage.getItem('auth')).user
     const [user, setUser] = useState({});
     const { token } = isAutheticated();
-    const history = useHistory()
+    const history = useNavigate()
     // console.log(token);
     useEffect(async () => {
         let res = await axios.get('/owner', {
@@ -45,35 +51,68 @@ const Profile = () => {
                 </CCol>
                 <CCol>
                     <CButton color='dark'
-                        className="float-right" onClick={() => history.push('/edit')}>Edit Profile</CButton>
+                        className="float-right" onClick={() => history('/edit')}>Edit Profile</CButton>
                 </CCol>
             </CRow>
-            <CTable color="white" striped>
-                <CTableHead>
-                    <CTableRow>
-                        <CTableHeaderCell scope="col">Cafe Name</CTableHeaderCell>
-                        <CTableDataCell scope="col">{user.cafeName}</CTableDataCell>
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    <CTableRow>
-                        <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                        <CTableDataCell scope="col">{user.email}</CTableDataCell>
-                    </CTableRow>
+            <CCard className="p-4">
+                <CCardBody>
+                    {/* <h1 >Edit Profile</h1> */}
+                    <CForm className="row g-3">
+                        <CCol xs={12}>
+                            <CFormLabel htmlFor="inputAddress">Cafe Name</CFormLabel>
+                            <CFormInput id="inputAddress" placeholder="" name='cafeName' value={"jsw"} />
+                        </CCol>
 
-                    <CTableRow>
-                        <CTableHeaderCell scope="row">Address</CTableHeaderCell>
-                        <CTableDataCell>{user.location},{user.city},{user.country}</CTableDataCell>
-                    </CTableRow>
+                        <CCol md={6}>
+                            <CFormLabel htmlFor="inputEmail4">Email</CFormLabel>
+                            <CFormInput type="email" id="inputEmail4" name='email' value={"habhs"} />
+                        </CCol>
+                        {/* <CCol md={6}>
+                                            <CFormLabel htmlFor="inputPassword4">Password</CFormLabel>
+                                            <CFormInput type="password" id="inputPassword4" name='password' value={ownerDetails.password} onChange={handleChange} />
+                                        </CCol> */}
 
-                    <CTableRow>
-                        <CTableHeaderCell scope="row">Item_Name</CTableHeaderCell>
-                        <CTableDataCell><img src={user.qr_code} alt="" /></CTableDataCell>
-                    </CTableRow>
 
-                </CTableBody>
-            </CTable>
-        </div>
+                        <CCol md={12}>
+                            <CFormLabel htmlFor="inputCity">Location</CFormLabel>
+                            <CFormInput id="inputCity" name='location' value={"ajnsj"} />
+                        </CCol>
+                        <CCol md={12}>
+                            <CFormLabel htmlFor="inputCity">image</CFormLabel>
+                            <CFormInput
+                                type="file"
+                                placeholder="image"
+                                accept="image/*"
+                                required
+                            // onChange={handleImage}
+
+
+                            />
+                        </CCol>
+                        {/* <CCol md={6}>
+                            <CFormLabel htmlFor="inputState">Country</CFormLabel>
+                            <CFormSelect id="inputState" name='country' >
+                                <option>Select a country</option>
+                                {countries.map(item => <option value={item.name}>{item.name}</option>)}
+
+                            </CFormSelect>
+                        </CCol> */}
+                        {/* <CCol md={6}>
+                            <CFormLabel htmlFor="inputState">City</CFormLabel>
+                            <CFormSelect id="inputState" name='city' >
+                                <option>Select a city</option>
+                                {cities.map(item => <option value={item.name}>{item.name}</option>)}
+
+                            </CFormSelect>
+                        </CCol> */}
+
+                        {/* <CCol xs={12}>
+                            <CButton onClick={handleSubmit} color='dark'>Submit</CButton>
+                        </CCol> */}
+                    </CForm>
+                </CCardBody>
+            </CCard>
+        </div >
     )
 }
 

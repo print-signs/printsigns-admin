@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Suspense } from 'react'
 import axios from 'axios';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Router, Route, Routes, HashRouter } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import './scss/style.scss'
 import ForgotPassword from './views/pages/register/ForgotPassword'
 import NewRegister from './views/pages/register/NewRegister'
 import ProtectedRoute from './components/ProtectedRoute';
+import { isAutheticated } from './auth';
+
 
 const loading = (
   <div className="pt-3 text-center">
@@ -19,36 +21,69 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Register = React.lazy(() => import('./views/pages/register/Change_password'))
-const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
+const Page404 = React.lazy(() => import('./views/pages/register/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
-class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <React.Suspense fallback={loading}>
-          <Switch>
-            < Route exact path="/" name="Login Page" render={(props) => <Login {...props} />} />
+const App = () => {
 
-            <Route exact path="/forgot" name="Forgot Page" render={(props) => <ForgotPassword {...props} />} />
-            <Route exact path="/newRegister" name="Register Page" render={(props) => <NewRegister {...props} />} />
+  const [userdata, setUserData] = useState(null)
+  const token = isAutheticated();
 
-            <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
-            <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
+  useEffect(() => {
+    const getUser = async () => {
+      let existanceData = localStorage.getItem("authToken");
+      if (!existanceData) {
+        // console.log(existanceData.userData)
+        setUserData(false)
+      } else {
+        try {
+          // console.log('requesting user data from server')
+          let response = await axios.get(`/api/v1/user/details`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          // console.log(response.data)
+          const data = response.data
+          if (data.success && data.user.role === 'admin') {
+
+            setUserData(data.user);
+          } else {
+            setUserData(false)
+          }
+
+        }
+        catch (err) {
+          setUserData(false)
+          console.log(err);
+        };
+      }
+
+    }
+    getUser()
+  }, [])
+
+  return (
+
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <Routes>
+          <Route exact path="/" name="Login Page" element={<Login />} />
+          <Route exact path="/register" name="Register Page" element={<NewRegister />} />
+          <Route exact path="/password/forgot" name="Forgot Page" element={<ForgotPassword />} />
+          <Route exact path="/404" name="Page 404" element={<Page404 />} />
+          <Route exact path="/500" name="Page 500" element={<Page500 />} />
+
+          <Route path="/" name="Home" element={userdata?.role === "admin" ? <DefaultLayout />
+            :
+            userdata === false ? <Login /> : <div></div>} />
 
 
-            {/* localStorage.getItem('authToken') ? */}
-            <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
-            {/* < ProtectedRoute path="/" name="Home" render={(props) => <DefaultLayout {...props} />} /> */}
+          <Route path="*" name="Home" element={<DefaultLayout />} />
+        </Routes>
+      </Suspense>
+    </HashRouter>
 
-
-
-
-          </Switch>
-        </React.Suspense>
-      </BrowserRouter>
-    )
-  }
+  )
 }
-//@coreui/coreui-free-react-admin-template@4.1.1
 export default App

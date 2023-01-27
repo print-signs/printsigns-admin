@@ -6,30 +6,31 @@ import swal from 'sweetalert';
 import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "../../auth";
 
-function ViewNews() {
-    const [news, setNews] = useState([])
+function ViewUsers() {
+    const [user, setUser] = useState([])
     const { id } = useParams();
-    console.log(id)
-    const { token } = isAutheticated();
+    // console.log(id)
+    const token = isAutheticated();
 
-    const getNews = useCallback(async () => {
-        let res = await axios.get(
-            `/api/news/getOne/${id}`,
+    const getUserDetails = useCallback(async () => {
+
+
+        let resp = await axios.get(
+            `/api/v1/admin/user/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        console.log(res.data.news)
-        setNews(res.data.news)
+        setUser(resp.data.user)
 
 
     }, [token]);
 
     useEffect(() => {
-        getNews();
-    }, [getNews]);
+        getUserDetails();
+    }, [getUserDetails]);
 
 
 
@@ -56,16 +57,7 @@ function ViewNews() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">CMP-News</h4>
-                                <Link to="/addNews"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add News</button></Link>
-                                {/* <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/dashboard">CMD-App</Link>
-                    </li>
-                    <li className="breadcrumb-item">CMD-Category</li>
-                  </ol>
-                </div> */}
+                                <h4 className="mb-3">CMP-User Details</h4>
                             </div>
                         </div>
                     </div>
@@ -81,36 +73,43 @@ function ViewNews() {
                                     <div className="table-responsive table-shoot">
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Title</th>
 
-                                                    <th>Image</th>
-                                                    <th>Description</th>
-                                                    <th>Added On</th>
-                                                    <th>Updated At</th>
+                                                <tr>
+                                                    <th>User_Id</th>
+
+                                                    <td>{user?._id}</td>
                                                 </tr>
+
+
+                                                <tr><th>Name</th>
+                                                    <td>{user?.name}</td></tr>
+
+                                                <tr><th>email</th>
+                                                    <td>{user?.email}</td></tr>
+
+                                                <tr><th>Image</th>
+                                                    <td>
+                                                        <img src={`${user.avatar?.url}`} width="50" alt="" />
+                                                    </td></tr>
+
+                                                {/* <th>Description</th> */}
+                                                <tr><th>Phone No.</th>
+                                                    <td>{user?.phone}</td></tr>
+                                                <tr><th>Role</th>
+                                                    <td>{user?.role}</td></tr>
+                                                <tr><th>Register At</th>
+
+                                                    <td>
+                                                        {new Date(`${user?.createdAt}`).toDateString()}<span> , {`${formatAMPM(user?.createdAt)}`}</span>
+                                                    </td></tr>
+                                                <tr><th>Profile Updated At</th>
+                                                    <td>
+                                                        {new Date(`${user?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(user?.updatedAt)}`}</span>
+                                                    </td></tr>
+
                                             </thead>
                                             <tbody>
-                                                {news &&
-                                                    <tr>
-                                                        <td>{news?._id}</td>
-                                                        <td>{news?.title}</td>
-                                                        <td>
-                                                            <img src={`${news.image?.url}`} width="50" alt="" />
-                                                        </td>
 
-                                                        <td>{news?.description}</td>
-                                                        <td>
-                                                            {new Date(`${news?.addedOn}`).toDateString()}<span> , {`${formatAMPM(news?.addedOn)}`}</span>
-                                                        </td>
-                                                        <td>
-                                                            {new Date(`${news?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(news?.updatedAt)}`}</span>
-                                                        </td>
-
-
-                                                    </tr>
-                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -128,4 +127,5 @@ function ViewNews() {
     );
 }
 
-export default ViewNews;
+export default ViewUsers;
+

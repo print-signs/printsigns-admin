@@ -13,35 +13,92 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import ClipLoader from "react-spinners/ClipLoader";
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 import Swal from 'sweetalert2'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
-  const [oldPassword, setOldPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const history = useHistory();
 
+  const [loading, setLoading] = useState(false);
+  const history = useNavigate();
+  const [user, setUser] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  })
+  const [errors, setErrors] = useState({
+    confirmPasswordError: '',
+    newPasswordError: '',
+    oldPasswordError: '',
+
+  })
+  const validEmailRegex = RegExp(
+    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+  )
+  const validPasswordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{7,}$/)
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    switch (name) {
+      case 'oldPassword':
+        setErrors({
+          ...errors,
+          oldPasswordError: validPasswordRegex.test(value)
+            ? ''
+            : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+        })
+
+        break
+      case 'newPassword':
+        setErrors({
+          ...errors,
+          newPasswordError: validPasswordRegex.test(value)
+            ? ''
+            : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+        })
+
+        break
+      case 'confirmPassword':
+        setErrors((errors) => ({
+          ...errors,
+          confirmPasswordError: validPasswordRegex.test(value)
+            ? ''
+            : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+        }))
+        break
+      default:
+        break
+    }
+
+    setUser({ ...user, [name]: value })
+  }
 
 
   const handleSubmit = async () => {
+    if (!(user.oldPassword && user.newPassword && user.confirmPassword)) {
+
+      return swal('Error!', 'All fields are required', 'error')
+    }
+    if (!(user.newPassword.length >= 8)) {
+
+      return swal('Error!', 'All fields are required', 'error');
+    }
     const token = localStorage.getItem("authToken")
-    //console.log(token)
-    if (newPassword == confirmPassword) {
-      let res = await axios.put('/api/user/update/password',
+    setLoading({ loading: true })
+    if (user.newPassword == user.confirmPassword) {
+      let res = await axios.put('/api/v1/user/password/update',
         {
-          oldPassword
-          , newPassword,
-          confirmPassword
+          ...user
         }, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       })
-      console.log(res)
-      if (res) {
+
+      // console.log(res.data.success)
+      if (res.data.success == true) {
         Swal.fire({
           title: 'Done',
           text: 'Password Changed',
@@ -50,12 +107,14 @@ const Register = () => {
           confirmButtonColor: '#303c54',
           iconColor: '#303c54'
         }).then(() => {
-          history.push('/dashboard')
+          history('/dashboard')
         });
-      }
 
+      }
+      setLoading(false);
     } else {
-      alert('new password and confirm password are not matched')
+      swal('Error!', 'New Password And Confirm Password is Not Match !', 'error')
+      setLoading(false);
     }
 
   }
@@ -74,31 +133,56 @@ const Register = () => {
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Old Password" autoComplete="email" onChange={(e) => setOldPassword(e.target.value)} />
+                    <CFormInput placeholder="Old Password" type="password" value={user.oldPassword}
+                      onChange={handleChange}
+                      autoComplete="current-password"
+                      name="oldPassword" />
                   </CInputGroup>
+                  {errors.oldPasswordError && (
+                    <p className="text-center py-2 text-danger">{errors.oldPasswordError}</p>
+                  )}
+
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
                     <CFormInput
                       type="password"
-                      placeholder="Password"
+                      placeholder=" New Password"
 
-                      onChange={(e) => setNewPassword(e.target.value)}
+                      value={user.newPassword}
+                      onChange={handleChange}
+                      name="newPassword"
+
                     />
                   </CInputGroup>
+                  {errors.newPasswordError && (
+                    <p className="text-center py-2 text-danger">{errors.newPasswordError}</p>
+                  )}
                   <CInputGroup className="mb-4">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
+                    {errors.passwordError && (
+                      <p className="text-center py-2 text-danger">{errors.passwordError}</p>
+                    )}
                     <CFormInput
                       type="password"
-                      placeholder="Confirm password"
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+
+                      placeholder="Confirm password "
+                      value={user.confirmPassword}
+                      onChange={handleChange}
+                      name="confirmPassword"
                     />
                   </CInputGroup>
+                  {errors.confirmPasswordError && (
+                    <p className="text-center py-2 text-danger">{errors.confirmPasswordError}</p>
+                  )}
                   <div className="d-grid">
-                    <CButton color="success" onClick={handleSubmit}>Submit</CButton>
+                    <CButton color="success" onClick={handleSubmit}>
+                      <ClipLoader loading={loading} size={18} />
+                      {!loading && "Submit"}
+                    </CButton>
                   </div>
                 </CForm>
               </CCardBody>

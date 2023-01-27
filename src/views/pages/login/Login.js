@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -15,42 +15,127 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import ClipLoader from "react-spinners/ClipLoader";
 import { useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const [validForm, setValidForm] = useState(false)
   const [auth, setAuth] = useState({
     email: "",
     password: ""
   });
-  const history = useHistory();
+  const [errors, setErrors] = useState({
+    emailError: '',
+    passwordError: '',
 
-  const handleChange = (e) => (event) => {
-    setAuth({ ...auth, [e]: event.target.value });
-  };
+  })
+  const validEmailRegex = RegExp(
+    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+  )
+  const validPasswordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{7,}$/)
+  const history = useNavigate();
+  // const handleChange = (e) => (event) => {
+
+  //   setAuth({ ...auth, [e]: event.target.value });
+  // };
+  const validateForm = () => {
+    let valid = true
+    Object.values(errors).forEach((val) => {
+      if (val.length > 0) {
+        valid = false
+        return false
+      }
+    })
+    Object.values(auth).forEach((val) => {
+      if (val.length <= 0) {
+        valid = false
+        return false
+      }
+    })
+    return valid
+  }
+
+  //cheking email and password
+  useEffect(() => {
+    if (validateForm()) {
+      setValidForm(true)
+    } else {
+      setValidForm(false)
+    }
+  }, [errors])
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    switch (name) {
+      case 'email':
+        setErrors({
+          ...errors,
+          emailError: validEmailRegex.test(value) ? '' : 'Email is not valid!',
+        })
+
+        break
+      case 'password':
+        setErrors((errors) => ({
+          ...errors,
+          passwordError: validPasswordRegex.test(value)
+            ? ''
+            : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+        }))
+        break
+      default:
+        break
+    }
+
+    setAuth({ ...auth, [name]: value })
+  }
 
   const Login = async () => {
-    const res = await axios.post("/api/user/login/", auth);
-    if (res.data.success == true) {
-      localStorage.setItem("authToken", res.data.token)
-      console.log(res.data)
-      localStorage.setItem("auth", JSON.stringify({
-        user: res.data.user,
-        token: res.data.token,
+    if (!(auth.email && auth.password)) {
 
-
-      }));
-      history.push('/dashboard')
-
+      return swal('Error!', 'All fields are required', 'error')
     }
-    else {
-      if (res.data.status === "blocked")
-        alert(res.data.message)
-      else
-        alert("Invalid Credentials");
+    setLoading({ loading: true })
+    try {
+      const res = await axios.post("/api/v1/user/login/", auth);
+      if (res.data.success == true) {
+        localStorage.setItem("authToken", res.data.token)
+        let response = await axios.get(`/api/v1/user/details`, {
+          headers: {
+            Authorization: `Bearer ${res.data.token}`,
+          },
+        })
+        // console.log(response.data)
+        const data = response.data
+        if (data.user.role === 'admin') {
+          history('/dashboard')
+          setLoading(false);
+          window.location.reload()
+        }
+        else {
+          swal('Error!', 'please try with admin credential!!', 'error')
+          setLoading(false);
+        }
+
+
+
+      }
+      else {
+        setLoading(false);
+
+        swal('Error!', 'Invalid Credentials', 'error')
+
+      }
+    } catch (error) {
+      setLoading(false);
+
+      swal('Error!', 'Invalid Credentials', 'error')
+
     }
   }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -61,28 +146,37 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to Your CMP Dashboard Account.</p>
+                    <p className="text-medium-emphasis">Sign In to Your ATP Dashboard Account.</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Email" onChange={handleChange("email")} autoComplete="email" />
+                      <CFormInput type="email" placeholder="Email" onChange={handleChange} value={auth.email} name="email" autoComplete="email" />
                     </CInputGroup>
+                    {errors.emailError && (
+                      <p className="text-center py-2 text-danger">{errors.emailError}</p>
+                    )}
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        onChange={handleChange("password")}
+                        name="password"
+                        value={auth.password}
+                        onChange={handleChange}
                         placeholder="Password"
                         autoComplete="current-password"
                       />
                     </CInputGroup>
 
+                    {errors.passwordError && (
+                      <p className="text-center py-2 text-danger">{errors.passwordError}</p>
+                    )}
+                    <CButton color="primary" className="px-4" disabled={!validForm} onClick={Login}>
+                      <ClipLoader loading={loading} size={18} />
+                      {!loading && "Login"}
 
-                    <CButton color="primary" className="px-4" onClick={Login}>
-                      Login
                     </CButton>
 
 
@@ -93,11 +187,11 @@ const Login = () => {
                     </Link>
                     <br />
 
-                    {/* <CButton color="link" className="px-0">
-                      <Link to="/forgot">
-                        Forgot password?
+                    <CButton color="link" className="px-0">
+                      <Link to="/password/forgot">
+                        Forgot password.?
                       </Link>
-                    </CButton> */}
+                    </CButton>
 
 
                   </CForm>
@@ -118,3 +212,8 @@ const Login = () => {
 }
 
 export default Login
+
+  // < Route path = "/" name = "Home" render = {(props) => (
+  //   userdata && userdata.role === 'admin' ? <DefaultLayout {...props} /> :
+  //     <><Login {...props} /></>
+  // )} />
