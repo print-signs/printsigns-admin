@@ -201,7 +201,7 @@ const States = () => {
                                       btn btn-primary btn-sm
                                     waves-effect waves-light
                                     btn-table
-                                    ml-2
+                                    me-1
                                   "
                                                                         >
                                                                             Edit
@@ -220,7 +220,7 @@ const States = () => {
                                     btn btn-danger btn-sm
                                     waves-effect waves-light
                                     btn-table
-                                    ml-2
+                                    me-1
                                     
                                   "
                                                                             onClick={() => {

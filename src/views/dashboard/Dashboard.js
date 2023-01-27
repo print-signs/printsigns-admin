@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [users, setUsers] = useState([])
   const token = isAutheticated();
 
-  const getAllUsers = useCallback(async () => {
+  const getAllUsers = async () => {
     let res = await axios.get(
       `/api/v1/admin/users`,
       {
@@ -24,7 +24,7 @@ const Dashboard = () => {
     setUsers(res.data.users)
 
 
-  }, [token]);
+  }
   // //2nd 
   // const [category, setCategory] = useState([])
   // const getAllCategory = useCallback(async () => {
@@ -106,14 +106,10 @@ const Dashboard = () => {
 
 
   // }, [token]);
-  // useEffect(() => {
-  //   getAllUsers();
-  //   getAllCategory()
-  //   getRequirement()
-  //   getNews()
-  //   getOffer()
-  //   getEvent()
-  // }, [getAllUsers, getAllCategory, getRequirement, getNews, getOffer, getEvent]);
+  useEffect(() => {
+    getAllUsers();
+
+  }, [token]);
   return (
     <>
       <WidgetsDropdown users={users} />
