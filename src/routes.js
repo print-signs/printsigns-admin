@@ -32,6 +32,14 @@ import AddProduct from './views/Products/AddProduct'
 import EditProduct from './views/Products/EditProduct'
 import ViewProduct from './views/Products/ViewProduct'
 
+//Order Management
+import NewOrders from './views/orders/NewOrders.js'
+import ProcessingOrders from './views/orders/ProcessingOrders.js'
+import DispatchedOrders from './views/orders/DispatchedOrders.js'
+import DeliveredOrders from './views/orders/DeliveredOrders.js'
+import CancelledOrders from './views/orders/CancelledOrders.js'
+import ReturnedOrders from './views/orders/ReturnedOrders.js'
+import ViewOrder from './views/orders/ViewOrder.js'
 const routes = [
 
   { path: '/', exact: true, name: 'Home' },
@@ -45,7 +53,14 @@ const routes = [
   { path: '/product/add', name: 'Add products', element: AddProduct },
   { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
   { path: '/product/view/:id', name: 'view products', element: ViewProduct },
-
+  //Order Management
+  { path: '/orders/new', name: 'New Orders', element: NewOrders },
+  // { path: '/orders/processing', name: 'Processing Orders', element: ProcessingOrders },
+  // { path: '/orders/dispatched', name: 'Dispatched Orders', element: DispatchedOrders },
+  // { path: '/orders/delivered', name: 'Delivered Orders', element: DeliveredOrders },
+  // { path: '/orders/cancelled', name: 'Cancelled Orders', element: CancelledOrders },
+  // { path: '/orders/returned', name: 'Returned Orders', element: ReturnedOrders },
+  // { path: '/orders/:status/:id', name: 'View Order', element: ViewOrder },
 
 
   //Temple

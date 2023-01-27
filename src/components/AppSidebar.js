@@ -41,7 +41,6 @@ const AppSidebar = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log(configDetails.data.result)
       configDetails.data.result.map((item) => {
         setHeaderlogoUrl(item?.logo[0]?.Headerlogo)
         setFooterlogoUrl(item?.logo[0]?.Footerlogo)
@@ -51,7 +50,6 @@ const AppSidebar = () => {
     getConfiguration()
   }, [])
 
-  console.log(HeaderlogoUrl)
   //---------------------------//
   return (
     <CSidebar

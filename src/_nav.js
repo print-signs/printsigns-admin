@@ -5,6 +5,7 @@ import {
   cilAppsSettings,
   cilBell,
   cilCalculator,
+  cilCart,
   cilChartPie,
   cilClipboard,
   cilCommand,
@@ -51,6 +52,51 @@ const _nav = [
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
     to: '/temples',
   },
+  {
+    component: CNavGroup,
+    name: 'Franchisee Orders',
+    icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'New',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/new',
+      },
+      {
+        component: CNavItem,
+        name: 'Paid',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/returned',
+      },
+      {
+        component: CNavItem,
+        name: 'Processing',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/processing',
+      },
+      {
+        component: CNavItem,
+        name: 'Dispatched',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/dispatched',
+      },
+      {
+        component: CNavItem,
+        name: 'Delivered',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/delivered',
+      },
+      {
+        component: CNavItem,
+        name: 'Cancelled',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        to: '/orders/cancelled',
+      },
+
+    ],
+  },
+
 
   {
     component: CNavItem,
