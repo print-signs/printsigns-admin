@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import { isAutheticated } from 'src/auth'
+import Button from '@material-ui/core/Button'
 
 function NewOrders() {
   const token = isAutheticated()
@@ -22,11 +23,12 @@ function NewOrders() {
   useEffect(() => {
     function getNewOrder() {
       axios
-        .get(`/api/order/list/new`, {
+        .get(`/api/order/getAll`, {
           headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setNewOrdersData(res.data.data)
+          setNewOrdersData(res.data.order)
+          console.log(res.data.order)
           setLoading(false)
         })
         .catch((err) => {
@@ -63,6 +65,23 @@ function NewOrders() {
                 <div style={{ fontSize: '22px' }} className="fw-bold">
                   New Orders
                 </div>
+
+                <div className="page-title-right">
+                  <Link to="/order/add">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{
+                        fontWeight: 'bold',
+                        marginBottom: '1rem',
+                        textTransform: 'capitalize',
+                      }}
+                    >
+                      Add Order
+                    </Button>
+                  </Link>
+                </div>
+
               </div>
             </div>
           </div>
@@ -107,7 +126,7 @@ function NewOrders() {
                           <th className="text-start">Order ID</th>
                           <th className="text-start">Franchisee</th>
                           <th className="text-start">Order value</th>
-                          {/* <th className="text-start">Placed On</th> */}
+                          <th className="text-start">Order At</th>
                           <th className="text-start">Status</th>
                           <th className="text-start">Actions</th>
                         </tr>
@@ -130,11 +149,11 @@ function NewOrders() {
                           showData.map((order, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-start">{order.order_id}</td>
-                                <td className="text-start">{order.parent.name}</td>
-                                <td className="text-start">{order?.total_amount}</td>
+                                <td className="text-start">{order?.order_id}</td>
+                                <td className="text-start">{order?.user?.name}</td>
+                                <td className="text-start">₹{order?.total_amount}</td>
                                 <td className="text-start">
-                                  {new Date(order?.placed_on).toLocaleString('en-IN', {
+                                  {new Date(order?.createdAt).toLocaleString('en-IN', {
                                     month: 'short',
                                     day: 'numeric',
                                     year: 'numeric',
@@ -145,11 +164,11 @@ function NewOrders() {
                                 </td>
                                 <td className="text-start">
                                   <span className="badge text-bg-success text-white">
-                                    {order?.status}
+                                    {order?.orderStatus}
                                   </span>
                                 </td>
                                 <td className="text-start">
-                                  <Link to={`/orders/${order.status}/${order._id}`}>
+                                  <Link to={`/orders/${order.orderStatus}/${order._id}`}>
                                     <button
                                       style={{ color: 'white' }}
                                       type="button"

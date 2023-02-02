@@ -128,7 +128,7 @@ const EditProduct = () => {
 
 
         axios
-            .put(`/api//product/update/${id}`, formData, {
+            .put(`/api/product/update/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',

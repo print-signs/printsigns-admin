@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react'
 import axios from 'axios';
 import { Router, Route, Routes, HashRouter } from 'react-router-dom'
 import { useState, useEffect } from 'react';
+import { Toaster } from "react-hot-toast";
 import './scss/style.scss'
 import ForgotPassword from './views/pages/register/ForgotPassword'
 import NewRegister from './views/pages/register/NewRegister'
@@ -81,7 +82,9 @@ const App = () => {
 
           <Route path="*" name="Home" element={<DefaultLayout />} />
         </Routes>
+        <Toaster />
       </Suspense>
+
     </HashRouter>
 
   )

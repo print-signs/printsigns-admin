@@ -22,6 +22,8 @@ const AddTemple = () => {
         city: '',
         state_name: '',
         short_url: '',
+        contact_Number: '',
+        contact_Person_Name: ''
         // pan: '',
         // business_name: '',
         // gstin: '',
@@ -102,10 +104,11 @@ const AddTemple = () => {
     const handleSubmit = () => {
         if (
             data.name.trim() === '' ||
+
             // data.pan.trim() === '' ||
-            // data.business_name.trim() === '' ||
-            // data.gstin.trim() === '' ||
-            // data.option.trim() === '' ||
+            data.contact_Number === '' ||
+
+            data.contact_Person_Name === '' ||
             data.address_line_1.trim() === '' ||
             data.address_line_2.trim() === '' ||
             data.city === '' ||
@@ -133,6 +136,9 @@ const AddTemple = () => {
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
         formData.set('state_name', data.state_name)
+        formData.set('contact_Number', data.contact_Number)
+        formData.set('contact_Person_Name', data.contact_Person_Name)
+
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
         formData.append('image', data.image)
@@ -180,7 +186,7 @@ const AddTemple = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Add Temple
+                            Add Franchisee
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -219,12 +225,12 @@ const AddTemple = () => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-6 my-1">
+                <div className="col-sm-12 col-md-12 col-lg-6 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    Temple Name*
+                                    Franchisee Name*
                                 </label>
                                 <input
                                     type="text"
@@ -236,19 +242,7 @@ const AddTemple = () => {
                                 />
                                 <p className="pt-1 pl-2 text-secondary">Remaining characters : {limiter.nameHas}</p>
                             </div>
-                            {/* <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    PAN*
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="pan"
-                                    value={data.pan}
-                                    maxLength="50"
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </div> */}
+
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Address Line 1*
@@ -275,32 +269,7 @@ const AddTemple = () => {
                                     onChange={(e) => handleChange(e)}
                                 />
                             </div>
-                            {/* <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    Business Name*
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="business_name"
-                                    value={data.business_name}
-                                    maxLength="50"
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </div> */}
-                            {/* <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    GSTIN*
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="gstin"
-                                    value={data.gstin}
-                                    maxLength="50"
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </div> */}
+
                             <div className="mb-3">
                                 <label htmlFor="pageToLink" className="form-label">
                                     City*
@@ -340,9 +309,34 @@ const AddTemple = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-6 my-1">
+                <div className="col-sm-12 col-md-12 col-lg-6 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
+
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Contact Number*
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    id="contact_Number"
+                                    value={data.contact_Number}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Contact Person Name*
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="contact_Person_Name"
+                                    value={data.contact_Person_Name}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </div>
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     URL*
@@ -361,21 +355,8 @@ const AddTemple = () => {
                                     />
                                 </div>
                             </div>
-                            {/* <div className="mb-3">
-                                <label htmlFor="option" className="form-label">
-                                    Option*
-                                </label>
-                                <select
-                                    className="form-control"
-                                    id="option"
-                                    value={data.option}
-                                    onChange={(e) => handleChange(e)}
-                                >
-                                    <option value="">None</option>
-                                    <option value="group">Group</option>
-                                    <option value="bundle">Bundle</option>
-                                </select>
-                            </div> */}
+
+
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
                                     Temple Banner*

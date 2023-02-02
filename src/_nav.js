@@ -13,6 +13,7 @@ import {
   cilDrop,
   cilFace,
   cilFilterSquare,
+  cilLoopCircular,
   cilMedicalCross,
   cilMoney,
   cilMugTea,
@@ -24,6 +25,7 @@ import {
   cilSpeedometer,
   cilStar,
   cilTablet,
+  cilTags,
   cilTennisBall,
   cilUser,
 
@@ -48,7 +50,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Temples',
+    name: 'Franchisee',
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
     to: '/temples',
   },
@@ -112,7 +114,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Cities',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilLoopCircular} customClassName="nav-icon" />,
         to: '/cities',
       },
       {
@@ -139,12 +141,12 @@ const _nav = [
       //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
       //   to: '/pincode',
       // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Tax Rates',
-      //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
-      //   to: '/tax',
-      // },
+      {
+        component: CNavItem,
+        name: 'Tax Rates',
+        icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
+        to: '/tax',
+      },
       // {
       //   component: CNavItem,
       //   name: 'Pages',

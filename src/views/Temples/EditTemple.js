@@ -20,13 +20,15 @@ const EditTemple = () => {
         name: '',
         address_line_1: '',
         address_line_2: '',
+        contact_Person_Name: '',
+        contact_Number: '',
         city: '',
         state_name: '',
         short_url: '',
-        pan: '',
-        business_name: '',
-        gstin: '',
-        option: '',
+        // pan: '',
+        // business_name: '',
+        // gstin: '',
+        // option: '',
     })
     const [cities, setCities] = useState([])
     const [loading, setLoading] = useState(false)
@@ -124,6 +126,8 @@ const EditTemple = () => {
             data.name.trim() === '' ||
             data.address_line_1.trim() === '' ||
             data.address_line_2.trim() === '' ||
+            data.contact_Number === '' ||
+            data.contact_Person_Name === '' ||
             data.city === '' ||
             data.short_url === '' ||
             data.state_name === ''
@@ -148,6 +152,8 @@ const EditTemple = () => {
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
         formData.set('state_name', data.state_name)
+        formData.set('contact_Number', data.contact_Number)
+        formData.set('contact_Person_Name', data.contact_Person_Name)
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
         formData.append('image', data.image)
@@ -195,7 +201,7 @@ const EditTemple = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Edit Temple
+                            Edit Franchisee
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -240,7 +246,7 @@ const EditTemple = () => {
                         <div className="card-body px-5">
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    Temple Name*
+                                    Franchisee Name*
                                 </label>
                                 <input
                                     type="text"
@@ -359,6 +365,31 @@ const EditTemple = () => {
                 <div className="col-6 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
+
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Contact Number*
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    id="contact_Number"
+                                    value={data.contact_Number}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Contact Person Name*
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="contact_Person_Name"
+                                    value={data.contact_Person_Name}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </div>
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     URL*

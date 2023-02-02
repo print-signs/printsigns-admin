@@ -96,7 +96,7 @@ const Temples = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Temples
+                                    Franchisees
                                 </div>
 
                                 <div className="page-title-right">
@@ -110,7 +110,7 @@ const Temples = () => {
                                                 textTransform: 'capitalize',
                                             }}
                                         >
-                                            Add Temple
+                                            Add Franchisee
                                         </Button>
                                     </Link>
                                 </div>
@@ -154,7 +154,7 @@ const Temples = () => {
                                         >
                                             <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
-                                                    <th className="text-start">Temple Name</th>
+                                                    <th className="text-start">Franchisee Name</th>
                                                     <th className="text-start">Logo</th>
                                                     <th className="text-start">City </th>
                                                     <th className="text-start">Created On</th>

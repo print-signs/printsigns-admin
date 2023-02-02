@@ -39,7 +39,12 @@ import DispatchedOrders from './views/orders/DispatchedOrders.js'
 import DeliveredOrders from './views/orders/DeliveredOrders.js'
 import CancelledOrders from './views/orders/CancelledOrders.js'
 import ReturnedOrders from './views/orders/ReturnedOrders.js'
-import ViewOrder from './views/orders/ViewOrder.js'
+import ViewOrder from './views/orders/ViewOrder'
+import AddOrder from './views/orders/AddOrder'
+//Taxes
+import Tax from './views/configuration/tax/Tax'
+import Addtax from './views/configuration/tax/Addtax'
+import Edittax from './views/configuration/tax/Edittax'
 const routes = [
 
   { path: '/', exact: true, name: 'Home' },
@@ -54,13 +59,16 @@ const routes = [
   { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
   { path: '/product/view/:id', name: 'view products', element: ViewProduct },
   //Order Management
+
+
   { path: '/orders/new', name: 'New Orders', element: NewOrders },
+  { path: '/order/add', name: 'add Order', element: AddOrder },
   // { path: '/orders/processing', name: 'Processing Orders', element: ProcessingOrders },
   // { path: '/orders/dispatched', name: 'Dispatched Orders', element: DispatchedOrders },
   // { path: '/orders/delivered', name: 'Delivered Orders', element: DeliveredOrders },
   // { path: '/orders/cancelled', name: 'Cancelled Orders', element: CancelledOrders },
   // { path: '/orders/returned', name: 'Returned Orders', element: ReturnedOrders },
-  // { path: '/orders/:status/:id', name: 'View Order', element: ViewOrder },
+  { path: '/order/:status/:id', name: 'View Order', element: ViewOrder },
 
 
   //Temple
@@ -87,6 +95,11 @@ const routes = [
   { path: '/socialmedia', name: 'Social Media', element: Socialmedia },
   { path: '/address', name: 'Address', element: Address },
   { path: '/logo', name: 'Logo', element: Logo },
+
+  //Taxes
+  { path: '/tax', name: 'Tax Rates', element: Tax },
+  { path: '/tax/add', name: 'Add Tax', element: Addtax },
+  { path: '/tax/edit/:id', name: 'Edit Tax', element: Edittax },
   // -------------------------------------------//
 
 
