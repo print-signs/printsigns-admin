@@ -38,15 +38,40 @@ export const cartReducer = createReducer(
         deleteFromCart: (state, action) => {
             state.cartItems = state.cartItems.filter((i) => i.id !== action.payload);
         },
+
+        // selectTax: (state, action) => {
+
+        //     const tax = action.payload;
+
+        //     const item = state.cartItems.find((i) => i.id === tax.productId);
+        //     if (item) {
+
+        //         state.cartItems.forEach((i) => {
+        //             if (i.id === item.id) {
+
+        //                 i.taxName = tax.name;
+        //                 i.taxRate = tax.rate;
+        //                 i.taxId = tax.taxId
+        //                 let rate = tax.rate / 100
+        //                 let PriceWithT = i.price;
+        //                 PriceWithT += + (i.price * rate).toFixed();
+        //                 i.PriceWithTax = PriceWithT
+
+        //             }
+        //         });
+        //     }
+        // },
+
         calculatePrice: (state) => {
             let sum = 0;
-            state.cartItems.forEach((i) => (sum += i.price * i.quantity));
+            state.cartItems.forEach((i) => (sum += i.PriceWithTax * i.quantity));
             state.subTotal = sum;
             // state.shipping = state.subTotal > 1000 ? 0 : 200;
             // state.tax = +(state.subTotal * 0.18).toFixed();
             state.total = state.subTotal
             //  + state.tax + state.shipping;
         },
+
 
     }
 );
@@ -55,7 +80,7 @@ export const cartReducer = createReducer(
 
 
 let initialInfo = localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")) : ({
-    franchisees: [],
+    franchisees: null,
 
 })
 
@@ -65,20 +90,21 @@ export const shipingReducer = createReducer(
     {
         addShippingInfo: (state, action) => {
             const item = action.payload;
-            const isItemExist = state.franchisees.find((i) => i.id === item.id);
+            // const isItemExist = state.franchisees.find((i) => i.id === item.id);
 
-            if (isItemExist) {
-                // state.cartItems.forEach((i) => {
-                //     if (i.id === item.id) i.quantity += 1;
-                // });
-                return;
-            } else {
-                state.franchisees.push(item);
-            }
+            // if (isItemExist) {
+            // state.cartItems.forEach((i) => {
+            //     if (i.id === item.id) i.quantity += 1;
+            // });
+            //     return;
+            // } else {
+            state.franchisees = item;
+            // }
         },
 
         deleteFromshippingInfo: (state, action) => {
-            state.franchisees = state.franchisees.filter((i) => i.id !== action.payload);
+            state.franchisees = null
+            // state.franchisees.filter((i) => i.id !== action.payload);
 
         },
     }

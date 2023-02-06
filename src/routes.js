@@ -45,6 +45,7 @@ import AddOrder from './views/orders/AddOrder'
 import Tax from './views/configuration/tax/Tax'
 import Addtax from './views/configuration/tax/Addtax'
 import Edittax from './views/configuration/tax/Edittax'
+import EditOrder from './views/orders/EditOrder'
 const routes = [
 
   { path: '/', exact: true, name: 'Home' },
@@ -63,6 +64,9 @@ const routes = [
 
   { path: '/orders/new', name: 'New Orders', element: NewOrders },
   { path: '/order/add', name: 'add Order', element: AddOrder },
+  { path: '/orders/edit/:id', name: 'Edit Order', element: EditOrder },
+  //{ path: '/orders/view/:id', name: 'Edit Order', element: EditOrder },
+
   // { path: '/orders/processing', name: 'Processing Orders', element: ProcessingOrders },
   // { path: '/orders/dispatched', name: 'Dispatched Orders', element: DispatchedOrders },
   // { path: '/orders/delivered', name: 'Delivered Orders', element: DeliveredOrders },

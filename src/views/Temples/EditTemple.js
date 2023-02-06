@@ -22,6 +22,7 @@ const EditTemple = () => {
         address_line_2: '',
         contact_Person_Name: '',
         contact_Number: '',
+        price_Lable: '',
         city: '',
         state_name: '',
         short_url: '',
@@ -126,6 +127,7 @@ const EditTemple = () => {
             data.name.trim() === '' ||
             data.address_line_1.trim() === '' ||
             data.address_line_2.trim() === '' ||
+            data.price_Lable.trim() === '' ||
             data.contact_Number === '' ||
             data.contact_Person_Name === '' ||
             data.city === '' ||
@@ -151,6 +153,9 @@ const EditTemple = () => {
         formData.set('address_line_1', data.address_line_1)
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
+        formData.set('price_Lable', data.price_Lable)
+
+
         formData.set('state_name', data.state_name)
         formData.set('contact_Number', data.contact_Number)
         formData.set('contact_Person_Name', data.contact_Person_Name)
@@ -408,21 +413,25 @@ const EditTemple = () => {
                                     />
                                 </div>
                             </div>
-                            {/* <div className="mb-3">
-                                <label htmlFor="option" className="form-label">
-                                    Option*
-                                </label>
-                                <select
-                                    className="form-control"
-                                    id="option"
-                                    value={data.option}
+                            <div className=" mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Price Lable*
+                                </label>  <select className="form-control" name="price_Lable" id="price_Lable"
                                     onChange={(e) => handleChange(e)}
+                                    value={data.price_Lable}
                                 >
-                                    <option value="">None</option>
-                                    <option value="group">Group</option>
-                                    <option value="bundle">Bundle</option>
+
+
+
+                                    <option value="" disabled>---</option>
+
+                                    <option value="base_Price">Base Price</option>
+                                    <option value="price_Level_2"> price Level 2</option>
+                                    <option value="price_Level_3">price Level 3</option>
+
+
                                 </select>
-                            </div> */}
+                            </div>
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
                                     Temple Banner*

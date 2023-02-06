@@ -1,6 +1,9 @@
 
 
 
+
+
+
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -13,19 +16,19 @@ import { cibBlackberry } from '@coreui/icons'
 import Button from '@material-ui/core/Button'
 // import PrintOrderDetails from './PrintOrderDetails.js'
 
-function AddOrder() {
+function EditOrder() {
     const { status, id } = useParams()
 
     const { cartItems, subTotal, tax, shipping, total } = useSelector(
         (state) => state.cart
     );
-
     // const { cart, shippingInfo } = useSelector(
     //     (state) => state
     // );
     const AllStates = useSelector(
         (state) => state
     );
+    console.log(AllStates.shipingInfo.franchisees)
     const getValue = useRef()
     const getFranchiseeID = useRef()
     const dispatch = useDispatch();
@@ -34,8 +37,6 @@ function AddOrder() {
     const token = isAutheticated()
     const [productData, setProductData] = useState([])
     const [allFranchisee, setAllFranchisee] = useState([])
-    const [allTax, setAllTax] = useState([])
-
 
 
     const [productDetails, setProductDetails] = useState()
@@ -48,19 +49,6 @@ function AddOrder() {
         contact_Number: '',
         total_Price: '',
     })
-    useEffect(() => {
-        const getAllTax = async () => {
-            const res = await axios.get(`/api/tax/view_tax`, {
-                headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
-            })
-            if (res.data) {
-                // console.log(res.data)
-                setAllTax(res.data)
-            }
-        }
-        getAllTax()
-
-    }, [token])
 
     useEffect(() => {
         function getProductDetails() {
@@ -87,7 +75,7 @@ function AddOrder() {
                 })
                 .then((res) => {
                     setLoading(false)
-                    console.log(res.data.data)
+                    // console.log(res.data.product)
                     setAllFranchisee(res.data.data)
                 })
                 .catch((err) => {
@@ -116,7 +104,6 @@ function AddOrder() {
 
     }
     // ------------------------product handle------------------------------//
-
     const handleGetSingleProduct = async (e) => {
 
 
@@ -131,12 +118,7 @@ function AddOrder() {
                     price: res?.data?.product?.base_Price,
                     id: res?.data?.product?._id,
                     quantity: 1,
-
-                    image: res?.data?.product?.image?.url,
-                    taxRate: 0.0,
-                    taxName: '',
-                    taxId: '',
-                    PriceWithTax: res?.data?.product?.base_Price,
+                    image: res?.data?.product?.image?.url
                 }
                 dispatch({ type: "addToCart", payload: options });
 
@@ -152,28 +134,7 @@ function AddOrder() {
             })
     }
 
-    // const TaxRatechange = async (id, e) => {
-    //     // console.log(e.target.value)
-    //     // console.log(e.target.value.slice(4, 6))
-    //     // console.log(e.target.value.slice(12, 16))
-    //     // console.log(e.target.value.slice(23))
 
-
-    //     let taxDetails = {
-    //         name: e.target.value.slice(12, 16),
-    //         rate: e.target.value.slice(4, 6),
-    //         productId: id,
-    //         taxId: e.target.value.slice(24)
-
-    //     }
-    //     dispatch({ type: "selectTax", payload: taxDetails });
-
-    //     dispatch({ type: "calculatePrice" });
-    //     localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-
-    //     toast.success("Tax Added");
-
-    // }
     const handleRemove = (id) => {
         dispatch({
             type: "deleteFromCart",
@@ -186,17 +147,6 @@ function AddOrder() {
     };
     //increase qty
     const increaseQuantity = (id) => {
-        if (
-            tax === 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select Tax Rate ',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
-            })
-            return
-        }
         dispatch({
             type: "addToCart",
             payload: { id },
@@ -208,17 +158,6 @@ function AddOrder() {
 
 
     const decreaseQuantity = (id) => {
-        if (
-            tax === 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select Tax Rate ',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
-            })
-            return
-        }
         dispatch({
             type: "decrement",
             payload: id,
@@ -233,7 +172,6 @@ function AddOrder() {
     // ------------------------Frenchisee handle------------------------------//
 
     const handleGetSingleFrenchisee = async () => {
-        console.log(getFranchiseeID.current.value)
 
         axios
             .get(`/api/Temple/arrayspopulate/${getFranchiseeID.current.value}`, {
@@ -244,7 +182,7 @@ function AddOrder() {
             })
             .then((res) => {
                 setLoading(false)
-                // console.log(res.data.data)
+                console.log(res.data.data)
                 let options = {
                     id: res?.data?.data?._id,
                     name: res?.data?.data?.name,
@@ -281,33 +219,11 @@ function AddOrder() {
 
     };
     // ------------------------Frenchisee handle  End------------------------------//
-    console.log(AllStates.shipingInfo.franchisees)
-    // cartItems.map(i => console.log(i.taxName))
+    console.log(AllStates.shipingInfo.franchisees.length)
+    console.log(cartItems)
     function handleSubmit() {
-
-
-        if (cartItems.length < 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select atleast one product',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
-            })
-            return
-        }
-        // else if (cartItems.find(i => i.taxName === '')) {
-        //     swal({
-        //         title: 'Warning',
-        //         text: 'Please select tax rate for every Product',
-        //         icon: 'error',
-        //         button: 'Close',
-        //         dangerMode: true,
-        //     })
-        //     return
-        // }
-        else if (
-            AllStates.shipingInfo.franchisees === null) {
+        if (
+            AllStates.shipingInfo.franchisees.length < 1) {
             swal({
                 title: 'Warning',
                 text: 'Please select Franchisee ',
@@ -317,7 +233,16 @@ function AddOrder() {
             })
             return
         }
-        else if (
+        else if (cartItems.length < 1) {
+            swal({
+                title: 'Warning',
+                text: 'Please select atleast one product',
+                icon: 'error',
+                button: 'Close',
+                dangerMode: true,
+            })
+            return
+        } else if (
             shipping === '' ||
 
             tax === '' ||
@@ -333,7 +258,6 @@ function AddOrder() {
             })
             return
         }
-
 
 
         setLoading(true)
@@ -370,7 +294,7 @@ function AddOrder() {
                 },
             )
             .then((res) => {
-                // console.log(res)
+                console.log(res)
                 swal({
                     title: 'Created',
                     text: 'Order Created!',
@@ -414,7 +338,7 @@ function AddOrder() {
                   "
                                 >
                                     <div style={{ fontSize: '22px' }} className="fw-bold">
-                                        Add Order
+                                        Edit Order
                                     </div>
                                     <div className="page-title-right">
                                         <Button
@@ -429,7 +353,7 @@ function AddOrder() {
                                             onClick={() => handleSubmit()}
                                             disabled={loading}
                                         >
-                                            {loading ? 'Loading' : 'Order Now'}
+                                            {loading ? 'Loading' : ' Edit Order'}
                                         </Button>
                                         <Link to="/orders/new">
                                             <Button
@@ -515,30 +439,13 @@ function AddOrder() {
                                                                             <button className='btn btn-sm btn-primary' onClick={() => increaseQuantity(productDetails?.id)}>+</button>
 
                                                                         </div>
-
-                                                                        {productDetails?.PriceWithTax && <p className="m-0 mt-3">
-                                                                            <stong>Price With Tax:</stong> ₹{productDetails?.PriceWithTax}
-                                                                        </p>}
                                                                         <button className='btn btn-danger btn-sm ms-2 mt-3' onClick={() => handleRemove(productDetails?.id)} >Delete</button>
                                                                     </div>
                                                                     <div className="col-sm-6">
-                                                                        <p className="m-0 mt-3">
+                                                                        <h6 className="m-0 mt-3">
                                                                             <stong> Price:</stong> ₹{productDetails?.price}
-                                                                        </p>
-                                                                        {/* {allTax.length > 0 && <div className="d-flex mt-4">
-                                                                            <h6 className="me-2 mt-1">Tax:</h6>
-                                                                            <select className="   " name="" id=""
-                                                                                onChange={(e) => TaxRatechange(productDetails?.id, e)}
-                                                                            >
-                                                                                <option value="" disabled>---</option>
-
-                                                                                {allTax.map((t, i) =>
-                                                                                    <option key={i} value={`tax:${t.tax},name:${t.name}  ,taxId:${t._id}`}>{t.tax}% {t.name}</option>
-                                                                                )}
-                                                                            </select>
-                                                                        </div>
-                                                                        } */}
-
+                                                                        </h6>
+                                                                        {' '}
 
 
                                                                     </div>
@@ -582,44 +489,45 @@ function AddOrder() {
 
 
                                         {
-                                            AllStates?.shipingInfo?.franchisees !== null &&
-                                            <div className="my-2">
-                                                <div className="row" style={{ fontSize: '14px' }}>
-                                                    <div className="col-sm-4">
-                                                        <img
-                                                            src={AllStates.shipingInfo.franchisees?.banner}
-                                                            alt={AllStates.shipingInfo.franchisees?.name}
-                                                            width='100%'
-                                                        // style={{
-                                                        //     width: '100%',
-                                                        //     objectFit: 'contain',
-                                                        //     maxHeight: '100px',
-                                                        // }}
-                                                        />
+                                            AllStates.shipingInfo.franchisees && AllStates.shipingInfo.franchisees.map((franchiDetails, i) =>
+                                                <div className="my-2">
+                                                    <div className="row" style={{ fontSize: '14px' }}>
+                                                        <div className="col-sm-4">
+                                                            <img
+                                                                src={franchiDetails?.banner}
+                                                                alt={franchiDetails?.name}
+                                                                width='100%'
+                                                            // style={{
+                                                            //     width: '100%',
+                                                            //     objectFit: 'contain',
+                                                            //     maxHeight: '100px',
+                                                            // }}
+                                                            />
+                                                        </div>
+                                                        <div className="col-sm-8">
+                                                            <h6 className="m-0 ms-2">{franchiDetails?.name}</h6>
+                                                            <parent className="m-0 ms-2 mt-3">
+                                                                Address. : {franchiDetails?.address}
+                                                            </parent>
+                                                            <p className="m-0 ms-2 mt-1">
+                                                                Contact No. : {franchiDetails?.contact_Number}
+                                                            </p>
+                                                            <p className="m-0 ms-2 mt-1">
+                                                                contact Person Name. : {franchiDetails?.contact_Person_Name}
+                                                            </p>
+
+
+
+
+                                                            <button className='btn btn-danger btn-sm ms-2 mt-2' onClick={() => FranchiseeRemove(franchiDetails?.id)} >Delete</button>
+
+
+                                                        </div>
                                                     </div>
-                                                    <div className="col-sm-8">
-                                                        <h6 className="m-0 ms-2">{AllStates.shipingInfo.franchisees?.name}</h6>
-                                                        <parent className="m-0 ms-2 mt-3">
-                                                            Address. : {AllStates.shipingInfo.franchisees?.address}
-                                                        </parent>
-                                                        <p className="m-0 ms-2 mt-1">
-                                                            Contact No. : {AllStates.shipingInfo.franchisees?.contact_Number}
-                                                        </p>
-                                                        <p className="m-0 ms-2 mt-1">
-                                                            contact Person Name. : {AllStates.shipingInfo.franchisees?.contact_Person_Name}
-                                                        </p>
+                                                    <hr />
 
-
-
-
-                                                        <button className='btn btn-danger btn-sm ms-2 mt-2' onClick={() => FranchiseeRemove(AllStates.shipingInfo.franchisees?.id)} >Delete</button>
-
-
-                                                    </div>
                                                 </div>
-                                                <hr />
-
-                                            </div>
+                                            )
                                         }
                                         {/* <div className="mt-1">
                                             <label className="fw-bold">Address :</label>
@@ -747,7 +655,7 @@ function AddOrder() {
                       })}
                     </label>
                   </div> */}
-                                        <div className="mt-3">
+                                        <div className="mt-1">
                                             <label>
                                                 <span className="fw-bold">Razorpay Order ID : </span>
                                                 {productData?.razorpay_order_id}
@@ -907,4 +815,4 @@ function AddOrder() {
     )
 }
 
-export default AddOrder
+export default EditOrder

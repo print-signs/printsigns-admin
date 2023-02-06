@@ -19,13 +19,36 @@ const AddProduct = () => {
         description: '',
 
         base_Price: '',
+        base_Price_With_Tax: '',
         price_Level_2: '',
-        price_Level_3: ''
+        price_Level_2_With_Tax: '',
+
+        price_Level_3: '',
+        price_Level_3_With_Tax: '',
+        taxId: ''
 
     })
 
 
     const [loading, setLoading] = useState(false)
+    const [allTax, setAllTax] = useState([])
+
+
+
+
+    useEffect(() => {
+        const getAllTax = async () => {
+            const res = await axios.get(`/api/tax/view_tax`, {
+                headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
+            })
+            if (res.data) {
+                setAllTax(res.data)
+            }
+        }
+        getAllTax()
+
+    }, [token])
+
     const handleChange = (e) => {
 
         if (e.target.id === 'image') {
@@ -61,6 +84,39 @@ const AddProduct = () => {
     }
 
 
+    const TaxRatechange = async (e) => {
+        let taxDetails = {
+            name: e.target.value.slice(12, 16),
+            rate: Number(e.target.value.slice(4, 6)),
+
+            taxId: e.target.value.slice(24)
+
+        }
+
+        let trRate = taxDetails.rate / 100
+        let PriceWithT = Number(data.base_Price);
+        PriceWithT += +((PriceWithT * trRate).toFixed());
+
+        //price_Level_2_With_Tax
+        let price_Level_2_With_Tax = Number(data.price_Level_2);
+        price_Level_2_With_Tax += +((price_Level_2_With_Tax * trRate).toFixed());
+        //
+        //price_Level_3_With_Tax
+        let price_Level_3_With_Tax = Number(data.price_Level_3);
+        price_Level_3_With_Tax += +((price_Level_3_With_Tax * trRate).toFixed());
+        setData((prev) => ({
+            ...prev,
+            base_Price_With_Tax: PriceWithT,
+
+            price_Level_2_With_Tax: price_Level_2_With_Tax,
+
+
+            price_Level_3_With_Tax: price_Level_3_With_Tax,
+            taxId: taxDetails.taxId
+
+        }))
+    }
+
 
     const handleSubmit = () => {
         if (
@@ -68,8 +124,11 @@ const AddProduct = () => {
 
             data.description.trim() === '' ||
             data.base_Price === '' ||
+            data.base_Price_With_Tax === '' ||
             data.price_Level_2 === '' ||
+            data.price_Level_2_With_Tax === '' ||
             data.price_Level_3 === '' ||
+            data.price_Level_3_With_Tax === '' ||
             data.imageURL.trim() === ''
         ) {
             swal({
@@ -87,8 +146,16 @@ const AddProduct = () => {
 
         formData.set('description', data.description)
         formData.set('base_Price', data.base_Price)
+        formData.set('base_Price_With_Tax', data.base_Price_With_Tax)
+
         formData.set('price_Level_2', data.price_Level_2)
+        formData.set('price_Level_2_With_Tax', data.price_Level_2_With_Tax)
+
         formData.set('price_Level_3', data.price_Level_3)
+        formData.set('price_Level_3_With_Tax', data.price_Level_3_With_Tax)
+        formData.set('taxId', data.taxId)
+
+
         formData.append('image', data.image)
 
 
@@ -245,8 +312,41 @@ const AddProduct = () => {
                 <div className="col-lg-6 col-md-6  col-sm-12 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
+                            <div className="d-flex flex-wrap">
 
-                            <div className="mb-3">
+                                <div className="mb-3 me-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Base Price*
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        id="base_Price"
+                                        value={data.base_Price}
+                                        onChange={(e) => handleChange(e)}
+
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Base Price With Tax
+                                    </label>
+                                    <input
+                                        type="number"
+                                        disabled
+                                        className="form-control"
+                                        id="base_Price_With_Tax"
+                                        value={data.base_Price_With_Tax}
+                                        placeholder={data.base_Price_With_Tax}
+                                    // onChange={(e) => handleChange(e)}
+
+                                    />
+                                </div>
+
+
+
+                            </div>
+                            {/* <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Base Price*
                                 </label>
@@ -258,35 +358,96 @@ const AddProduct = () => {
                                     onChange={(e) => handleChange(e)}
 
                                 />
+                            </div> */}
+
+                            <div className="d-flex flex-wrap">
+
+                                <div className="mb-3 me-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Price Level 2*
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        id="price_Level_2"
+                                        value={data.price_Level_2}
+                                        onChange={(e) => handleChange(e)}
+
+
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Price Level 2 with Tax
+                                    </label>
+                                    <input
+                                        type="number"
+                                        disabled
+                                        className="form-control"
+                                        id="price_Level_2_With_Tax"
+                                        value={data.price_Level_2_With_Tax}
+                                        placeholder={data.price_Level_2_With_Tax}
+                                    // onChange={(e) => handleChange(e)}
+
+
+                                    />
+                                </div>
+
+
+
                             </div>
-                            <div className="mb-3">
+
+                            <div className="d-flex flex-wrap">
+
+                                <div className="mb-3 me-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Price Level 3*
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        id="price_Level_3"
+                                        value={data.price_Level_3}
+                                        onChange={(e) => handleChange(e)}
+
+
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="title" className="form-label">
+                                        Price Level 3 with Tax
+                                    </label>
+                                    <input
+                                        type="number"
+                                        disabled
+                                        className="form-control"
+                                        id="price_Level_3_With_Tax"
+                                        placeholder={data.price_Level_3_With_Tax}
+                                    // onChange={(e) => handleChange(e)}
+
+
+                                    />
+                                </div>
+
+
+
+                            </div>
+
+
+                            {allTax.length > 0 && <div className=" mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    Price Level 2*
-                                </label>
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    id="price_Level_2"
-                                    value={data.price_Level_2}
-                                    onChange={(e) => handleChange(e)}
+                                    Tax*
+                                </label>  <select className="   form-control" name="" id=""
+                                    onChange={(e) => TaxRatechange(e)}
+                                >
+                                    <option value="" disabled>---</option>
 
-
-                                />
+                                    {allTax.map((t, i) =>
+                                        <option key={i} value={`tax:${t.tax},name:${t.name}  ,taxId:${t._id}`}>{t.tax}% {t.name}</option>
+                                    )}
+                                </select>
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    Price Level 3*
-                                </label>
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    id="price_Level_3"
-                                    value={data.price_Level_3}
-                                    onChange={(e) => handleChange(e)}
-
-
-                                />
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>

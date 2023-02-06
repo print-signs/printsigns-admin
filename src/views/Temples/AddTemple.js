@@ -23,11 +23,8 @@ const AddTemple = () => {
         state_name: '',
         short_url: '',
         contact_Number: '',
-        contact_Person_Name: ''
-        // pan: '',
-        // business_name: '',
-        // gstin: '',
-        // option: '',
+        contact_Person_Name: '',
+        price_Lable: ''
     })
 
     const [cities, setCities] = useState([])
@@ -111,6 +108,7 @@ const AddTemple = () => {
             data.contact_Person_Name === '' ||
             data.address_line_1.trim() === '' ||
             data.address_line_2.trim() === '' ||
+            data.price_Lable.trim() === '' ||
             data.city === '' ||
             data.short_url === '' ||
             data.state_name === '' ||
@@ -139,8 +137,10 @@ const AddTemple = () => {
         formData.set('contact_Number', data.contact_Number)
         formData.set('contact_Person_Name', data.contact_Person_Name)
 
+        formData.set('price_Lable', data.price_Lable)
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
+
         formData.append('image', data.image)
         axios
             .post(`/api/temple`, formData, {
@@ -356,6 +356,25 @@ const AddTemple = () => {
                                 </div>
                             </div>
 
+                            <div className=" mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Price Lable*
+                                </label>  <select className="form-control" name="price_Lable" id="price_Lable"
+                                    onChange={(e) => handleChange(e)}
+                                    value={data.price_Lable}
+                                >
+
+
+
+                                    <option value="" disabled>---</option>
+
+                                    <option value="base_Price">Base Price</option>
+                                    <option value="price_Level_2"> price Level 2</option>
+                                    <option value="price_Level_3">price Level 3</option>
+
+
+                                </select>
+                            </div>
 
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">

@@ -37,7 +37,7 @@ function NewOrders() {
         })
     }
     getNewOrder()
-  }, [])
+  }, [success])
 
   useEffect(() => {
     const loadData = () => {
@@ -47,6 +47,38 @@ function NewOrders() {
     }
     loadData()
   }, [currentPage, itemPerPage, newOrdersData])
+
+
+  const handleDelete = (id) => {
+    console.log(id)
+    swal({
+      title: 'Are you sure?',
+      icon: 'error',
+      buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
+    }).then((value) => {
+      if (value === true) {
+        axios
+          .delete(`/api/order/delete/${id}`, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            setSuccess((prev) => !prev)
+          })
+          .catch((err) => {
+            swal({
+              title: 'Warning',
+              text: err.response.data.message ? err.response.data.message : 'Something went wrong!',
+              icon: 'error',
+              button: 'Retry',
+              dangerMode: true,
+            })
+          })
+      }
+    })
+  }
 
   return (
     <div className="main-content">
@@ -150,7 +182,7 @@ function NewOrders() {
                             return (
                               <tr key={i}>
                                 <td className="text-start">{order?.order_id}</td>
-                                <td className="text-start">{order?.user?.name}</td>
+                                <td className="text-start">{order?.shippingInfo?.name}</td>
                                 <td className="text-start">₹{order?.total_amount}</td>
                                 <td className="text-start">
                                   {new Date(order?.createdAt).toLocaleString('en-IN', {
@@ -176,12 +208,41 @@ function NewOrders() {
                                       btn btn-primary btn-sm
                                     waves-effect waves-light
                                     btn-table
-                                    ms-2
+                                    ms-2 mt-1
                                   "
                                     >
                                       View
                                     </button>
                                   </Link>
+                                  <Link to={`/orders/edit/${order._id}`}>
+                                    <button
+                                      style={{ color: 'white' }}
+                                      type="button"
+                                      className="
+                                      btn btn-info btn-sm
+                                    waves-effect waves-light
+                                    btn-table
+                                    ms-2  mt-1
+                                  "
+                                    >
+                                      Edit
+                                    </button>
+                                  </Link>
+
+                                  <button
+                                    style={{ color: 'white' }}
+                                    type="button"
+                                    className="
+                                      btn btn-danger btn-sm
+                                    waves-effect waves-light
+                                    btn-table
+                                    ms-2  mt-1
+                                  "
+                                    onClick={() => handleDelete(order._id)}
+                                  >
+                                    Delete
+                                  </button>
+
                                 </td>
                               </tr>
                             )
