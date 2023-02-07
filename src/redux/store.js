@@ -21,7 +21,7 @@ import { cartReducer, shipingReducer } from "./reducers/cartReducer"
 export const store = configureStore({
     reducer: {
         cart: cartReducer,
-        shipingInfo: shipingReducer
+        // shipingInfo: shipingReducer
     },
     // initialState
 

@@ -28,7 +28,7 @@ function NewOrders() {
         })
         .then((res) => {
           setNewOrdersData(res.data.order)
-          console.log(res.data.order)
+          // console.log(res.data.order)
           setLoading(false)
         })
         .catch((err) => {

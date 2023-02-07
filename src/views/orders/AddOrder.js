@@ -11,18 +11,15 @@ import { addItemsToCart } from 'src/redux/Actions/cartAction'
 import toast from 'react-hot-toast'
 import { cibBlackberry } from '@coreui/icons'
 import Button from '@material-ui/core/Button'
-// import PrintOrderDetails from './PrintOrderDetails.js'
 
 function AddOrder() {
     const { status, id } = useParams()
 
-    const { cartItems, subTotal, tax, shipping, total } = useSelector(
+    const { cartItems, subTotal, shippingCharge, tax, shipingInfo, total } = useSelector(
         (state) => state.cart
     );
 
-    // const { cart, shippingInfo } = useSelector(
-    //     (state) => state
-    // );
+
     const AllStates = useSelector(
         (state) => state
     );
@@ -115,120 +112,6 @@ function AddOrder() {
         }))
 
     }
-    // ------------------------product handle------------------------------//
-
-    const handleGetSingleProduct = async (e) => {
-
-
-        axios
-            .get(`/api/product/getOne/${getValue.current.value}`, {
-                headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
-            })
-            .then((res) => {
-                setLoading(false)
-                let options = {
-                    name: res?.data?.product?.name,
-                    price: res?.data?.product?.base_Price,
-                    id: res?.data?.product?._id,
-                    quantity: 1,
-
-                    image: res?.data?.product?.image?.url,
-                    taxRate: 0.0,
-                    taxName: '',
-                    taxId: '',
-                    PriceWithTax: res?.data?.product?.base_Price,
-                }
-                dispatch({ type: "addToCart", payload: options });
-
-                dispatch({ type: "calculatePrice" });
-                localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-
-                toast.success("Product Added");
-
-            })
-            .catch((err) => {
-                setLoading(false)
-
-            })
-    }
-
-    // const TaxRatechange = async (id, e) => {
-    //     // console.log(e.target.value)
-    //     // console.log(e.target.value.slice(4, 6))
-    //     // console.log(e.target.value.slice(12, 16))
-    //     // console.log(e.target.value.slice(23))
-
-
-    //     let taxDetails = {
-    //         name: e.target.value.slice(12, 16),
-    //         rate: e.target.value.slice(4, 6),
-    //         productId: id,
-    //         taxId: e.target.value.slice(24)
-
-    //     }
-    //     dispatch({ type: "selectTax", payload: taxDetails });
-
-    //     dispatch({ type: "calculatePrice" });
-    //     localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-
-    //     toast.success("Tax Added");
-
-    // }
-    const handleRemove = (id) => {
-        dispatch({
-            type: "deleteFromCart",
-            payload: id,
-        });
-        dispatch({ type: "calculatePrice" });
-        localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-        toast.success("Item Removed");
-
-    };
-    //increase qty
-    const increaseQuantity = (id) => {
-        if (
-            tax === 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select Tax Rate ',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
-            })
-            return
-        }
-        dispatch({
-            type: "addToCart",
-            payload: { id },
-        });
-        dispatch({ type: "calculatePrice" });
-        localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-
-    }
-
-
-    const decreaseQuantity = (id) => {
-        if (
-            tax === 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select Tax Rate ',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
-            })
-            return
-        }
-        dispatch({
-            type: "decrement",
-            payload: id,
-        });
-
-        dispatch({ type: "calculatePrice" });
-        localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
-
-    };
-    // ------------------------product handle End------------------------------//
 
     // ------------------------Frenchisee handle------------------------------//
 
@@ -244,9 +127,9 @@ function AddOrder() {
             })
             .then((res) => {
                 setLoading(false)
-                // console.log(res.data.data)
+                console.log(res.data.data)
                 let options = {
-                    id: res?.data?.data?._id,
+                    Franchisee: res?.data?.data?._id,
                     name: res?.data?.data?.name,
 
 
@@ -254,6 +137,7 @@ function AddOrder() {
                     contact_Person_Name: res?.data?.data?.contact_Person_Name,
                     address: (res?.data?.data?.address_line_1 + ' ' + res?.data?.data?.address_line_2),
                     city: res?.data?.data?.city?.city_name,
+                    price_Lable: res?.data?.data?.price_Lable,
                     state: res?.data?.data?.city?.state?.state_name,
                     banner: res?.data?.data?.banner?.url,
                     Franchisee_Url: res?.data?.data?.url
@@ -261,7 +145,7 @@ function AddOrder() {
 
                 dispatch({ type: "addShippingInfo", payload: options });
 
-                localStorage.setItem("shippingInfo", JSON.stringify(AllStates.shipingInfo));
+                // localStorage.setItem("shippingInfo", JSON.stringify(AllStates.shipingInfo));
 
                 toast.success("Franchisee Added");
 
@@ -274,40 +158,93 @@ function AddOrder() {
     const FranchiseeRemove = (id) => {
         dispatch({
             type: "deleteFromshippingInfo",
-            payload: id,
+            payload: { Franchisee: id },
         });
-        localStorage.setItem("shippingInfo", JSON.stringify(AllStates.shipingInfo));
         toast.success("Franchisee Removed");
 
     };
     // ------------------------Frenchisee handle  End------------------------------//
-    console.log(AllStates.shipingInfo.franchisees)
-    // cartItems.map(i => console.log(i.taxName))
-    function handleSubmit() {
+    // ------------------------product handle------------------------------//
+
+    const handleGetSingleProduct = async (e) => {
 
 
-        if (cartItems.length < 1) {
-            swal({
-                title: 'Warning',
-                text: 'Please select atleast one product',
-                icon: 'error',
-                button: 'Close',
-                dangerMode: true,
+        axios
+            .get(`/api/product/getOne/${getValue.current.value}`, {
+                headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
-            return
-        }
-        // else if (cartItems.find(i => i.taxName === '')) {
-        //     swal({
-        //         title: 'Warning',
-        //         text: 'Please select tax rate for every Product',
-        //         icon: 'error',
-        //         button: 'Close',
-        //         dangerMode: true,
-        //     })
-        //     return
-        // }
-        else if (
-            AllStates.shipingInfo.franchisees === null) {
+            .then((res) => {
+                setLoading(false)
+                const productAllkey = Object.keys(res?.data?.product);
+                const productAllValue = Object.values(res?.data?.product);
+                const findIndex1 = (productAllkey.indexOf(shipingInfo?.price_Lable))
+                const findIndex2 = (productAllkey.indexOf(`${shipingInfo?.price_Lable}_With_Tax`))
+
+
+
+                let options = {
+                    name: res?.data?.product?.name,
+                    price: productAllValue[findIndex1],
+                    product: res?.data?.product?._id,
+                    quantity: 1,
+
+                    image: res?.data?.product?.image?.url,
+
+                    taxId: res?.data?.product?.taxId,
+                    price_With_Tax: productAllValue[findIndex2],
+                }
+                dispatch({ type: "addToCart", payload: options });
+
+                dispatch({ type: "calculatePrice" });
+
+                toast.success("Product Added");
+
+            })
+            .catch((err) => {
+                setLoading(false)
+
+            })
+    }
+
+
+    const handleRemove = (id) => {
+        dispatch({
+            type: "deleteFromCart",
+            payload: { product: id },
+        });
+        dispatch({ type: "calculatePrice" });
+        toast.success("Item Removed");
+
+    };
+    //increase qty
+    const increaseQuantity = (id) => {
+
+        dispatch({
+            type: "addToCart",
+            payload: { product: id },
+        });
+        dispatch({ type: "calculatePrice" });
+        // localStorage.setItem("cartItems", JSON.stringify(AllStates.cart));
+
+    }
+
+
+    const decreaseQuantity = (id) => {
+
+        dispatch({
+            type: "decrement",
+            payload: { product: id },
+        });
+
+        dispatch({ type: "calculatePrice" });
+
+    };
+    // ------------------------product handle End------------------------------//
+
+
+    function handleSubmit() {
+        if (
+            shipingInfo === null) {
             swal({
                 title: 'Warning',
                 text: 'Please select Franchisee ',
@@ -317,10 +254,22 @@ function AddOrder() {
             })
             return
         }
-        else if (
-            shipping === '' ||
 
+        else if (cartItems.length < 1) {
+            swal({
+                title: 'Warning',
+                text: 'Please select atleast one product',
+                icon: 'error',
+                button: 'Close',
+                dangerMode: true,
+            })
+            return
+        }
+
+
+        else if (
             tax === '' ||
+            shippingCharge === '' ||
             total === ''
 
         ) {
@@ -337,14 +286,7 @@ function AddOrder() {
 
 
         setLoading(true)
-        // const formData = new FormData()
-        // formData.set('orderItems', cartItems)
 
-
-        // formData.set('shippingInfo', AllStates.shipingInfo.franchisees)
-        // formData.set('shipping_charge', shipping)
-        // formData.set('tax_amount', tax)
-        // formData.set('total_amount', total)
 
 
 
@@ -354,8 +296,8 @@ function AddOrder() {
                 `/api/order/create`,
                 {
                     orderItems: cartItems,
-                    shippingInfo: AllStates.shipingInfo.franchisees,
-                    shipping_charge: shipping,
+                    shippingInfo: shipingInfo,
+                    shipping_charge: shippingCharge,
                     tax_amount: tax,
                     total_amount: total
 
@@ -373,18 +315,18 @@ function AddOrder() {
                 // console.log(res)
                 swal({
                     title: 'Created',
-                    text: 'Order Created!',
+                    text: res.data.message ? res.data.message : 'Order created!',
                     icon: 'success',
                     button: 'ok',
                 })
                 setLoading(false)
                 navigate('/orders/new')
             })
-            .catch((err) => {
+            .catch((error) => {
                 setLoading(false)
                 swal({
                     title: 'Warning',
-                    text: 'Something went wrong!',
+                    text: error.response.data.message ? error.response.data.message : 'Something went wrong!',
                     icon: 'error',
                     button: 'Retry',
                     dangerMode: true,
@@ -453,8 +395,92 @@ function AddOrder() {
 
 
                         <div className="row">
-                            <div className="col-lg-7 mt-3">
+                            <div className="col-lg-6 mt-3">
                                 <div className="card">
+                                    <div className="card-body">
+                                        <div className="mt-1">
+                                            <label className="fw-bold">Franchisee :</label>
+                                            <div className="d-flex">
+                                                <select
+                                                    className="form-control me-2"
+                                                    onChange={handleChange}
+                                                    value={orderStatus}
+                                                    ref={getFranchiseeID}
+                                                    disabled={shipingInfo !== null}
+                                                >
+                                                    <option value="" disabled></option>
+                                                    {allFranchisee && allFranchisee.map((item, index) =>
+                                                        <option key={index} value={item?._id}>{item?.name}</option>
+                                                    )}
+                                                </select>
+                                                <button className='btn-sm btn-primary' onClick={(e) => handleGetSingleFrenchisee(e)} >Add</button>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        {
+                                            shipingInfo !== null &&
+                                            <div className="my-2">
+                                                <div className="row" style={{ fontSize: '14px' }}>
+                                                    <div className="col-sm-4">
+                                                        <img
+                                                            src={shipingInfo?.banner}
+                                                            alt={shipingInfo?.name}
+                                                            width='100%'
+                                                        // style={{
+                                                        //     width: '100%',
+                                                        //     objectFit: 'contain',
+                                                        //     maxHeight: '100px',
+                                                        // }}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm-8">
+                                                        <h6 className="m-0 ms-2">{shipingInfo?.name}</h6>
+                                                        <parent className="m-0 ms-2 mt-3">
+                                                            Address. : {shipingInfo?.address}
+                                                        </parent>
+                                                        <p className="m-0 ms-2 mt-1">
+                                                            Contact No. : {shipingInfo?.contact_Number}
+                                                        </p>
+                                                        <p className="m-0 ms-2 mt-1">
+                                                            contact Person Name. : {shipingInfo?.contact_Person_Name}
+                                                        </p>
+
+
+
+
+                                                        <button className='btn btn-danger btn-sm ms-2 mt-2' onClick={() => FranchiseeRemove(shipingInfo?.id)} >Delete</button>
+
+
+                                                    </div>
+                                                </div>
+                                                <hr />
+
+                                            </div>
+                                        }
+
+                                        <div className="mt-3">
+                                            <label>
+                                                <span className="fw-bold">Razorpay Order ID : </span>
+                                                {productData?.razorpay_order_id}
+                                            </label>
+                                        </div>{' '}
+                                        <div className="mt-1">
+                                            <label>
+                                                <span className="fw-bold">Razorpay Payment ID : </span>
+                                                {productData?.razorpay_payment_id}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div className="col-lg-6 mt-3">
+
+                                {shipingInfo !== null && <div className="card">
                                     <div className="card-body">
                                         <div className="mt-1">
                                             <label className="fw-bold">Select Product:</label>
@@ -510,34 +536,22 @@ function AddOrder() {
 
 
                                                                             }}>
-                                                                            <button className='btn btn-sm btn-primary ' onClick={() => decreaseQuantity(productDetails?.id)} >-</button>
+                                                                            <button className='btn btn-sm btn-primary ' onClick={() => decreaseQuantity(productDetails?.product)} >-</button>
                                                                             <span className='px-2 mt-1' style={{}}>{productDetails?.quantity}</span>
-                                                                            <button className='btn btn-sm btn-primary' onClick={() => increaseQuantity(productDetails?.id)}>+</button>
+                                                                            <button className='btn btn-sm btn-primary' onClick={() => increaseQuantity(productDetails?.product)}>+</button>
 
                                                                         </div>
 
-                                                                        {productDetails?.PriceWithTax && <p className="m-0 mt-3">
-                                                                            <stong>Price With Tax:</stong> ₹{productDetails?.PriceWithTax}
-                                                                        </p>}
-                                                                        <button className='btn btn-danger btn-sm ms-2 mt-3' onClick={() => handleRemove(productDetails?.id)} >Delete</button>
+                                                                        <p className="m-0 mt-3">
+                                                                            <stong>Price With Tax:</stong> ₹{productDetails?.price_With_Tax}
+                                                                        </p>
+                                                                        <button className='btn btn-danger btn-sm ms-2 mt-3' onClick={() => handleRemove(productDetails?.product)} >Delete</button>
                                                                     </div>
                                                                     <div className="col-sm-6">
                                                                         <p className="m-0 mt-3">
                                                                             <stong> Price:</stong> ₹{productDetails?.price}
                                                                         </p>
-                                                                        {/* {allTax.length > 0 && <div className="d-flex mt-4">
-                                                                            <h6 className="me-2 mt-1">Tax:</h6>
-                                                                            <select className="   " name="" id=""
-                                                                                onChange={(e) => TaxRatechange(productDetails?.id, e)}
-                                                                            >
-                                                                                <option value="" disabled>---</option>
 
-                                                                                {allTax.map((t, i) =>
-                                                                                    <option key={i} value={`tax:${t.tax},name:${t.name}  ,taxId:${t._id}`}>{t.tax}% {t.name}</option>
-                                                                                )}
-                                                                            </select>
-                                                                        </div>
-                                                                        } */}
 
 
 
@@ -556,124 +570,8 @@ function AddOrder() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-5 mt-3">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="mt-1">
-                                            <label className="fw-bold">Franchisee :</label>
-                                            <div className="d-flex">
-                                                <select
-                                                    className="form-control me-2"
-                                                    onChange={handleChange}
-                                                    value={orderStatus}
-                                                    ref={getFranchiseeID}
-                                                >
-                                                    <option value="" disabled></option>
-                                                    {allFranchisee && allFranchisee.map((item, index) =>
-                                                        <option key={index} value={item?._id}>{item?.name}</option>
-                                                    )}
-                                                </select>
-                                                <button className='btn-sm btn-primary' onClick={(e) => handleGetSingleFrenchisee(e)} >Add</button>
-                                            </div>
 
-
-                                        </div>
-
-
-                                        {
-                                            AllStates?.shipingInfo?.franchisees !== null &&
-                                            <div className="my-2">
-                                                <div className="row" style={{ fontSize: '14px' }}>
-                                                    <div className="col-sm-4">
-                                                        <img
-                                                            src={AllStates.shipingInfo.franchisees?.banner}
-                                                            alt={AllStates.shipingInfo.franchisees?.name}
-                                                            width='100%'
-                                                        // style={{
-                                                        //     width: '100%',
-                                                        //     objectFit: 'contain',
-                                                        //     maxHeight: '100px',
-                                                        // }}
-                                                        />
-                                                    </div>
-                                                    <div className="col-sm-8">
-                                                        <h6 className="m-0 ms-2">{AllStates.shipingInfo.franchisees?.name}</h6>
-                                                        <parent className="m-0 ms-2 mt-3">
-                                                            Address. : {AllStates.shipingInfo.franchisees?.address}
-                                                        </parent>
-                                                        <p className="m-0 ms-2 mt-1">
-                                                            Contact No. : {AllStates.shipingInfo.franchisees?.contact_Number}
-                                                        </p>
-                                                        <p className="m-0 ms-2 mt-1">
-                                                            contact Person Name. : {AllStates.shipingInfo.franchisees?.contact_Person_Name}
-                                                        </p>
-
-
-
-
-                                                        <button className='btn btn-danger btn-sm ms-2 mt-2' onClick={() => FranchiseeRemove(AllStates.shipingInfo.franchisees?.id)} >Delete</button>
-
-
-                                                    </div>
-                                                </div>
-                                                <hr />
-
-                                            </div>
-                                        }
-                                        {/* <div className="mt-1">
-                                            <label className="fw-bold">Address :</label>
-                                        </div>
-                                        <div className="mt-1">
-                                            <label className="fw-bold">Contact Number :</label>
-                                        </div> */}
-                                        {/* <div className="mt-3">
-                                            <label>
-                                                <span className="fw-bold">Order ID: {productData?.order_id}</span>
-                                            </label>
-                                        </div> */}
-
-                                        {/* <div className="mt-3">
-                                            {productData?.order_id && (
-                                                <div className="d-flex">
-                                                    <p className="fw-bold me-3">Order ID QR Code:</p>
-                                                    <QRCode
-                                                        value={JSON.stringify({ order_id: productData?.order_id })}
-                                                        size={256}
-                                                        style={{ height: '150px', width: '150px' }}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div> */}
-                                        {/* {productData.status === 'processing' && (
-                                            <>
-                                                <div className="mt-3">
-                                                    <label className="fw-bold">Courier Name* :</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="courier_name"
-                                                        value={data.courier_name}
-                                                        onChange={handleChange}
-                                                    />
-                                                </div>
-                                                <div className="mt-3">
-                                                    <label className="fw-bold">Tracking ID* :</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="tracking_id"
-                                                        value={data.tracking_id}
-                                                        onChange={handleChange}
-                                                    />
-                                                </div>
-                                            </>
-                                        )} */}
-                                        {/* <div className="mt-3">
-                                            <label>
-                                                <span className="fw-bold">Amount Paid : </span>Rs.{productData?.total_amount}
-                                            </label>
-                                        </div> */}
+                                }
 
 
 
@@ -681,86 +579,6 @@ function AddOrder() {
 
 
 
-
-                                        {/* {productData?.address && (
-                                            <>
-                                                <div className="mt-1">
-                                                    <label>
-                                                        <span className="fw-bold">Address : </span>
-                                                        {`${productData.address?.full_name}, ${productData.address?.flat_house_no_apartment
-                                                            }, ${productData.address?.area_street_sector_village}, ${productData.address?.landmark && productData.address?.landmark + ', '
-                                                            }${productData.address?.address_line &&
-                                                            productData.address?.address_line + ', '
-                                                            }${productData.address?.city}, ${productData.address?.state}, ${productData.address?.pincode
-                                                            }`}
-                                                    </label>
-                                                </div>
-                                                <div className="mt-1">
-                                                    <label>
-                                                        {' '}
-                                                        <span className="fw-bold">Contact Number : </span>
-                                                        {productData.address?.mobile_number}
-                                                    </label>
-                                                </div>
-                                            </>
-                                        )} */}
-
-
-
-
-
-
-                                        {/* {productData?.courier_name && (
-                                            <div className="mt-1">
-                                                <label>
-                                                    <span className="fw-bold">Courier Name : </span>
-                                                    {productData?.courier_name}
-                                                </label>
-                                            </div>
-                                        )}
-                                        {productData?.tracking_id && (
-                                            <div className="mt-1">
-                                                <label>
-                                                    <span className="fw-bold">Tracking ID : </span>
-                                                    {productData?.tracking_id}
-                                                </label>
-                                            </div>
-                                        )} */}
-
-
-
-
-
-
-
-
-                                        {/* <div className="mt-1">
-                    <label>
-                      <span className="fw-bold">Order Placed On : </span>
-                      {new Date(productData?.placed_on).toLocaleString('en-IN', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: 'numeric',
-                        hour12: true,
-                      })}
-                    </label>
-                  </div> */}
-                                        <div className="mt-3">
-                                            <label>
-                                                <span className="fw-bold">Razorpay Order ID : </span>
-                                                {productData?.razorpay_order_id}
-                                            </label>
-                                        </div>{' '}
-                                        <div className="mt-1">
-                                            <label>
-                                                <span className="fw-bold">Razorpay Payment ID : </span>
-                                                {productData?.razorpay_payment_id}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="card my-1">
                                     <div className="card-body">
                                         <label className="fw-bold">Status Timeline :</label>
@@ -895,6 +713,12 @@ function AddOrder() {
                                         </table>
                                     </div>
                                 </div>
+
+
+
+
+
+
                             </div>
                         </div>
                     </div>
