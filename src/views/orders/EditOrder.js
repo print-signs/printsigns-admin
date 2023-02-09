@@ -38,6 +38,7 @@ function EditOrder() {
 
     const [productDetails, setProductDetails] = useState()
     const [loading, setLoading] = useState(true)
+    const [orderId, setOrderId] = useState(null)
     const [orderStatus, setOrderStatus] = useState('')
     // const [data, setData] = useState({
     //     product_Name: '',
@@ -52,8 +53,7 @@ function EditOrder() {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             if (res.data) {
-                // console.log(res.data?.order?.shippingInfo)
-
+                setOrderId(res.data?.order?.order_id)
                 let options = {
                     Franchisee: res.data?.order?.shippingInfo?.Franchisee?._id,
                     name: res.data?.order?.shippingInfo?.name,
@@ -117,7 +117,7 @@ function EditOrder() {
         function getFranchiseeDetails() {
             setLoading(true)
             axios
-                .get(`/api/temple`, {
+                .get(`/api/franchisee`, {
                     headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
                 })
                 .then((res) => {
@@ -157,7 +157,7 @@ function EditOrder() {
         console.log(getFranchiseeID.current.value)
 
         axios
-            .get(`/api/Temple/arrayspopulate/${getFranchiseeID.current.value}`, {
+            .get(`/api/franchisee/arrayspopulate/${getFranchiseeID.current.value}`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -212,6 +212,7 @@ function EditOrder() {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
+
                 setLoading(false)
                 const productAllkey = Object.keys(res?.data?.product);
                 const productAllValue = Object.values(res?.data?.product);
@@ -393,8 +394,11 @@ function EditOrder() {
                     justify-content-between
                   "
                                 >
+
                                     <div style={{ fontSize: '22px' }} className="fw-bold">
-                                        Edit Order
+                                        <p> Edit Order</p>
+                                        {orderId && <span><small>Order ID :  {orderId}</small> </span>}
+
                                     </div>
                                     <div className="page-title-right">
                                         <Button
@@ -409,7 +413,7 @@ function EditOrder() {
                                             onClick={() => handleSubmit()}
                                             disabled={loading}
                                         >
-                                            {loading ? 'Loading' : 'Update'}
+                                            {loading ? 'Loading' : 'Edit Now'}
                                         </Button>
                                         <Link to="/orders/new">
                                             <Button
@@ -483,7 +487,10 @@ function EditOrder() {
                                                             Contact No. : {shipingInfo?.contact_Number}
                                                         </p>
                                                         <p className="m-0 ms-2 mt-1">
-                                                            contact Person Name. : {shipingInfo?.contact_Person_Name}
+                                                            Contact Person Name : {shipingInfo?.contact_Person_Name}
+                                                        </p>
+                                                        <p className="m-0 ms-2 mt-1">
+                                                            Price Lable : {shipingInfo?.price_Lable}
                                                         </p>
 
 

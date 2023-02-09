@@ -79,7 +79,7 @@ function AddOrder() {
         function getFranchiseeDetails() {
             setLoading(true)
             axios
-                .get(`/api/temple`, {
+                .get(`/api/franchisee`, {
                     headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
                 })
                 .then((res) => {
@@ -119,7 +119,7 @@ function AddOrder() {
         console.log(getFranchiseeID.current.value)
 
         axios
-            .get(`/api/Temple/arrayspopulate/${getFranchiseeID.current.value}`, {
+            .get(`/api/franchisee/arrayspopulate/${getFranchiseeID.current.value}`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -445,8 +445,12 @@ function AddOrder() {
                                                             Contact No. : {shipingInfo?.contact_Number}
                                                         </p>
                                                         <p className="m-0 ms-2 mt-1">
-                                                            contact Person Name. : {shipingInfo?.contact_Person_Name}
+                                                            Contact Person Name : {shipingInfo?.contact_Person_Name}
                                                         </p>
+                                                        <p className="m-0 ms-2 mt-1">
+                                                            Price Lable : {shipingInfo?.price_Lable}
+                                                        </p>
+
 
 
 

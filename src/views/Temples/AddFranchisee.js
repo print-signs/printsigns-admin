@@ -9,7 +9,7 @@ import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 // import { WebsiteURL } from '../WebsiteURL'
 
-const AddTemple = () => {
+const AddFranchisee = () => {
     const [WebsiteURL, setWebsiteURL] = useState('https://reinventuniforms.in/')
     const token = isAutheticated()
     const navigate = useNavigate()
@@ -17,6 +17,7 @@ const AddTemple = () => {
         image: '',
         imageURL: '',
         name: '',
+        email: '',
         address_line_1: '',
         address_line_2: '',
         city: '',
@@ -24,12 +25,16 @@ const AddTemple = () => {
         short_url: '',
         contact_Number: '',
         contact_Person_Name: '',
-        price_Lable: ''
+        price_Lable: '',
+        pin_Code: ''
     })
 
     const [cities, setCities] = useState([])
 
     const [loading, setLoading] = useState(false)
+    const [validForm, setValidForm] = useState(false)
+
+
     const [limiter, setLimiter] = useState({
         name: 100,
         nameHas: 100,
@@ -52,6 +57,65 @@ const AddTemple = () => {
     useEffect(() => {
         getRequired()
     }, [])
+    const [errors, setErrors] = useState({
+        emailError: '',
+
+
+    })
+    const validEmailRegex = RegExp(
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+    )
+    const validateForm = () => {
+        let valid = true
+        Object.values(errors).forEach((val) => {
+            if (val.length > 0) {
+                valid = false
+                return false
+            }
+        })
+        Object.values(data.email).forEach((val) => {
+            if (val.length <= 0) {
+                valid = false
+                return false
+            }
+        })
+        return valid
+    }
+
+    //cheking email and password
+    useEffect(() => {
+        if (validateForm()) {
+            setValidForm(true)
+        } else {
+            setValidForm(false)
+        }
+    }, [errors])
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target
+
+    //     switch (name) {
+    //         case 'email':
+    //             setErrors({
+    //                 ...errors,
+    //                 emailError: validEmailRegex.test(value) ? '' : 'Email is not valid!',
+    //             })
+
+    //             break
+    //         case 'password':
+    //             setErrors((errors) => ({
+    //                 ...errors,
+    //                 passwordError: validPasswordRegex.test(value)
+    //                     ? ''
+    //                     : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+    //             }))
+    //             break
+    //         default:
+    //             break
+    //     }
+
+    //     setAuth({ ...auth, [name]: value })
+    // }
+
 
     const handleChange = (e) => {
         if (e.target.id === 'name') {
@@ -61,6 +125,14 @@ const AddTemple = () => {
                 [e.target.id + 'Has']: prev[e.target.id] - e.target.value.length,
             }))
             setData((prev) => ({ ...prev, short_url: e.target.value.toLowerCase().replace(/\s+/g, '-') }))
+        }
+        if (e.target.id === 'email') {
+            setErrors({
+                ...errors,
+                emailError: validEmailRegex.test(e.target.value) ? '' : 'Email is not valid!',
+            })
+
+
         }
         if (e.target.id === 'city') {
             const city = cities.filter((m) => e.target.value === m?._id)
@@ -101,8 +173,7 @@ const AddTemple = () => {
     const handleSubmit = () => {
         if (
             data.name.trim() === '' ||
-
-            // data.pan.trim() === '' ||
+            data.email.trim() === '' ||
             data.contact_Number === '' ||
 
             data.contact_Person_Name === '' ||
@@ -110,6 +181,7 @@ const AddTemple = () => {
             data.address_line_2.trim() === '' ||
             data.price_Lable.trim() === '' ||
             data.city === '' ||
+            data.pin_Code.trim() === '' ||
             data.short_url === '' ||
             data.state_name === '' ||
             data.imageURL.trim() === ''
@@ -126,10 +198,8 @@ const AddTemple = () => {
         setLoading(true)
         const formData = new FormData()
         formData.set('name', data.name)
-        // formData.set('pan', data.pan)
-        // formData.set('business_name', data.business_name)
-        // formData.set('gstin', data.gstin)
-        // formData.set('option', data.option)
+        formData.set('email', data.email)
+
         formData.set('address_line_1', data.address_line_1)
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
@@ -138,12 +208,13 @@ const AddTemple = () => {
         formData.set('contact_Person_Name', data.contact_Person_Name)
 
         formData.set('price_Lable', data.price_Lable)
+        formData.set('pin_Code', data.pin_Code)
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
 
         formData.append('image', data.image)
         axios
-            .post(`/api/temple`, formData, {
+            .post(`/api/franchisee/`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',
@@ -153,12 +224,12 @@ const AddTemple = () => {
             .then((res) => {
                 swal({
                     title: 'Added',
-                    text: 'Temple added successfully!',
+                    text: res?.data?.message ? res?.data?.message : 'Franchisee added successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
                 setLoading(false)
-                navigate('/temples', { replace: true })
+                navigate('/franchisees', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -207,7 +278,7 @@ const AddTemple = () => {
                             >
                                 {loading ? 'Loading' : 'Save'}
                             </Button>
-                            <Link to="/temples">
+                            <Link to="/franchisees">
                                 <Button
                                     variant="contained"
                                     color="secondary"
@@ -241,6 +312,23 @@ const AddTemple = () => {
                                     onChange={(e) => handleChange(e)}
                                 />
                                 <p className="pt-1 pl-2 text-secondary">Remaining characters : {limiter.nameHas}</p>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Email *
+                                </label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="email"
+                                    value={data.email}
+                                    maxLength="50"
+                                    onChange={(e) => handleChange(e)}
+                                />
+                                {errors.emailError && (
+                                    <p className="text-center py-2 text-danger">{errors.emailError}</p>
+                                )}
                             </div>
 
                             <div className="mb-3">
@@ -305,6 +393,23 @@ const AddTemple = () => {
                                     value={data.state_name}
                                     disabled
                                 />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Pin Code *
+                                </label>
+                                <input
+                                    type="Number"
+                                    className="form-control"
+                                    id="pin_Code"
+                                    value={data.pin_Code}
+                                    maxLength={8}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                                {/* {data.pin_Code ? <><small className="charLeft mt-4 fst-italic">
+                                    {8 - data.pin_Code.length} characters left
+                                </small></> : <></>
+                                } */}
                             </div>
                         </div>
                     </div>
@@ -404,4 +509,4 @@ const AddTemple = () => {
     )
 }
 
-export default AddTemple
+export default AddFranchisee

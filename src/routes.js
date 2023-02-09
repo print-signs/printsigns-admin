@@ -22,10 +22,10 @@ import Socialmedia from './views/configuration/Socialmedia.js'
 import Address from './views/configuration/Address.js'
 import Logo from './views/configuration/Logo.js'
 import Login from './views/pages/login/Login'
-//temple
-import Temples from './views/Temples/Temples'
-import AddTemple from './views/Temples/AddTemple'
-import EditTemple from './views/Temples/EditTemple'
+//Franchisees
+import Franchisees from './views/Temples/Franchisees'
+import AddFranchisee from './views/Temples/AddFranchisee'
+import EditFranchisee from './views/Temples/EditFranchisee'
 import Products from './views/Products/Products'
 //product
 import AddProduct from './views/Products/AddProduct'
@@ -46,6 +46,8 @@ import Tax from './views/configuration/tax/Tax'
 import Addtax from './views/configuration/tax/Addtax'
 import Edittax from './views/configuration/tax/Edittax'
 import EditOrder from './views/orders/EditOrder'
+import ViewOrders from './views/orders/ViewOrders'
+
 const routes = [
 
   { path: '/', exact: true, name: 'Home' },
@@ -65,7 +67,7 @@ const routes = [
   { path: '/orders/new', name: 'New Orders', element: NewOrders },
   { path: '/order/add', name: 'add Order', element: AddOrder },
   { path: '/orders/edit/:id', name: 'Edit Order', element: EditOrder },
-  //{ path: '/orders/view/:id', name: 'Edit Order', element: EditOrder },
+  { path: '/orders/view/:id', name: 'View Order', element: ViewOrders },
 
   // { path: '/orders/processing', name: 'Processing Orders', element: ProcessingOrders },
   // { path: '/orders/dispatched', name: 'Dispatched Orders', element: DispatchedOrders },
@@ -76,9 +78,9 @@ const routes = [
 
 
   //Temple
-  { path: '/temples', name: 'Temples', element: Temples },
-  { path: '/temple/add', name: 'Add Temple', element: AddTemple },
-  { path: '/temple/edit/:id', name: 'Edit Temples', element: EditTemple },
+  { path: '/franchisees', name: 'Franchisees', element: Franchisees },
+  { path: '/franchisee/add', name: 'Add Franchisee', element: AddFranchisee },
+  { path: '/franchisee/edit/:id', name: 'Edit Franchisee', element: EditFranchisee },
 
   //dashboard
 

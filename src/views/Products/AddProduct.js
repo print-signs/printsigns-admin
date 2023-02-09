@@ -440,7 +440,7 @@ const AddProduct = () => {
                                 </label>  <select className="   form-control" name="" id=""
                                     onChange={(e) => TaxRatechange(e)}
                                 >
-                                    <option value="" disabled>---</option>
+                                    <option value="" disabled>-----</option>
 
                                     {allTax.map((t, i) =>
                                         <option key={i} value={`tax:${t.tax},name:${t.name}  ,taxId:${t._id}`}>{t.tax}% {t.name}</option>

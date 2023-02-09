@@ -200,7 +200,10 @@ function NewOrders() {
                                   </span>
                                 </td>
                                 <td className="text-start">
-                                  <Link to={`/orders/${order.orderStatus}/${order._id}`}>
+
+                                  {/* <Link to={`/orders/${order.orderStatus}/${order._id}`}> */}
+                                  <Link to={`/orders/view/${order._id}`}>
+
                                     <button
                                       style={{ color: 'white' }}
                                       type="button"

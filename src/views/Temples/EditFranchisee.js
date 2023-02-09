@@ -7,7 +7,7 @@ import swal from 'sweetalert'
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 
-const EditTemple = () => {
+const EditFranchisee = () => {
 
 
     const [WebsiteURL, setWebsiteURL] = useState('https://reinventuniforms.in/')
@@ -18,21 +18,20 @@ const EditTemple = () => {
         image: '',
         imageURL: '',
         name: '',
+        email: '',
         address_line_1: '',
         address_line_2: '',
-        contact_Person_Name: '',
-        contact_Number: '',
-        price_Lable: '',
         city: '',
         state_name: '',
         short_url: '',
-        // pan: '',
-        // business_name: '',
-        // gstin: '',
-        // option: '',
+        contact_Number: '',
+        contact_Person_Name: '',
+        price_Lable: '',
+        pin_Code: ''
     })
     const [cities, setCities] = useState([])
     const [loading, setLoading] = useState(false)
+    const [validForm, setValidForm] = useState(false)
     const [limiter, setLimiter] = useState({
         name: 100,
         nameHas: 100,
@@ -51,7 +50,7 @@ const EditTemple = () => {
             })
             .catch((err) => { })
         axios
-            .get(`/api/Temple/withoutpopulate/${id}`, {
+            .get(`/api/franchisee/withoutpopulate/${id}`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -81,6 +80,90 @@ const EditTemple = () => {
         setStateName()
     }, [data.city])
 
+    //validate
+    const [errors, setErrors] = useState({
+        emailError: '',
+
+
+    })
+    const validEmailRegex = RegExp(
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+    )
+    const validateForm = () => {
+        let valid = true
+        Object.values(errors).forEach((val) => {
+            if (val.length > 0) {
+                valid = false
+                return false
+            }
+        })
+        Object.values(data.email).forEach((val) => {
+            if (val.length <= 0) {
+                valid = false
+                return false
+            }
+        })
+        return valid
+    }
+
+    //cheking email 
+    useEffect(() => {
+        if (validateForm()) {
+            setValidForm(true)
+        } else {
+            setValidForm(false)
+        }
+    }, [errors])
+
+    // const handleChange = (e) => {
+    //     if (e.target.id === 'name') {
+    //         if (e.target.value.length === limiter[e.target.id] + 1) return
+    //         setLimiter((prev) => ({
+    //             ...prev,
+    //             [e.target.id + 'Has']: prev[e.target.id] - e.target.value.length,
+    //         }))
+    //         if (e.target.id === 'email') {
+    //             setErrors({
+    //                 ...errors,
+    //                 emailError: validEmailRegex.test(e.target.value) ? '' : 'Email is not valid!',
+    //             })
+
+
+    //         }
+    //         // setData((prev) => ({ ...prev, short_url: e.target.value.toLowerCase().replace(/\s+/g, '-') }))
+    //     }
+    //     if (e.target.id === 'image') {
+    //         if (
+    //             e.target.files[0]?.type === 'image/jpeg' ||
+    //             e.target.files[0]?.type === 'image/png' ||
+    //             e.target.files[0]?.type === 'image/jpg'
+    //         ) {
+    //             setData((prev) => ({
+    //                 ...prev,
+    //                 imageURL: URL.createObjectURL(e.target.files[0]),
+    //                 image: e.target.files[0],
+    //             }))
+    //             return
+    //         } else {
+    //             swal({
+    //                 title: 'Warning',
+    //                 text: 'Upload jpg, jpeg, png only.',
+    //                 icon: 'error',
+    //                 button: 'Close',
+    //                 dangerMode: true,
+    //             })
+    //             setData((prev) => ({
+    //                 ...prev,
+    //                 imageURL: '',
+    //                 image: '',
+    //             }))
+    //             e.target.value = null
+    //             return
+    //         }
+    //     }
+    //     setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    // }
+
     const handleChange = (e) => {
         if (e.target.id === 'name') {
             if (e.target.value.length === limiter[e.target.id] + 1) return
@@ -88,7 +171,19 @@ const EditTemple = () => {
                 ...prev,
                 [e.target.id + 'Has']: prev[e.target.id] - e.target.value.length,
             }))
-            // setData((prev) => ({ ...prev, short_url: e.target.value.toLowerCase().replace(/\s+/g, '-') }))
+            setData((prev) => ({ ...prev, short_url: e.target.value.toLowerCase().replace(/\s+/g, '-') }))
+        }
+        if (e.target.id === 'email') {
+            setErrors({
+                ...errors,
+                emailError: validEmailRegex.test(e.target.value) ? '' : 'Email is not valid!',
+            })
+
+
+        }
+        if (e.target.id === 'city') {
+            const city = cities.filter((m) => e.target.value === m?._id)
+            setData((prev) => ({ ...prev, state_name: city[0]?.state?.state_name || '' }))
         }
         if (e.target.id === 'image') {
             if (
@@ -125,14 +220,18 @@ const EditTemple = () => {
     const handleSubmit = () => {
         if (
             data.name.trim() === '' ||
+            data.email.trim() === '' ||
+            data.contact_Number === '' ||
+
+            data.contact_Person_Name === '' ||
             data.address_line_1.trim() === '' ||
             data.address_line_2.trim() === '' ||
             data.price_Lable.trim() === '' ||
-            data.contact_Number === '' ||
-            data.contact_Person_Name === '' ||
             data.city === '' ||
+            data.pin_Code === '' ||
             data.short_url === '' ||
-            data.state_name === ''
+            data.state_name === '' ||
+            data.imageURL.trim() === ''
         ) {
             swal({
                 title: 'Warning',
@@ -146,10 +245,8 @@ const EditTemple = () => {
         setLoading(true)
         const formData = new FormData()
         formData.set('name', data.name)
-        // formData.set('pan', data.pan)
-        // formData.set('business_name', data.business_name)
-        // formData.set('gstin', data.gstin)
-        // formData.set('option', data.option)
+        formData.set('email', data.email)
+
         formData.set('address_line_1', data.address_line_1)
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
@@ -157,13 +254,14 @@ const EditTemple = () => {
 
 
         formData.set('state_name', data.state_name)
+        formData.set('pin_Code', data.pin_Code)
         formData.set('contact_Number', data.contact_Number)
         formData.set('contact_Person_Name', data.contact_Person_Name)
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
         formData.append('image', data.image)
         axios
-            .patch(`/api/Temple/${id}`, formData, {
+            .patch(`/api/franchisee/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',
@@ -173,12 +271,12 @@ const EditTemple = () => {
             .then((res) => {
                 swal({
                     title: 'Updated',
-                    text: 'Temple updated successfully!',
+                    text: res?.data?.message ? res?.data?.message : 'franchisee updated successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
                 setLoading(false)
-                navigate('/temples', { replace: true })
+                navigate('/franchisees', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -227,7 +325,7 @@ const EditTemple = () => {
                             >
                                 {loading ? 'Loading' : 'Update'}
                             </Button>
-                            <Link to="/temples">
+                            <Link to="/franchisees">
                                 <Button
                                     variant="contained"
                                     color="secondary"
@@ -263,19 +361,23 @@ const EditTemple = () => {
                                 />
                                 <p className="pt-1 pl-2 text-secondary">Remaining characters : {limiter.nameHas}</p>
                             </div>
-                            {/* <div className="mb-3">
+                            <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    PAN*
+                                    Email *
                                 </label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="form-control"
-                                    id="pan"
-                                    value={data.pan}
-                                    maxLength="50"
+                                    id="email"
+                                    value={data.email}
+
                                     onChange={(e) => handleChange(e)}
                                 />
-                            </div> */}
+                                {errors.emailError && (
+                                    <p className="text-center py-2 text-danger">{errors.emailError}</p>
+                                )}
+                            </div>
+
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Address Line 1*
@@ -364,6 +466,23 @@ const EditTemple = () => {
                                     disabled
                                 />
                             </div>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Pin Code *
+                                </label>
+                                <input
+                                    type="Number"
+                                    className="form-control"
+                                    id="pin_Code"
+                                    value={data.pin_Code}
+                                    maxLength='8'
+                                    onChange={(e) => handleChange(e)}
+                                />
+                                {/* {data.pin_Code ? <><small className="charLeft mt-4 fst-italic">
+                                    {8 - data.pin_Code.length} characters left
+                                </small></> : <></>
+                                } */}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -434,7 +553,7 @@ const EditTemple = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
-                                    Temple Banner*
+                                    franchisee Banner*
                                 </label>
                                 <input
                                     type="file"
@@ -460,4 +579,4 @@ const EditTemple = () => {
     )
 }
 
-export default EditTemple
+export default EditFranchisee

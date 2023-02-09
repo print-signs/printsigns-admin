@@ -8,15 +8,15 @@ import swal from 'sweetalert'
 import OverLayButton from './OverLayButton.js'
 import { isAutheticated } from 'src/auth.js'
 
-const Temples = () => {
+const Franchisees = () => {
     const token = isAutheticated()
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [TemplesData, setTemplesData] = useState([])
+    const [FranchiseesData, setFranchiseesData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(TemplesData)
+    const [showData, setShowData] = useState(FranchiseesData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -25,11 +25,11 @@ const Temples = () => {
 
     const getCategories = () => {
         axios
-            .get(`/api/temple`, {
+            .get(`/api/franchisee`, {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                setTemplesData(res.data.data)
+                setFranchiseesData(res.data.data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -46,10 +46,10 @@ const Temples = () => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(TemplesData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(FranchiseesData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, TemplesData])
+    }, [currentPage, itemPerPage, FranchiseesData])
 
     const handleDelete = (id) => {
         swal({
@@ -59,7 +59,7 @@ const Temples = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/temple/${id}`, {
+                    .delete(`/api/franchisee/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ const Temples = () => {
                                 </div>
 
                                 <div className="page-title-right">
-                                    <Link to="/temple/add">
+                                    <Link to="/franchisee/add">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -176,16 +176,16 @@ const Temples = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((temple, i) => {
+                                                    showData.map((franchisee, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{temple.name}</td>
+                                                                <td className="text-start">{franchisee.name}</td>
                                                                 <td className="text-start">
-                                                                    <img src={temple.banner.url} alt="Test Image" height="50" />
+                                                                    <img src={franchisee.banner.url} alt="Test Image" height="50" />
                                                                 </td>
-                                                                <td className="text-start">{temple?.city?.city_name}</td>
+                                                                <td className="text-start">{franchisee?.city?.city_name}</td>
                                                                 <td className="text-start">
-                                                                    {new Date(temple.createdAt).toLocaleString('en-IN', {
+                                                                    {new Date(franchisee.createdAt).toLocaleString('en-IN', {
                                                                         month: '2-digit',
                                                                         day: 'numeric',
                                                                         year: 'numeric',
@@ -195,9 +195,9 @@ const Temples = () => {
                                                                     })}
                                                                 </td>
                                                                 <td className=" text-center">
-                                                                    <OverLayButton data={{ url: temple?.url }} />
+                                                                    <OverLayButton data={{ url: franchisee?.url }} />
 
-                                                                    <Link to={`/temple/products/${temple._id}`}>
+                                                                    <Link to={`/franchisee/products/${franchisee._id}`}>
                                                                         <button
                                                                             style={{ color: 'white' }}
                                                                             type="button"
@@ -211,7 +211,7 @@ const Temples = () => {
                                                                         </button>
                                                                     </Link>
 
-                                                                    <Link to={`/temple/edit/${temple._id}`}>
+                                                                    <Link to={`/franchisee/edit/${franchisee._id}`}>
                                                                         <button
                                                                             style={{ color: 'white' }}
                                                                             type="button"
@@ -234,7 +234,7 @@ const Temples = () => {
                                     
                                   "
                                                                         onClick={() => {
-                                                                            handleDelete(temple._id)
+                                                                            handleDelete(franchisee._id)
                                                                         }}
                                                                     >
                                                                         Delete
@@ -257,8 +257,8 @@ const Temples = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, TemplesData.length)} of{' '}
-                                                {TemplesData.length} entries
+                                                {Math.min(currentPage * itemPerPage, FranchiseesData.length)} of{' '}
+                                                {FranchiseesData.length} entries
                                             </div>
                                         </div>
 
@@ -301,7 +301,7 @@ const Temples = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        TemplesData.length - 1
+                                                        FranchiseesData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -320,7 +320,7 @@ const Temples = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                TemplesData.length - 1
+                                                                FranchiseesData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -348,4 +348,4 @@ const Temples = () => {
     )
 }
 
-export default Temples
+export default Franchisees

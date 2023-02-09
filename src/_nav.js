@@ -52,7 +52,7 @@ const _nav = [
     component: CNavItem,
     name: 'Franchisee',
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
-    to: '/temples',
+    to: '/franchisees',
   },
   {
     component: CNavGroup,
