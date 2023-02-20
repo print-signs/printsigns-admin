@@ -115,54 +115,6 @@ const EditFranchisee = () => {
         }
     }, [errors])
 
-    // const handleChange = (e) => {
-    //     if (e.target.id === 'name') {
-    //         if (e.target.value.length === limiter[e.target.id] + 1) return
-    //         setLimiter((prev) => ({
-    //             ...prev,
-    //             [e.target.id + 'Has']: prev[e.target.id] - e.target.value.length,
-    //         }))
-    //         if (e.target.id === 'email') {
-    //             setErrors({
-    //                 ...errors,
-    //                 emailError: validEmailRegex.test(e.target.value) ? '' : 'Email is not valid!',
-    //             })
-
-
-    //         }
-    //         // setData((prev) => ({ ...prev, short_url: e.target.value.toLowerCase().replace(/\s+/g, '-') }))
-    //     }
-    //     if (e.target.id === 'image') {
-    //         if (
-    //             e.target.files[0]?.type === 'image/jpeg' ||
-    //             e.target.files[0]?.type === 'image/png' ||
-    //             e.target.files[0]?.type === 'image/jpg'
-    //         ) {
-    //             setData((prev) => ({
-    //                 ...prev,
-    //                 imageURL: URL.createObjectURL(e.target.files[0]),
-    //                 image: e.target.files[0],
-    //             }))
-    //             return
-    //         } else {
-    //             swal({
-    //                 title: 'Warning',
-    //                 text: 'Upload jpg, jpeg, png only.',
-    //                 icon: 'error',
-    //                 button: 'Close',
-    //                 dangerMode: true,
-    //             })
-    //             setData((prev) => ({
-    //                 ...prev,
-    //                 imageURL: '',
-    //                 image: '',
-    //             }))
-    //             e.target.value = null
-    //             return
-    //         }
-    //     }
-    //     setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
-    // }
 
     const handleChange = (e) => {
         if (e.target.id === 'name') {
@@ -230,8 +182,8 @@ const EditFranchisee = () => {
             data.city === '' ||
             data.pin_Code === '' ||
             data.short_url === '' ||
-            data.state_name === '' ||
-            data.imageURL.trim() === ''
+            data.state_name === ''
+            // data.imageURL.trim() === ''
         ) {
             swal({
                 title: 'Warning',
@@ -553,7 +505,7 @@ const EditFranchisee = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
-                                    franchisee Banner*
+                                    Franchisee Banner (optional)
                                 </label>
                                 <input
                                     type="file"

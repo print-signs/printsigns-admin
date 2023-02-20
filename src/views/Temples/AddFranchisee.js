@@ -183,8 +183,8 @@ const AddFranchisee = () => {
             data.city === '' ||
             data.pin_Code.trim() === '' ||
             data.short_url === '' ||
-            data.state_name === '' ||
-            data.imageURL.trim() === ''
+            data.state_name === ''
+            // data.imageURL.trim() === ''
         ) {
             swal({
                 title: 'Warning',
@@ -483,7 +483,7 @@ const AddFranchisee = () => {
 
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
-                                    Temple Banner*
+                                    Franchisee Banner (optional)
                                 </label>
                                 <input
                                     type="file"

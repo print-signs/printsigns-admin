@@ -29,6 +29,7 @@ const Franchisees = () => {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
+                // console.log(res.data.data)
                 setFranchiseesData(res.data.data)
                 setLoading(false)
             })
@@ -51,6 +52,43 @@ const Franchisees = () => {
         loadData()
     }, [currentPage, itemPerPage, FranchiseesData])
 
+
+    const handleVarification = (id) => {
+        swal({
+            title: 'Are you sure?',
+            icon: 'warning',
+            buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
+        }).then((value) => {
+            if (value === true) {
+                axios
+                    .get(`/api/franchisee/admin/verify/${id}`, {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    .then((res) => {
+                        swal({
+                            title: 'success',
+                            text: res.data.message ? res.data.message : 'Verified Successfully!',
+                            icon: 'success',
+                            button: 'ok',
+                            dangerMode: true,
+                        })
+                        setSuccess((prev) => !prev)
+                    })
+                    .catch((err) => {
+                        swal({
+                            title: 'Failled',
+                            text: 'Something went wrong!',
+                            icon: 'error',
+                            button: 'Retry',
+                            dangerMode: true,
+                        })
+                    })
+            }
+        })
+    }
     const handleDelete = (id) => {
         swal({
             title: 'Are you sure?',
@@ -158,6 +196,7 @@ const Franchisees = () => {
                                                     <th className="text-start">Logo</th>
                                                     <th className="text-start">City </th>
                                                     <th className="text-start">Created On</th>
+                                                    <th className="text-start">Status</th>
                                                     <th className="text-center">Actions</th>
                                                 </tr>
                                             </thead>
@@ -180,10 +219,14 @@ const Franchisees = () => {
                                                         return (
                                                             <tr key={i}>
                                                                 <td className="text-start">{franchisee.name}</td>
-                                                                <td className="text-start">
-                                                                    <img src={franchisee.banner.url} alt="Test Image" height="50" />
-                                                                </td>
+                                                                {franchisee.banner && franchisee.banner ?
+                                                                    <td className="text-start">
+                                                                        <img src={franchisee.banner.url} alt="No Image" height="50" />
+                                                                    </td> :
+                                                                    <p>No image!</p>
+                                                                }
                                                                 <td className="text-start">{franchisee?.city?.city_name}</td>
+
                                                                 <td className="text-start">
                                                                     {new Date(franchisee.createdAt).toLocaleString('en-IN', {
                                                                         month: '2-digit',
@@ -193,6 +236,25 @@ const Franchisees = () => {
                                                                         // minute: 'numeric',
                                                                         // hour12: true,
                                                                     })}
+                                                                </td>
+                                                                <td className="text-start">
+                                                                    <button
+                                                                        style={{ color: 'white' }}
+                                                                        type="button"
+                                                                        className={`
+                                                                        
+                                    btn ${franchisee?.verify === true ? 'btn-success' : 'btn-danger'} btn-sm
+                                    waves-effect waves-light
+                                    ms-2
+                                    
+                                  `}
+                                                                        disabled={franchisee?.verify === true}
+                                                                        onClick={() => {
+                                                                            handleVarification(franchisee._id)
+                                                                        }}
+                                                                    >
+                                                                        {franchisee?.verify ? 'verified' : 'Not Verify'}
+                                                                    </button>
                                                                 </td>
                                                                 <td className=" text-center">
                                                                     <OverLayButton data={{ url: franchisee?.url }} />
