@@ -47,6 +47,13 @@ import Addtax from './views/configuration/tax/Addtax'
 import Edittax from './views/configuration/tax/Edittax'
 import EditOrder from './views/orders/EditOrder'
 import ViewOrders from './views/orders/ViewOrders'
+import Departures from './views/Departures/Departures'
+import AddDeparture from './views/Departures/AddDeparture'
+import Informations from './views/Informations/Informations'
+import AddInformations from './views/Informations/AddInformations'
+import Complaints from './views/Complaints/Complaints'
+import AddComplaint from './views/Complaints/AddComplaint'
+import ViewComplaint from './views/Complaints/ViewComplaint'
 
 const routes = [
 
@@ -61,6 +68,19 @@ const routes = [
   { path: '/product/add', name: 'Add products', element: AddProduct },
   { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
   { path: '/product/view/:id', name: 'view products', element: ViewProduct },
+  //Departure
+  { path: '/departures', name: 'Departures', element: Departures },
+  { path: '/departure/add', name: 'Add Departure', element: AddDeparture },
+  { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
+  { path: '/product/view/:id', name: 'view products', element: ViewProduct },
+  //Complaints
+  { path: '/complaints', name: 'Complaints', element: Complaints },
+  { path: '/complaint/new', name: 'Add Complaint', element: AddComplaint },
+  { path: '/complaint/view/:id', name: 'view Complain', element: ViewComplaint },
+  //informations
+  { path: '/informations', name: 'Informations', element: Informations },
+  { path: '/information/new', name: 'Add Informations', element: AddInformations },
+
   //Order Management
 
 

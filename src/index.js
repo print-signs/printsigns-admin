@@ -11,8 +11,8 @@ import axios from 'axios'
 import { store } from './redux/store';
 
 const setupAxios = () => {
-  // axios.defaults.baseURL = 'https://atpapi.checkapp.one'
-  axios.defaults.baseURL = 'http://localhost:5000'
+  axios.defaults.baseURL = 'https://atpapi.checkapp.one'
+  //axios.defaults.baseURL = 'http://localhost:5000'
   axios.defaults.headers = {
     'Cache-Control': 'no-cache,no-store',
     'Pragma': 'no-cache',

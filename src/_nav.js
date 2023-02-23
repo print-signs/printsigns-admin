@@ -2,6 +2,7 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilAddressBook,
+  cilAirplaneMode,
   cilAppsSettings,
   cilBell,
   cilCalculator,
@@ -9,10 +10,12 @@ import {
   cilChartPie,
   cilClipboard,
   cilCommand,
+  cilCompress,
   cilCursor,
   cilDrop,
   cilFace,
   cilFilterSquare,
+  cilInfo,
   cilLoopCircular,
   cilMedicalCross,
   cilMoney,
@@ -50,54 +53,73 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Franchisee',
-    icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
-    to: '/franchisees',
+    name: 'Departures',
+    icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
+    to: '/departures',
   },
   {
-    component: CNavGroup,
-    name: 'Franchisee Orders',
-    icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'New',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/new',
-      },
-      {
-        component: CNavItem,
-        name: 'Paid',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/returned',
-      },
-      {
-        component: CNavItem,
-        name: 'Processing',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/processing',
-      },
-      {
-        component: CNavItem,
-        name: 'Dispatched',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/dispatched',
-      },
-      {
-        component: CNavItem,
-        name: 'Delivered',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/delivered',
-      },
-      {
-        component: CNavItem,
-        name: 'Cancelled',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/cancelled',
-      },
-
-    ],
+    component: CNavItem,
+    name: 'Complaints',
+    icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
+    to: '/complaints',
   },
+  {
+    component: CNavItem,
+    name: 'Information',
+    icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
+    to: '/informations',
+  },
+
+  // {
+  //   component: CNavItem,
+  //   name: 'Franchisee',
+  //   icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
+  //   to: '/franchisees',
+  // },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Franchisee Orders',
+  //   icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'New',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/new',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Paid',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/returned',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Processing',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/processing',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Dispatched',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/dispatched',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Delivered',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/delivered',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Cancelled',
+  //       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  //       to: '/orders/cancelled',
+  //     },
+
+  //   ],
+  // },
 
 
   {
@@ -111,18 +133,18 @@ const _nav = [
     name: 'Configuration',
     icon: <CIcon icon={cilAppsSettings} customClassName="nav-icon" />,
     items: [
-      {
-        component: CNavItem,
-        name: 'Cities',
-        icon: <CIcon icon={cilLoopCircular} customClassName="nav-icon" />,
-        to: '/cities',
-      },
-      {
-        component: CNavItem,
-        name: 'States',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/states',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Cities',
+      //   icon: <CIcon icon={cilLoopCircular} customClassName="nav-icon" />,
+      //   to: '/cities',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'States',
+      //   icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+      //   to: '/states',
+      // },
       // {
       //   component: CNavItem,
       //   name: 'Standard Shipping',
@@ -141,12 +163,12 @@ const _nav = [
       //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
       //   to: '/pincode',
       // },
-      {
-        component: CNavItem,
-        name: 'Tax Rates',
-        icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
-        to: '/tax',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Tax Rates',
+      //   icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
+      //   to: '/tax',
+      // },
       // {
       //   component: CNavItem,
       //   name: 'Pages',

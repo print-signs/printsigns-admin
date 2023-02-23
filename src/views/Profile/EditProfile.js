@@ -151,7 +151,7 @@ const EditProfile = () => {
 
 
 
-                                        <CFormInput
+                                        {/* <CFormInput
                                             type="file"
                                             placeholder="image"
                                             accept="image/*"
@@ -164,7 +164,7 @@ const EditProfile = () => {
 
                                             {imagesPreview && <img className=" w-50 p-1 " src={imagesPreview} alt="Product Preview" />}
 
-                                        </div>
+                                        </div> */}
                                         <CCol xs={12}>
                                             <CButton onClick={handleSubmit} color='primary'>{loading ? 'Loading...' : 'Submit'}</CButton>
                                             <CButton className='ml-2' onClick={handleCancle} color='warning'>Cancel</CButton>
