@@ -17,11 +17,30 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
+import axios from 'axios'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { isAutheticated } from 'src/auth'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const [AppName, setAppName] = useState('')
+  const token = isAutheticated()
 
+
+  useEffect(() => {
+    async function getConfiguration() {
+      const configDetails = await axios.get(`/api/config`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      setAppName(configDetails.data.result[0]?.appName)
+
+    }
+    getConfiguration()
+  }, [])
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
@@ -32,12 +51,12 @@ const AppHeader = () => {
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
-          <h3>Any Time Prasad</h3>
+          <h3>{AppName}</h3>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
             <CNavLink to="/dashboard" component={NavLink} activeClassName="active">
-              ATP Dashboard
+              <h3>{AppName}</h3>
             </CNavLink>
           </CNavItem>
           {/* <CNavItem>

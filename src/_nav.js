@@ -30,6 +30,7 @@ import {
   cilTablet,
   cilTags,
   cilTennisBall,
+  cilText,
   cilUser,
 
 
@@ -189,6 +190,13 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: 'Application Name',
+        icon: <CIcon icon={cilText} customClassName="nav-icon" />,
+        to: '/application/name',
+      },
+
+      {
+        component: CNavItem,
         name: 'Address',
         icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" />,
         to: '/address',
@@ -198,6 +206,12 @@ const _nav = [
         name: 'Logos',
         icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
         to: '/logo',
+      },
+      {
+        component: CNavItem,
+        name: 'Copyright Message',
+        icon: <CIcon icon={cilText} customClassName="nav-icon" />,
+        to: '/copyright/message',
       },
     ],
   },

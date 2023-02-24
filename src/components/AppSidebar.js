@@ -29,7 +29,7 @@ const AppSidebar = () => {
   const token = isAutheticated()
 
   // urlcreated images
-
+  const [AppName, setAppName] = useState('')
   const [HeaderlogoUrl, setHeaderlogoUrl] = useState('')
   const [FooterlogoUrl, setFooterlogoUrl] = useState('')
   const [AdminlogoUrl, setAdminlogoUrl] = useState('')
@@ -41,6 +41,7 @@ const AppSidebar = () => {
           Authorization: `Bearer ${token}`,
         },
       })
+      setAppName(configDetails.data.result[0]?.appName)
       configDetails.data.result.map((item) => {
         setHeaderlogoUrl(item?.logo[0]?.Headerlogo)
         setFooterlogoUrl(item?.logo[0]?.Footerlogo)
@@ -63,7 +64,7 @@ const AppSidebar = () => {
       <CSidebarBrand className="d-none  d-md-flex" style={{ background: 'rgb(140, 213, 213)' }} to="/">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
 
-        {HeaderlogoUrl ? <Link to='/dashboard'><img src={HeaderlogoUrl} alt='' /></Link> : <h2>ATP Dashboard</h2>}
+        {HeaderlogoUrl ? <Link to='/dashboard'><img src={HeaderlogoUrl} alt='' /></Link> : { AppName } ? <h2>Airport Dashboard</h2> : ''}
         {/* <CIcon className="sidebar-brand-narrow"  height={35} /> */}
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>

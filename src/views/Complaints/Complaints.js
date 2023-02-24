@@ -27,13 +27,13 @@ const Complaints = () => {
 
     const getComplaintsData = async () => {
         axios
-            .get(`/api/information/getAll/`, {
+            .get(`/api/complaint/getAll/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                setComplaintsData(res.data?.information)
+                setComplaintsData(res.data?.complaint)
                 setLoading(false)
             })
             .catch((err) => {
@@ -188,9 +188,9 @@ const Complaints = () => {
                                                     showData.map((product, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{product.title}</td>
+                                                                <td className="text-start">{product.MobileOrEmail}</td>
 
-                                                                <td className="text-start">{product.description}</td>
+                                                                <td className="text-start">{product.Complaint}</td>
                                                                 <td className="text-start">
                                                                     {new Date(product.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',

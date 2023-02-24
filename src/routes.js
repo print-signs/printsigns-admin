@@ -54,6 +54,8 @@ import AddInformations from './views/Informations/AddInformations'
 import Complaints from './views/Complaints/Complaints'
 import AddComplaint from './views/Complaints/AddComplaint'
 import ViewComplaint from './views/Complaints/ViewComplaint'
+import ApplicationName from './views/configuration/ApplicationName'
+import CopyrightMessage from './views/configuration/CopyrightMessage'
 
 const routes = [
 
@@ -97,28 +99,20 @@ const routes = [
   { path: '/order/:status/:id', name: 'View Order', element: ViewOrder },
 
 
-  //Temple
-  { path: '/franchisees', name: 'Franchisees', element: Franchisees },
-  { path: '/franchisee/add', name: 'Add Franchisee', element: AddFranchisee },
-  { path: '/franchisee/edit/:id', name: 'Edit Franchisee', element: EditFranchisee },
+
 
   //dashboard
 
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
 
   //------------settings------------------------//
-  //cities
-  { path: '/cities', name: 'Cities', element: Cities },
-  { path: '/cities/add', name: 'Add City', element: AddCity },
-  { path: '/cities/edit/:id', name: 'Edit City', element: EditCity },
-  //states
-  { path: '/states', name: 'States', element: States },
-  { path: '/states/add', name: 'Add State', element: AddState },
-  { path: '/states/edit/:id', name: 'Edit State', element: EditState },
 
-  //
 
   { path: '/socialmedia', name: 'Social Media', element: Socialmedia },
+  { path: '/application/name', name: 'ApplicationName', element: ApplicationName },
+  { path: '/copyright/message', name: 'Copyright Message', element: CopyrightMessage },
+
+
   { path: '/address', name: 'Address', element: Address },
   { path: '/logo', name: 'Logo', element: Logo },
 
