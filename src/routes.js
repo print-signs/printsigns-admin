@@ -56,6 +56,8 @@ import AddComplaint from './views/Complaints/AddComplaint'
 import ViewComplaint from './views/Complaints/ViewComplaint'
 import ApplicationName from './views/configuration/ApplicationName'
 import CopyrightMessage from './views/configuration/CopyrightMessage'
+import ContactRequests from './views/ContactRequests/ContactRequests'
+import AddContactRequest from './views/ContactRequests/AddContactRequest'
 
 const routes = [
 
@@ -75,6 +77,10 @@ const routes = [
   { path: '/departure/add', name: 'Add Departure', element: AddDeparture },
   { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
   { path: '/product/view/:id', name: 'view products', element: ViewProduct },
+  //Contact Requests
+  { path: '/contact/request', name: 'Contact Requests', element: ContactRequests },
+  { path: '/contact/request/new', name: 'AddContact Request', element: AddContactRequest },
+  // { path: '/complaint/view/:id', name: 'view Complain', element: ViewComplaint },
   //Complaints
   { path: '/complaints', name: 'Complaints', element: Complaints },
   { path: '/complaint/new', name: 'Add Complaint', element: AddComplaint },

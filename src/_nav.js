@@ -11,6 +11,7 @@ import {
   cilClipboard,
   cilCommand,
   cilCompress,
+  cilContact,
   cilCursor,
   cilDrop,
   cilFace,
@@ -64,6 +65,13 @@ const _nav = [
     icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
     to: '/complaints',
   },
+  {
+    component: CNavItem,
+    name: 'Contact Requests',
+    icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
+    to: '/contact/request',
+  },
+
   {
     component: CNavItem,
     name: 'Information',
