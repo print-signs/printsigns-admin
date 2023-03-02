@@ -1,5 +1,7 @@
 
 
+
+
 import axios from "axios";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import swal from 'sweetalert';
@@ -7,29 +9,28 @@ import swal from 'sweetalert';
 import { Link, useParams } from "react-router-dom";
 import { isAutheticated } from "src/auth";
 
-function ViewProduct() {
-    const [product, setProduct] = useState([])
+function ViewTestimonial() {
+    const [testimonial, setTestimonial] = useState([])
     const { id } = useParams();
     const token = isAutheticated();
 
-    const getProduct = useCallback(async () => {
+    const getTestimonial = useCallback(async () => {
         let res = await axios.get(
-            `/api/product/getOne/${id}`,
+            `/api/testimonial/getOne/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }
         );
-        console.log(res.data.product)
-        setProduct(res.data.product)
+        setTestimonial(res.data.testimonial)
 
 
     }, [token]);
 
     useEffect(() => {
-        getProduct();
-    }, [getProduct]);
+        getTestimonial();
+    }, [getTestimonial]);
 
 
 
@@ -56,16 +57,9 @@ function ViewProduct() {
                     <div className="row">
                         <div className="col-12">
                             <div className="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 className="mb-3">Product</h4>
-                                <Link to="/product/add"><button type="button" className="btn btn-info float-end mb-3 ml-4"> + Add Product</button></Link>
-                                {/* <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/dashboard">CMD-App</Link>
-                    </li>
-                    <li className="breadcrumb-item">CMD-Category</li>
-                  </ol>
-                </div> */}
+                                <h4 className="mb-3">Testimonial</h4>
+                                <Link to="/testimonials"><button type="button" className="btn btn-info float-end mb-3 ml-4">Back</button></Link>
+
                             </div>
                         </div>
                     </div>
@@ -82,26 +76,26 @@ function ViewProduct() {
                                         <table className="table table-centered table-nowrap mb-0">
                                             <thead className="thead-light">
 
-                                                <tr><th>Id</th> <td><h5>{product?._id}</h5></td></tr>
-                                                <tr><th>Name</th>                                                        <td>{product?.name}</td></tr>
+                                                <tr><th>Id</th> <td><h5>{testimonial?._id}</h5></td></tr>
+                                                <tr><th>Name</th>                                                        <td>{testimonial?.name}</td></tr>
 
-                                                {product.image && <tr><th>image</th><td>
-                                                    {product.image.map(i =>
-                                                        <img className="me-2" src={`${i?.url}`} width="70" alt="" />
-                                                    )}
+                                                {testimonial.image && <tr><th>image</th><td>
+
+                                                    <img className="me-2" src={`${testimonial.image?.url}`} width="70" alt="" />
+
                                                 </td></tr>}
-                                                <tr><th>Description</th><td>{product?.description}</td></tr>
-                                                <tr><th>Base Price</th><td>₹{product?.price}</td></tr>
+                                                {testimonial?.company && <tr><th> Company</th><td>{testimonial?.company}</td></tr>}
+                                                <tr><th>Testimonial</th><td>{testimonial?.testimonial}</td></tr>
 
 
-                                                {/* <tr><th>Product Time</th><td>{product?.time}</td></tr>
-                                                <tr><th>Location</th><td>{product?.location}</td></tr> */}
+                                                {/* <tr><th>Testimonial Time</th><td>{testimonial?.time}</td></tr>
+                                                <tr><th>Location</th><td>{testimonial?.location}</td></tr> */}
                                                 <tr><th>Created On</th><td>
-                                                    {new Date(`${product?.createdAt}`).toDateString()}<span> , {`${formatAMPM(product?.createdAt)}`}</span>
+                                                    {new Date(`${testimonial?.createdAt}`).toDateString()}<span> , {`${formatAMPM(testimonial?.createdAt)}`}</span>
                                                 </td></tr>
                                                 <tr><th>Updated At</th>
                                                     <td>
-                                                        {new Date(`${product?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(product?.updatedAt)}`}</span>
+                                                        {new Date(`${testimonial?.updatedAt}`).toDateString()}<span> , {`${formatAMPM(testimonial?.updatedAt)}`}</span>
                                                     </td>
                                                 </tr>
 
@@ -125,4 +119,4 @@ function ViewProduct() {
     );
 }
 
-export default ViewProduct;
+export default ViewTestimonial;

@@ -61,9 +61,9 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Complaints',
+    name: 'Testimonials',
     icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
-    to: '/complaints',
+    to: '/testimonials',
   },
   {
     component: CNavItem,

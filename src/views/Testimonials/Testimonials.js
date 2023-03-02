@@ -7,16 +7,16 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 
-const Complaints = () => {
+const Testimonials = () => {
     const token = isAutheticated()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [ComplaintsData, setComplaintsData] = useState([])
+    const [TestimonialsData, setTestimonialsData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(ComplaintsData)
+    const [showData, setShowData] = useState(TestimonialsData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -25,15 +25,15 @@ const Complaints = () => {
 
 
 
-    const getComplaintsData = async () => {
+    const getTestimonialsData = async () => {
         axios
-            .get(`/api/complaint/getAll/`, {
+            .get(`/api/testimonial/getAll/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                setComplaintsData(res.data?.complaint)
+                setTestimonialsData(res.data?.testimonial)
                 setLoading(false)
             })
             .catch((err) => {
@@ -42,17 +42,17 @@ const Complaints = () => {
     }
 
     useEffect(() => {
-        getComplaintsData()
+        getTestimonialsData()
     }, [success])
 
     useEffect(() => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(ComplaintsData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(TestimonialsData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, ComplaintsData])
+    }, [currentPage, itemPerPage, TestimonialsData])
 
     const handleDelete = (id) => {
         swal({
@@ -62,7 +62,7 @@ const Complaints = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/product/delete/${id}`, {
+                    .delete(`/api/item/delete/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -99,7 +99,7 @@ const Complaints = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Complaints
+                                    Testimonials
                                 </div>
 
                                 <div className="page-title-right">
@@ -112,10 +112,10 @@ const Complaints = () => {
                                             textTransform: 'capitalize',
                                         }}
                                         onClick={() => {
-                                            navigate('/complaint/new', { replace: true })
+                                            navigate('/testimonial/new', { replace: true })
                                         }}
                                     >
-                                        Add New Complaint
+                                        Add New Testimonial
                                     </Button>
                                 </div>
                             </div>
@@ -163,8 +163,8 @@ const Complaints = () => {
 
 
 
-                                                    <th className="text-start">Mobile or EMail</th>
-                                                    <th className="text-start">Complaints</th>
+                                                    <th className="text-start">Name</th>
+                                                    <th className="text-start">Testimonials</th>
                                                     <th className="text-start">Date & Time</th>
 
 
@@ -186,14 +186,14 @@ const Complaints = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((product, i) => {
+                                                    showData.map((item, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{product.MobileOrEmail}</td>
+                                                                <td className="text-start">{item.name}</td>
 
-                                                                <td className="text-start">{product.Complaint}</td>
+                                                                <td className="text-start">{item.company}</td>
                                                                 <td className="text-start">
-                                                                    {new Date(product.createdAt).toLocaleString('en-IN', {
+                                                                    {new Date(item.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',
                                                                         month: 'short',
                                                                         day: 'numeric',
@@ -205,7 +205,7 @@ const Complaints = () => {
                                                                 </td>
                                                                 <td className="text-start">
 
-                                                                    <Link to={`/product/view/${product._id}`}>
+                                                                    <Link to={`/testimonial/view/${item._id}`}>
                                                                         <button
                                                                             style={{ color: 'white', marginRight: '1rem' }}
                                                                             type="button"
@@ -239,8 +239,8 @@ const Complaints = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, ComplaintsData.length)} of{' '}
-                                                {ComplaintsData.length} entries
+                                                {Math.min(currentPage * itemPerPage, TestimonialsData.length)} of{' '}
+                                                {TestimonialsData.length} entries
                                             </div>
                                         </div>
 
@@ -283,7 +283,7 @@ const Complaints = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        ComplaintsData.length - 1
+                                                        TestimonialsData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -302,7 +302,7 @@ const Complaints = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                ComplaintsData.length - 1
+                                                                TestimonialsData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -330,4 +330,4 @@ const Complaints = () => {
     )
 }
 
-export default Complaints
+export default Testimonials

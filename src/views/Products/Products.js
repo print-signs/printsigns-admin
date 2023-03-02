@@ -67,6 +67,12 @@ const Products = () => {
                         },
                     })
                     .then((res) => {
+                        swal({
+                            title: 'Deleted',
+                            text: 'Product Deleted successfully!',
+                            icon: 'success',
+                            button: 'ok',
+                        })
                         setSuccess((prev) => !prev)
                     })
                     .catch((err) => {
@@ -159,8 +165,8 @@ const Products = () => {
                                                 <tr>
 
                                                     <th className="text-start">Product Name</th>
-                                                    <th className="text-start">Thumbnail</th>
-                                                    <th className="text-start">Base Price</th>
+                                                    <th className="text-start">Image</th>
+                                                    <th className="text-start">Price</th>
                                                     <th className="text-start">Added On</th>
                                                     <th className="text-start">Actions</th>
                                                 </tr>
@@ -185,13 +191,14 @@ const Products = () => {
                                                             <tr key={i}>
                                                                 <td className="text-start">{product.name}</td>
                                                                 <th>
-                                                                    {product?.image && (
-                                                                        <>
-                                                                            <img src={product.image?.url} width="50" alt="preview" />
-                                                                        </>
-                                                                    )}
+                                                                    {product.image &&
+                                                                        product.image.map(i =>
+                                                                            <img className="me-2" src={`${i?.url}`} width="40" alt="" />
+                                                                        )}
+
+
                                                                 </th>
-                                                                <th className="text-start">₹{product.base_Price}</th>
+                                                                <th className="text-start">₹{product.price}</th>
                                                                 <td className="text-start">
                                                                     {new Date(product.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',

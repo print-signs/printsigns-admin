@@ -8,15 +8,16 @@ import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 // import { WebsiteURL } from '../WebsiteURL'
 
-const AddComplaint = () => {
+const AddTestimonial = () => {
     const token = isAutheticated()
     const navigate = useNavigate()
     const [data, setData] = useState({
 
-        MobileOrEmail: '',
-        Complaint: '',
-
-
+        name: '',
+        testimonial: '',
+        company: '',
+        image: '',
+        imageURL: '',
 
     })
 
@@ -31,18 +32,47 @@ const AddComplaint = () => {
 
     const handleChange = (e) => {
 
-
+        if (e.target.id === 'image') {
+            if (
+                e.target.files[0]?.type === 'image/jpeg' ||
+                e.target.files[0]?.type === 'image/png' ||
+                e.target.files[0]?.type === 'image/jpg'
+            ) {
+                setData((prev) => ({
+                    ...prev,
+                    imageURL: URL.createObjectURL(e.target.files[0]),
+                    image: e.target.files[0],
+                }))
+                return
+            } else {
+                swal({
+                    title: 'Warning',
+                    text: 'Upload jpg, jpeg, png only.',
+                    icon: 'error',
+                    button: 'Close',
+                    dangerMode: true,
+                })
+                setData((prev) => ({
+                    ...prev,
+                    imageURL: '',
+                    image: '',
+                }))
+                e.target.value = null
+                return
+            }
+        }
         setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
 
 
-
     const handleSubmit = () => {
         if (
-            data.MobileOrEmail.trim() === '' ||
+            data.name.trim() === '' ||
+            data.company.trim() === '' ||
+            data.image === '' ||
 
-            data.Complaint.trim() === ''
+            data.testimonial.trim() === ''
 
         ) {
             swal({
@@ -56,14 +86,16 @@ const AddComplaint = () => {
         }
         setLoading(true)
         const formData = new FormData()
-        formData.set('MobileOrEmail', data.MobileOrEmail)
+        formData.set('name', data.name)
+        formData.set('company', data.company)
+        formData.set('image', data.image)
 
-        formData.set('Complaint', data.Complaint)
+        formData.set('testimonial', data.testimonial)
 
 
 
         axios
-            .post(`/api/complaint/new/`, formData, {
+            .post(`/api/testimonial/new/`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',
@@ -73,12 +105,12 @@ const AddComplaint = () => {
             .then((res) => {
                 swal({
                     title: 'Added',
-                    text: 'Complaint added successfully!',
+                    text: 'Testimonial added successfully!',
                     icon: 'success',
                     button: 'ok',
                 })
                 setLoading(false)
-                navigate('/complaints', { replace: true })
+                navigate('/testimonials', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -106,7 +138,7 @@ const AddComplaint = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Complaint
+                            Testimonial
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -127,7 +159,7 @@ const AddComplaint = () => {
                             >
                                 {loading ? 'Loading' : 'Save'}
                             </Button>
-                            <Link to="/complaints">
+                            <Link to="/testimonials">
                                 <Button
                                     variant="contained"
                                     color="secondary"
@@ -151,48 +183,87 @@ const AddComplaint = () => {
 
 
 
+
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    Mobile Or Email *
+                                    Name *
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="MobileOrEmail"
-                                    value={data.MobileOrEmail}
-                                    maxLength={150}
+                                    id="name"
+                                    value={data.name}
+                                    maxLength={25}
                                     onChange={(e) => handleChange(e)}
                                 />
-                                {data.MobileOrEmail ? <><small className="charLeft mt-4 fst-italic">
-                                    {150 - data.MobileOrEmail.length} characters left
+                                {data.name ? <><small className="charLeft mt-4 fst-italic">
+                                    {25 - data.name.length} characters left
                                 </small></> : <></>
 
-                                }                            </div>
+                                }  </div>
+
 
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
-                                    Complaint *
+                                    Company (Optional) *
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="company"
+                                    value={data.company}
+                                    maxLength={30}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                                {data.company ? <><small className="charLeft mt-4 fst-italic">
+                                    {30 - data.company.length} characters left
+                                </small></> : <></>
+
+                                }  </div>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">
+                                    Testimonial *
                                 </label>
                                 <textarea
                                     type="text"
                                     className="form-control"
-                                    id="Complaint"
+                                    id="testimonial"
                                     rows="10"
-                                    cols="100"
-                                    value={data.Complaint}
-                                    placeholder='your Complaint...'
-                                    maxLength="1000"
+                                    cols="80"
+                                    value={data.testimonial}
+                                    placeholder='your Testimonial...'
+                                    maxLength="500"
                                     onChange={(e) => handleChange(e)}
                                 >
                                 </textarea>
 
-                                {data.Complaint ? <><small className="charLeft mt-4 fst-italic">
-                                    {1000 - data.Complaint.length} characters left
+                                {data.testimonial ? <><small className="charLeft mt-4 fst-italic">
+                                    {500 - data.testimonial.length} characters left
                                 </small></> : <></>
                                 }
                             </div>
+                            <div className="mb-3">
+                                <label htmlFor="image" className="form-label">
+                                    Photo (optional)*
+                                </label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    id="image"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={(e) => handleChange(e)}
+                                />
+                                <p className="pt-1 pl-2 text-secondary">Upload jpg, jpeg and png only*</p>
+                            </div>
+                            <div className="mb-3" style={{ height: '200px', maxWdth: '100%' }}>
+                                <img
+                                    src={data.imageURL}
+                                    alt="Uploaded Image will be shown here"
+                                    style={{ maxHeight: '200px', maxWidth: '100%' }}
+                                />
 
-
+                            </div>
                             {/* <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Description *
@@ -211,4 +282,4 @@ const AddComplaint = () => {
     )
 }
 
-export default AddComplaint
+export default AddTestimonial

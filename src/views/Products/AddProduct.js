@@ -13,19 +13,13 @@ const AddProduct = () => {
     const token = isAutheticated()
     const navigate = useNavigate()
     const [data, setData] = useState({
-        image: '',
-        imageURL: '',
+        image: [],
+        imageURL: [],
         name: '',
         description: '',
 
-        base_Price: '',
-        base_Price_With_Tax: '',
-        price_Level_2: '',
-        price_Level_2_With_Tax: '',
+        price: '',
 
-        price_Level_3: '',
-        price_Level_3_With_Tax: '',
-        taxId: ''
 
     })
 
@@ -33,7 +27,8 @@ const AddProduct = () => {
     const [loading, setLoading] = useState(false)
     const [allTax, setAllTax] = useState([])
 
-
+    const [imagesPreview, setImagesPreview] = useState([]);
+    const [allimage, setAllImage] = useState([]);
 
 
     useEffect(() => {
@@ -57,10 +52,38 @@ const AddProduct = () => {
                 e.target.files[0]?.type === 'image/png' ||
                 e.target.files[0]?.type === 'image/jpg'
             ) {
+                if (imagesPreview.length > 3) {
+                    swal({
+                        title: 'Warning',
+                        text: 'maximum Four image Upload ',
+                        icon: 'error',
+                        button: 'Close',
+                        dangerMode: true,
+                    })
+                    return
+                }
+                // only for file preview------------------------------------
+                const files = Array.from(e.target.files);
+                files.forEach((file) => {
+                    const reader = new FileReader();
+
+                    reader.onload = () => {
+                        if (reader.readyState === 2) {
+                            setImagesPreview((old) => [...old, reader.result]);
+
+                        }
+                    };
+
+                    reader.readAsDataURL(file)
+                });
+                // -----------------------------------------------------------------------------
+
+
                 setData((prev) => ({
                     ...prev,
-                    imageURL: URL.createObjectURL(e.target.files[0]),
-                    image: e.target.files[0],
+
+
+                    image: [...data.image, ...e.target.files],
                 }))
                 return
             } else {
@@ -94,7 +117,7 @@ const AddProduct = () => {
         }
 
         let trRate = taxDetails.rate / 100
-        let PriceWithT = Number(data.base_Price);
+        let PriceWithT = Number(data.price);
         PriceWithT += +((PriceWithT * trRate).toFixed());
 
         //price_Level_2_With_Tax
@@ -106,7 +129,7 @@ const AddProduct = () => {
         price_Level_3_With_Tax += +((price_Level_3_With_Tax * trRate).toFixed());
         setData((prev) => ({
             ...prev,
-            base_Price_With_Tax: PriceWithT,
+            price_With_Tax: PriceWithT,
 
             price_Level_2_With_Tax: price_Level_2_With_Tax,
 
@@ -117,19 +140,20 @@ const AddProduct = () => {
         }))
     }
 
-
+    // console.log(data.image.length)
     const handleSubmit = () => {
         if (
             data.name.trim() === '' ||
 
             data.description.trim() === '' ||
-            data.base_Price === '' ||
-            data.base_Price_With_Tax === '' ||
-            data.price_Level_2 === '' ||
-            data.price_Level_2_With_Tax === '' ||
-            data.price_Level_3 === '' ||
-            data.price_Level_3_With_Tax === '' ||
-            data.imageURL.trim() === ''
+            data.price === '' ||
+            data.image === ''
+            // data.price_With_Tax === '' ||
+            // data.price_Level_2 === '' ||
+            // data.price_Level_2_With_Tax === '' ||
+            // data.price_Level_3 === '' ||
+            // data.price_Level_3_With_Tax === '' ||
+            // data.imageURL.trim() === ''
         ) {
             swal({
                 title: 'Warning',
@@ -142,21 +166,19 @@ const AddProduct = () => {
         }
         setLoading(true)
         const formData = new FormData()
-        formData.set('name', data.name)
+        formData.append('name', data.name)
 
-        formData.set('description', data.description)
-        formData.set('base_Price', data.base_Price)
-        formData.set('base_Price_With_Tax', data.base_Price_With_Tax)
-
-        formData.set('price_Level_2', data.price_Level_2)
-        formData.set('price_Level_2_With_Tax', data.price_Level_2_With_Tax)
-
-        formData.set('price_Level_3', data.price_Level_3)
-        formData.set('price_Level_3_With_Tax', data.price_Level_3_With_Tax)
-        formData.set('taxId', data.taxId)
+        formData.append('description', data.description)
+        formData.append('price', data.price)
 
 
-        formData.append('image', data.image)
+
+
+        data.image.forEach((Singleimage) => {
+            // console.log(Singleimage)
+            formData.append("image", Singleimage);
+
+        });
 
 
         axios
@@ -172,14 +194,14 @@ const AddProduct = () => {
                     title: 'Added',
                     text: 'Product added successfully!',
                     icon: 'success',
-                    button: 'Return',
+                    button: 'ok',
                 })
                 setLoading(false)
                 navigate('/products', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
-                const message = err.response?.data?.message || 'Something went wrong!'
+                const message = err.response?.data?.message ? err.response?.data?.message : 'Something went wrong!'
                 swal({
                     title: 'Warning',
                     text: message,
@@ -296,13 +318,14 @@ const AddProduct = () => {
                                 />
                                 <p className="pt-1 pl-2 text-secondary">Upload jpg, jpeg and png only*</p>
                             </div>
-                            <div className="mb-3" style={{ height: '200px', maxWdth: '100%' }}>
-                                <img
-                                    src={data.imageURL}
-                                    alt="Uploaded Image will be shown here"
-                                    style={{ maxHeight: '200px', maxWidth: '100%' }}
-                                />
+                            <div><strong className="fs-6 fst-italic">*Please Upload maximum four images</strong></div>
 
+
+                            <div id="createProductFormImage" className="w-25 d-flex">
+
+                                {imagesPreview.map((image, index) => (
+                                    <img className=" w-50 p-1 " key={index} src={image} alt="Product Preview" />
+                                ))}
                             </div>
 
 
@@ -312,126 +335,27 @@ const AddProduct = () => {
                 <div className="col-lg-6 col-md-6  col-sm-12 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
-                            <div className="d-flex flex-wrap">
-
-                                <div className="mb-3 me-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Base Price*
-                                    </label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        id="base_Price"
-                                        value={data.base_Price}
-                                        onChange={(e) => handleChange(e)}
-
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Base Price With Tax
-                                    </label>
-                                    <input
-                                        type="number"
-                                        disabled
-                                        className="form-control"
-                                        id="base_Price_With_Tax"
-                                        value={data.base_Price_With_Tax}
-                                        placeholder={data.base_Price_With_Tax}
-                                    // onChange={(e) => handleChange(e)}
-
-                                    />
-                                </div>
 
 
-
-                            </div>
-                            {/* <div className="mb-3">
+                            <div className="mb-3 me-3">
                                 <label htmlFor="title" className="form-label">
-                                    Base Price*
+                                    Price (optional)
                                 </label>
                                 <input
                                     type="number"
                                     className="form-control"
-                                    id="base_Price"
-                                    value={data.base_Price}
+                                    id="price"
+                                    value={data.price}
                                     onChange={(e) => handleChange(e)}
 
                                 />
-                            </div> */}
-
-                            <div className="d-flex flex-wrap">
-
-                                <div className="mb-3 me-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Price Level 2*
-                                    </label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        id="price_Level_2"
-                                        value={data.price_Level_2}
-                                        onChange={(e) => handleChange(e)}
-
-
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Price Level 2 with Tax
-                                    </label>
-                                    <input
-                                        type="number"
-                                        disabled
-                                        className="form-control"
-                                        id="price_Level_2_With_Tax"
-                                        value={data.price_Level_2_With_Tax}
-                                        placeholder={data.price_Level_2_With_Tax}
-                                    // onChange={(e) => handleChange(e)}
-
-
-                                    />
-                                </div>
-
-
-
                             </div>
 
-                            <div className="d-flex flex-wrap">
-
-                                <div className="mb-3 me-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Price Level 3*
-                                    </label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        id="price_Level_3"
-                                        value={data.price_Level_3}
-                                        onChange={(e) => handleChange(e)}
-
-
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="title" className="form-label">
-                                        Price Level 3 with Tax
-                                    </label>
-                                    <input
-                                        type="number"
-                                        disabled
-                                        className="form-control"
-                                        id="price_Level_3_With_Tax"
-                                        placeholder={data.price_Level_3_With_Tax}
-                                    // onChange={(e) => handleChange(e)}
-
-
-                                    />
-                                </div>
 
 
 
-                            </div>
+
+
 
 
                             {allTax.length > 0 && <div className=" mb-3">

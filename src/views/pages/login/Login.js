@@ -146,7 +146,7 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to Your ChatGpt Airport Admin Dashboard Account.</p>
+                    <p className="text-medium-emphasis">Sign In to Your Jatin Mor Admin Dashboard Account.</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />

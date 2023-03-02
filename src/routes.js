@@ -51,13 +51,14 @@ import Departures from './views/Departures/Departures'
 import AddDeparture from './views/Departures/AddDeparture'
 import Informations from './views/Informations/Informations'
 import AddInformations from './views/Informations/AddInformations'
-import Complaints from './views/Complaints/Complaints'
-import AddComplaint from './views/Complaints/AddComplaint'
-import ViewComplaint from './views/Complaints/ViewComplaint'
+
 import ApplicationName from './views/configuration/ApplicationName'
 import CopyrightMessage from './views/configuration/CopyrightMessage'
 import ContactRequests from './views/ContactRequests/ContactRequests'
 import AddContactRequest from './views/ContactRequests/AddContactRequest'
+import Testimonials from './views/Testimonials/Testimonials'
+import AddTestimonial from './views/Testimonials/AddTestimonial'
+import ViewTestimonial from './views/Testimonials/ViewTestimonial'
 
 const routes = [
 
@@ -82,9 +83,9 @@ const routes = [
   { path: '/contact/request/new', name: 'AddContact Request', element: AddContactRequest },
   // { path: '/complaint/view/:id', name: 'view Complain', element: ViewComplaint },
   //Complaints
-  { path: '/complaints', name: 'Complaints', element: Complaints },
-  { path: '/complaint/new', name: 'Add Complaint', element: AddComplaint },
-  { path: '/complaint/view/:id', name: 'view Complain', element: ViewComplaint },
+  { path: '/testimonials', name: 'Testimonials', element: Testimonials },
+  { path: '/testimonial/new', name: 'AddTestimonial', element: AddTestimonial },
+  { path: '/testimonial/view/:id', name: 'ViewTestimonial', element: ViewTestimonial },
   //informations
   { path: '/informations', name: 'Informations', element: Informations },
   { path: '/information/new', name: 'Add Informations', element: AddInformations },
