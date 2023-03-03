@@ -53,12 +53,12 @@ const _nav = [
     icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
     to: '/products',
   },
-  {
-    component: CNavItem,
-    name: 'Departures',
-    icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
-    to: '/departures',
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Departures',
+  //   icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
+  //   to: '/departures',
+  // },
   {
     component: CNavItem,
     name: 'Testimonials',
@@ -72,12 +72,12 @@ const _nav = [
     to: '/contact/request',
   },
 
-  {
-    component: CNavItem,
-    name: 'Information',
-    icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
-    to: '/informations',
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Information',
+  //   icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
+  //   to: '/informations',
+  // },
 
   // {
   //   component: CNavItem,
