@@ -1,22 +1,22 @@
-
 import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import swal from 'sweetalert'
-import OverLayButton from './OverLayButton.js'
-import { isAutheticated } from 'src/auth.js'
 
-const Franchisees = () => {
-    const token = isAutheticated()
+import swal from 'sweetalert'
+import { isAutheticated } from 'src/auth'
+
+const Cities = () => {
+    const token = isAutheticated();
+
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [FranchiseesData, setFranchiseesData] = useState([])
+    const [citiesData, setCitiesData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(FranchiseesData)
+    const [showData, setShowData] = useState(citiesData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -25,12 +25,11 @@ const Franchisees = () => {
 
     const getCategories = () => {
         axios
-            .get(`/api/franchisee`, {
+            .get(`/api/purpose`, {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                // console.log(res.data.data)
-                setFranchiseesData(res.data.data)
+                setCitiesData(res.data.data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -47,48 +46,11 @@ const Franchisees = () => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(FranchiseesData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(citiesData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, FranchiseesData])
+    }, [currentPage, itemPerPage, citiesData])
 
-
-    const handleVarification = (id) => {
-        swal({
-            title: 'Are you sure?',
-            icon: 'warning',
-            buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
-        }).then((value) => {
-            if (value === true) {
-                axios
-                    .get(`/api/franchisee/admin/verify/${id}`, {
-                        headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
-                    .then((res) => {
-                        swal({
-                            title: 'success',
-                            text: res.data.message ? res.data.message : 'Verified Successfully!',
-                            icon: 'success',
-                            button: 'ok',
-                            dangerMode: true,
-                        })
-                        setSuccess((prev) => !prev)
-                    })
-                    .catch((err) => {
-                        swal({
-                            title: 'Failled',
-                            text: 'Something went wrong!',
-                            icon: 'error',
-                            button: 'Retry',
-                            dangerMode: true,
-                        })
-                    })
-            }
-        })
-    }
     const handleDelete = (id) => {
         swal({
             title: 'Are you sure?',
@@ -97,7 +59,7 @@ const Franchisees = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/franchisee/${id}`, {
+                    .delete(`/api/purpose/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -134,11 +96,11 @@ const Franchisees = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Franchisees
+                                    Purpose
                                 </div>
 
                                 <div className="page-title-right">
-                                    <Link to="/franchisee/add">
+                                    <Link to="/purpose/add">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -148,7 +110,7 @@ const Franchisees = () => {
                                                 textTransform: 'capitalize',
                                             }}
                                         >
-                                            Add Franchisee
+                                            Add Purpose
                                         </Button>
                                     </Link>
                                 </div>
@@ -190,14 +152,12 @@ const Franchisees = () => {
                                             className="table table-centered table-nowrap"
                                             style={{ border: '1px solid' }}
                                         >
-                                            <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
+                                            <thead className="thead" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
-                                                    <th className="text-start">Franchisee Name</th>
-                                                    <th className="text-start">Logo</th>
-                                                    <th className="text-start">City </th>
+                                                    <th className="text-start">Purpose</th>
+
                                                     <th className="text-start">Created On</th>
-                                                    <th className="text-start">Status</th>
-                                                    <th className="text-center">Actions</th>
+                                                    <th className="text-start">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -215,92 +175,61 @@ const Franchisees = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((franchisee, i) => {
+                                                    showData.map((purpose, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{franchisee.name}</td>
-                                                                {franchisee.banner && franchisee.banner ?
-                                                                    <td className="text-start">
-                                                                        <img src={franchisee.banner.url} alt="No Image" height="50" />
-                                                                    </td> :
-                                                                    <p>No image!</p>
-                                                                }
-                                                                <td className="text-start">{franchisee?.city?.city_name}</td>
-
+                                                                <td className="text-start">{purpose.purpose}</td>
+                                                                {/* <td className="text-start">{purpose.state?.state_name}</td> */}
                                                                 <td className="text-start">
-                                                                    {new Date(franchisee.createdAt).toLocaleString('en-IN', {
-                                                                        month: '2-digit',
+                                                                    {new Date(purpose.createdAt).toLocaleString('en-IN', {
+                                                                        weekday: 'short',
+                                                                        month: 'short',
                                                                         day: 'numeric',
                                                                         year: 'numeric',
-                                                                        // hour: 'numeric',
-                                                                        // minute: 'numeric',
-                                                                        // hour12: true,
+                                                                        hour: 'numeric',
+                                                                        minute: 'numeric',
+                                                                        hour12: true,
                                                                     })}
                                                                 </td>
+
                                                                 <td className="text-start">
-                                                                    <button
-                                                                        style={{ color: 'white' }}
-                                                                        type="button"
-                                                                        className={`
-                                                                        
-                                    btn ${franchisee?.verify === true ? 'btn-success' : 'btn-danger'} btn-sm
-                                    waves-effect waves-light
-                                    ms-2
-                                    
-                                  `}
-                                                                        disabled={franchisee?.verify === true}
-                                                                        onClick={() => {
-                                                                            handleVarification(franchisee._id)
-                                                                        }}
-                                                                    >
-                                                                        {franchisee?.verify ? 'verified' : 'Not Verify'}
-                                                                    </button>
-                                                                </td>
-                                                                <td className=" text-center">
-                                                                    <OverLayButton data={{ url: franchisee?.url }} />
-
-                                                                    <Link to={`/franchisee/products/${franchisee._id}`}>
+                                                                    <Link to={`/purpose/edit/${purpose._id}`}>
                                                                         <button
-                                                                            style={{ color: 'white' }}
+                                                                            style={{ color: 'white', margin: '0 1rem' }}
                                                                             type="button"
                                                                             className="
-                                                                                 btn btn-primary btn-sm
-                                                                              waves-effect waves-light
-                                    ms-2
-                                  "
-                                                                        >
-                                                                            Products
-                                                                        </button>
-                                                                    </Link>
-
-                                                                    <Link to={`/franchisee/edit/${franchisee._id}`}>
-                                                                        <button
-                                                                            style={{ color: 'white' }}
-                                                                            type="button"
-                                                                            className="
-                                      btn btn-success btn-sm
+                                      btn btn-primary btn-sm
                                     waves-effect waves-light
-                                    ms-2
+                                    btn-table
+                                    me-1
                                   "
                                                                         >
                                                                             Edit
                                                                         </button>
                                                                     </Link>
-                                                                    <button
-                                                                        style={{ color: 'white' }}
-                                                                        type="button"
-                                                                        className="
-                                    btn btn-danger btn-sm
-                                    waves-effect waves-light
-                                    ms-2
-                                    
-                                  "
-                                                                        onClick={() => {
-                                                                            handleDelete(franchisee._id)
+                                                                    <Link
+                                                                        to={'#'}
+                                                                        style={{
+                                                                            margin: '1rem',
                                                                         }}
                                                                     >
-                                                                        Delete
-                                                                    </button>
+                                                                        <button
+                                                                            style={{ color: 'white' }}
+                                                                            type="button"
+                                                                            className="
+                                    btn btn-danger btn-sm
+                                    waves-effect waves-light
+                                    btn-table
+                                    me-1
+                                    
+                                  "
+                                                                            onClick={() => {
+                                                                                handleDelete(purpose._id)
+                                                                            }}
+                                                                        >
+                                                                            Delete
+                                                                        </button>
+                                                                    </Link>
                                                                 </td>
                                                             </tr>
                                                         )
@@ -319,8 +248,8 @@ const Franchisees = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, FranchiseesData.length)} of{' '}
-                                                {FranchiseesData.length} entries
+                                                {Math.min(currentPage * itemPerPage, citiesData.length)} of{' '}
+                                                {citiesData.length} entries
                                             </div>
                                         </div>
 
@@ -363,7 +292,7 @@ const Franchisees = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        FranchiseesData.length - 1
+                                                        citiesData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -382,7 +311,7 @@ const Franchisees = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                FranchiseesData.length - 1
+                                                                citiesData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -410,4 +339,4 @@ const Franchisees = () => {
     )
 }
 
-export default Franchisees
+export default Cities

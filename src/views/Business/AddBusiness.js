@@ -1,17 +1,16 @@
 
 
+
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import swal from 'sweetalert'
 import axios from 'axios'
 import { isAutheticated } from 'src/auth'
+// import { WebsiteURL } from '../WebsiteURL'
 
-const EditFranchisee = () => {
-
-
+const AddBusiness = () => {
     const [WebsiteURL, setWebsiteURL] = useState('https://reinventuniforms.in/')
-    const id = useParams()?.id
     const token = isAutheticated()
     const navigate = useNavigate()
     const [data, setData] = useState({
@@ -29,16 +28,20 @@ const EditFranchisee = () => {
         price_Lable: '',
         pin_Code: ''
     })
+
     const [cities, setCities] = useState([])
+
     const [loading, setLoading] = useState(false)
     const [validForm, setValidForm] = useState(false)
+
+
     const [limiter, setLimiter] = useState({
         name: 100,
         nameHas: 100,
     })
 
-    const getRequired = async () => {
-        await axios
+    const getRequired = () => {
+        axios
             .get(`/api/city`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -49,38 +52,11 @@ const EditFranchisee = () => {
                 setCities([...res.data.data])
             })
             .catch((err) => { })
-        axios
-            .get(`/api/franchisee/withoutpopulate/${id}`, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => {
-                setData((prev) => ({
-                    ...prev,
-                    ...res.data?.data,
-                    city: res.data?.data?.city,
-                    imageURL: res.data?.data?.banner?.url,
-                }))
-                setLimiter((prev) => ({ ...prev, nameHas: prev.name - res.data?.data?.name?.length || 0 }))
-            })
-            .catch((err) => { })
     }
 
     useEffect(() => {
         getRequired()
     }, [])
-
-    useEffect(() => {
-        const setStateName = () => {
-            const city = cities.filter((m) => data.city === m?._id)
-            setData((prev) => ({ ...prev, state_name: city[0]?.state?.state_name || '' }))
-        }
-        setStateName()
-    }, [data.city])
-
-    //validate
     const [errors, setErrors] = useState({
         emailError: '',
 
@@ -106,7 +82,7 @@ const EditFranchisee = () => {
         return valid
     }
 
-    //cheking email 
+    //cheking email and password
     useEffect(() => {
         if (validateForm()) {
             setValidForm(true)
@@ -114,6 +90,31 @@ const EditFranchisee = () => {
             setValidForm(false)
         }
     }, [errors])
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target
+
+    //     switch (name) {
+    //         case 'email':
+    //             setErrors({
+    //                 ...errors,
+    //                 emailError: validEmailRegex.test(value) ? '' : 'Email is not valid!',
+    //             })
+
+    //             break
+    //         case 'password':
+    //             setErrors((errors) => ({
+    //                 ...errors,
+    //                 passwordError: validPasswordRegex.test(value)
+    //                     ? ''
+    //                     : 'Password Shoud Be 8 Characters Long, Atleast One Uppercase, Atleast One Lowercase,Atleast One Digit, Atleast One Special Character',
+    //             }))
+    //             break
+    //         default:
+    //             break
+    //     }
+
+    //     setAuth({ ...auth, [name]: value })
+    // }
 
 
     const handleChange = (e) => {
@@ -180,7 +181,7 @@ const EditFranchisee = () => {
             data.address_line_2.trim() === '' ||
             data.price_Lable.trim() === '' ||
             data.city === '' ||
-            data.pin_Code === '' ||
+            data.pin_Code.trim() === '' ||
             data.short_url === '' ||
             data.state_name === ''
             // data.imageURL.trim() === ''
@@ -202,18 +203,18 @@ const EditFranchisee = () => {
         formData.set('address_line_1', data.address_line_1)
         formData.set('address_line_2', data.address_line_2)
         formData.set('city', data.city)
-        formData.set('price_Lable', data.price_Lable)
-
-
         formData.set('state_name', data.state_name)
-        formData.set('pin_Code', data.pin_Code)
         formData.set('contact_Number', data.contact_Number)
         formData.set('contact_Person_Name', data.contact_Person_Name)
+
+        formData.set('price_Lable', data.price_Lable)
+        formData.set('pin_Code', data.pin_Code)
         formData.set('url', WebsiteURL + data.short_url + '/login')
         formData.set('short_url', data.short_url)
+
         formData.append('image', data.image)
         axios
-            .patch(`/api/franchisee/${id}`, formData, {
+            .post(`/api/franchisee/`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/formdata',
@@ -222,8 +223,8 @@ const EditFranchisee = () => {
             })
             .then((res) => {
                 swal({
-                    title: 'Updated',
-                    text: res?.data?.message ? res?.data?.message : 'franchisee updated successfully!',
+                    title: 'Added',
+                    text: res?.data?.message ? res?.data?.message : 'Franchisee added successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
@@ -256,7 +257,7 @@ const EditFranchisee = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Edit Franchisee
+                            Add Franchisee
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -275,7 +276,7 @@ const EditFranchisee = () => {
                                 onClick={() => handleSubmit()}
                                 disabled={loading}
                             >
-                                {loading ? 'Loading' : 'Update'}
+                                {loading ? 'Loading' : 'Save'}
                             </Button>
                             <Link to="/franchisees">
                                 <Button
@@ -294,9 +295,8 @@ const EditFranchisee = () => {
                     </div>
                 </div>
             </div>
-
             <div className="row">
-                <div className="col-6 my-1">
+                <div className="col-sm-12 col-md-12 col-lg-6 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
                             <div className="mb-3">
@@ -313,6 +313,7 @@ const EditFranchisee = () => {
                                 />
                                 <p className="pt-1 pl-2 text-secondary">Remaining characters : {limiter.nameHas}</p>
                             </div>
+
                             <div className="mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Email *
@@ -322,7 +323,7 @@ const EditFranchisee = () => {
                                     className="form-control"
                                     id="email"
                                     value={data.email}
-
+                                    maxLength="50"
                                     onChange={(e) => handleChange(e)}
                                 />
                                 {errors.emailError && (
@@ -356,32 +357,7 @@ const EditFranchisee = () => {
                                     onChange={(e) => handleChange(e)}
                                 />
                             </div>
-                            {/* <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    Business Name*
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="business_name"
-                                    value={data.business_name}
-                                    maxLength="50"
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="title" className="form-label">
-                                    GSTIN*
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="gstin"
-                                    value={data.gstin}
-                                    maxLength="50"
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </div> */}
+
                             <div className="mb-3">
                                 <label htmlFor="pageToLink" className="form-label">
                                     City*
@@ -427,7 +403,7 @@ const EditFranchisee = () => {
                                     className="form-control"
                                     id="pin_Code"
                                     value={data.pin_Code}
-                                    maxLength='8'
+                                    maxLength={8}
                                     onChange={(e) => handleChange(e)}
                                 />
                                 {/* {data.pin_Code ? <><small className="charLeft mt-4 fst-italic">
@@ -438,7 +414,7 @@ const EditFranchisee = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-6 my-1">
+                <div className="col-sm-12 col-md-12 col-lg-6 my-1">
                     <div className="card h-100">
                         <div className="card-body px-5">
 
@@ -484,6 +460,7 @@ const EditFranchisee = () => {
                                     />
                                 </div>
                             </div>
+
                             <div className=" mb-3">
                                 <label htmlFor="title" className="form-label">
                                     Price Lable*
@@ -503,6 +480,7 @@ const EditFranchisee = () => {
 
                                 </select>
                             </div>
+
                             <div className="mb-3">
                                 <label htmlFor="image" className="form-label">
                                     Franchisee Banner (optional)
@@ -531,4 +509,4 @@ const EditFranchisee = () => {
     )
 }
 
-export default EditFranchisee
+export default AddBusiness

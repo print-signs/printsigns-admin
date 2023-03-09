@@ -10,9 +10,9 @@ import EditProfile from './views/Profile/EditProfile'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 ///
 //Cities
-import Cities from './views/configuration/cities/Cities.js'
-import AddCity from './views/configuration/cities/AddCity.js'
-import EditCity from './views/configuration/cities/EditCity.js'
+import Cities from './views/configuration/Purpose/Purpose.js'
+import AddCity from './views/configuration/Purpose/AddPurpose.js'
+import EditCity from './views/configuration/Purpose/EditPurpose.js'
 //states
 import EditState from './views/configuration/states/EditStates.js'
 import AddState from './views/configuration/states/AddState.js'
@@ -22,10 +22,11 @@ import Socialmedia from './views/configuration/Socialmedia.js'
 import Address from './views/configuration/Address.js'
 import Logo from './views/configuration/Logo.js'
 import Login from './views/pages/login/Login'
-//Franchisees
-import Franchisees from './views/Temples/Franchisees'
-import AddFranchisee from './views/Temples/AddFranchisee'
-import EditFranchisee from './views/Temples/EditFranchisee'
+
+//Businesses
+import Businesses from './views/Business/Businesses.js'
+import AddBusiness from './views/Business/AddBusiness.js'
+import EditBusiness from './views/Business/EditBusiness.js'
 import Products from './views/Products/Products'
 //product
 import AddProduct from './views/Products/AddProduct'
@@ -59,7 +60,17 @@ import AddContactRequest from './views/ContactRequests/AddContactRequest'
 import Testimonials from './views/Testimonials/Testimonials'
 import AddTestimonial from './views/Testimonials/AddTestimonial'
 import ViewTestimonial from './views/Testimonials/ViewTestimonial'
-
+import Policies from './views/configuration/Policies/Policies'
+import Purpose from './views/configuration/Purpose/Purpose'
+import AddPurpose from './views/configuration/Purpose/AddPurpose'
+import Languages from './views/configuration/Language/Languages'
+import AddLanguage from './views/configuration/Language/AddLanguage'
+import EditLanguage from './views/configuration/Language/EditLanguage'
+//
+import BusinessType from './views/configuration/Business/Business'
+import AddBusinessType from './views/configuration/Language/AddLanguage'
+import EditBusinessType from './views/configuration/Business/EditLanguage'
+import EditPurpose from './views/configuration/Purpose/EditPurpose.js'
 const routes = [
 
   { path: '/', exact: true, name: 'Home' },
@@ -78,6 +89,11 @@ const routes = [
   { path: '/departure/add', name: 'Add Departure', element: AddDeparture },
   { path: '/product/edit/:id', name: 'Edit products', element: EditProduct },
   { path: '/product/view/:id', name: 'view products', element: ViewProduct },
+  //Franchisee
+  { path: '/businesses', name: 'business', element: Businesses },
+  { path: '/business/add', name: 'Add business', element: AddBusiness },
+  { path: '/business/edit/:id', name: 'Edit business', element: EditBusiness },
+  // { path: '/franchisee/view/:id', name: 'view franchisee', element: ViewFra },
   //Contact Requests
   { path: '/contact/request', name: 'Contact Requests', element: ContactRequests },
   { path: '/contact/request/new', name: 'AddContact Request', element: AddContactRequest },
@@ -114,8 +130,29 @@ const routes = [
 
   //------------settings------------------------//
 
+  { path: '/policies', name: 'Policies', element: Policies },
 
   { path: '/socialmedia', name: 'Social Media', element: Socialmedia },
+  { path: '/purpose', name: 'Purpose', element: Purpose },
+  { path: '/purpose/add', name: 'Add Purpose', element: AddPurpose },
+  //languge
+
+  { path: '/languages', name: 'languages', element: Languages },
+  { path: '/language/add', name: 'Add languages', element: AddLanguage },
+  { path: '/language/edit/:id', name: 'Edit languages', element: EditLanguage },
+  //business
+
+  { path: '/business', name: 'business', element: BusinessType },
+  { path: '/business/add', name: 'Add business', element: AddBusinessType },
+  { path: '/business/edit/:id', name: 'Edit business', element: EditBusinessType },
+
+  //purpose
+
+  { path: '/purpose', name: 'purpose', element: Languages },
+  { path: '/purpose/add', name: 'Add purpose', element: AddLanguage },
+  { path: '/purpose/edit/:id', name: 'Edit purpose', element: EditPurpose },
+
+  //languge
   { path: '/application/name', name: 'ApplicationName', element: ApplicationName },
   { path: '/copyright/message', name: 'Copyright Message', element: CopyrightMessage },
 

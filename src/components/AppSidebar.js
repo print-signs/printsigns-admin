@@ -64,7 +64,7 @@ const AppSidebar = () => {
       <CSidebarBrand className="d-none  d-md-flex" style={{ background: 'rgb(140, 213, 213)' }} to="/">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
 
-        {HeaderlogoUrl ? <Link to='/dashboard'><img src={HeaderlogoUrl} alt='' /></Link> : { AppName } ? <h2>Jatin Mor </h2> : ''}
+        {HeaderlogoUrl ? <Link to='/dashboard'><img src={HeaderlogoUrl} alt='' width='100%' /></Link> : { AppName } ? <h2>Bolo </h2> : ''}
         {/* <CIcon className="sidebar-brand-narrow"  height={35} /> */}
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>

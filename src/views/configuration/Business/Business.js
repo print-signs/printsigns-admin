@@ -1,3 +1,6 @@
+
+
+
 import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import { useState } from 'react'
@@ -7,16 +10,16 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import { isAutheticated } from 'src/auth'
 
-const Cities = () => {
+const Business = () => {
     const token = isAutheticated();
 
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [citiesData, setCitiesData] = useState([])
+    const [BusinessData, setBusinessData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(citiesData)
+    const [showData, setShowData] = useState(BusinessData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -25,11 +28,12 @@ const Cities = () => {
 
     const getCategories = () => {
         axios
-            .get(`/api/city`, {
+            .get(`/api/business`, {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                setCitiesData(res.data.data)
+                console.log(res.data)
+                setBusinessData(res.data.data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -46,10 +50,10 @@ const Cities = () => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(citiesData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(BusinessData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, citiesData])
+    }, [currentPage, itemPerPage, BusinessData])
 
     const handleDelete = (id) => {
         swal({
@@ -59,7 +63,7 @@ const Cities = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/city/${id}`, {
+                    .delete(`/api/business/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -96,11 +100,11 @@ const Cities = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Cities
+                                    Business
                                 </div>
 
                                 <div className="page-title-right">
-                                    <Link to="/cities/add">
+                                    <Link to="/business/add">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -110,7 +114,7 @@ const Cities = () => {
                                                 textTransform: 'capitalize',
                                             }}
                                         >
-                                            Add City
+                                            Add Business
                                         </Button>
                                     </Link>
                                 </div>
@@ -154,8 +158,7 @@ const Cities = () => {
                                         >
                                             <thead className="thead" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
-                                                    <th className="text-start">City Name</th>
-                                                    <th className="text-start">State Name</th>
+                                                    <th className="text-start">Business </th>
                                                     <th className="text-start">Created On</th>
                                                     <th className="text-start">Actions</th>
                                                 </tr>
@@ -175,13 +178,13 @@ const Cities = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((city, i) => {
+                                                    showData.map((business, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td className="text-start">{city.city_name}</td>
-                                                                <td className="text-start">{city.state?.state_name}</td>
+                                                                <td className="text-start">{business.business}</td>
+                                                                {/* <td className="text-start">{business.state?.state_name}</td> */}
                                                                 <td className="text-start">
-                                                                    {new Date(city.createdAt).toLocaleString('en-IN', {
+                                                                    {new Date(business.createdAt).toLocaleString('en-IN', {
                                                                         weekday: 'short',
                                                                         month: 'short',
                                                                         day: 'numeric',
@@ -193,7 +196,7 @@ const Cities = () => {
                                                                 </td>
 
                                                                 <td className="text-start">
-                                                                    <Link to={`/cities/edit/${city._id}`}>
+                                                                    <Link to={`/business/edit/${business._id}`}>
                                                                         <button
                                                                             style={{ color: 'white', margin: '0 1rem' }}
                                                                             type="button"
@@ -224,7 +227,7 @@ const Cities = () => {
                                     
                                   "
                                                                             onClick={() => {
-                                                                                handleDelete(city._id)
+                                                                                handleDelete(business._id)
                                                                             }}
                                                                         >
                                                                             Delete
@@ -248,8 +251,8 @@ const Cities = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, citiesData.length)} of{' '}
-                                                {citiesData.length} entries
+                                                {Math.min(currentPage * itemPerPage, BusinessData.length)} of{' '}
+                                                {BusinessData.length} entries
                                             </div>
                                         </div>
 
@@ -292,7 +295,7 @@ const Cities = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        citiesData.length - 1
+                                                        BusinessData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -311,7 +314,7 @@ const Cities = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                citiesData.length - 1
+                                                                BusinessData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -339,4 +342,4 @@ const Cities = () => {
     )
 }
 
-export default Cities
+export default Business

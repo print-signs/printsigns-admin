@@ -7,25 +7,20 @@ import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 
 
-const EditCity = () => {
+const EditLanguage = () => {
     const id = useParams()?.id
     const token = isAutheticated();
     const navigate = useNavigate()
-    const [statesData, setStatesData] = useState([])
     const [data, setData] = useState({
-        city_name: '',
-        state: '',
+        language: '',
 
     })
     const [loading, setLoading] = useState(false)
-    const [limiter, setLimiter] = useState({
-        city_name: 30,
-        city_nameHas: 30,
-    })
+
 
     const getCategory = () => {
         axios
-            .get(`$/api/city/${id}`, {
+            .get(`/api/language/${id}`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -36,22 +31,10 @@ const EditCity = () => {
                     ...prev,
                     ...res.data?.data,
                 }))
-                setLimiter((prev) => ({
-                    ...prev,
-                    city_nameHas: prev.city_name - res.data?.data?.city_name.length,
-                }))
+
             })
             .catch((err) => { })
-        axios
-            .get(`/api/state`, {
-                headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
-            })
-            .then((res) => {
-                setStatesData(res.data.data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+
     }
 
     useEffect(() => {
@@ -59,18 +42,12 @@ const EditCity = () => {
     }, [])
 
     const handleChange = (e) => {
-        if (e.target.type === 'text') {
-            if (e.target.value.length === limiter[e.target.id] + 1) return
-            setLimiter((prev) => ({
-                ...prev,
-                [e.target.id + 'Has']: prev[e.target.id] - e.target.value.length,
-            }))
-        }
+
         setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
     const handleSubmit = () => {
-        if (data.city_name.trim() === '' || data.state.trim() === '') {
+        if (data.language.trim() === '') {
             swal({
                 title: 'Warning',
                 text: 'Fill all mandatory fields',
@@ -82,7 +59,7 @@ const EditCity = () => {
         }
         setLoading(true)
         axios
-            .patch(`/api/city/${id}`, data, {
+            .patch(`/api/Language/${id}`, data, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -91,12 +68,12 @@ const EditCity = () => {
             .then((res) => {
                 swal({
                     title: 'Updated',
-                    text: 'City updated successfully!',
+                    text: 'Language updated successfully!',
                     icon: 'success',
                     button: 'Close',
                 })
                 setLoading(false)
-                navigate('/cities', { replace: true })
+                navigate('/languages', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -123,7 +100,7 @@ const EditCity = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Edit City
+                            Edit Language
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -166,58 +143,24 @@ const EditCity = () => {
                     <div className="card h-100">
                         <div className="card-body px-5">
                             <div className="mb-3">
-                                <label htmlFor="city_name" className="form-label">
-                                    City Name*
+                                <label htmlFor="language" className="form-label">
+                                    Language *
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="city_name"
-                                    value={data.city_name}
-                                    maxLength={limiter.city_name}
+                                    id="language"
+
+                                    value={data.language}
+                                    maxLength='50'
                                     onChange={(e) => handleChange(e)}
                                 />
-                                <p className="pt-1 pl-2 text-secondary">
-                                    Remaining characters : {limiter.city_nameHas}
-                                </p>
+                                {data.language && <p className="pt-1 pl-2 text-secondary">
+                                    Remaining characters : {50 - data.language.length}
+                                </p>}
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="city_name" className="form-label">
-                                    State Name*
-                                </label>
-                                <select
-                                    onChange={(e) => handleChange(e)}
-                                    value={data.state}
-                                    className="form-control"
-                                    id="state"
-                                >
-                                    <option value="">---select---</option>
-                                    {statesData[0] ? (
-                                        statesData.map((c, i) => (
-                                            <option key={i} value={c._id}>
-                                                {c.state_name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="" disabled>
-                                            Please add a City
-                                        </option>
-                                    )}
-                                </select>
-                            </div>
-                            {/* <div className="mb-3">
-                                <label>Unique ID</label>
-                                <input type="text" value={data._id} className="form-control" disabled />
-                            </div>
-                            <div className="mb-3">
-                                <label>TimeStamp</label>
-                                <input
-                                    type="text"
-                                    value={new Date(data.createdAt)}
-                                    className="form-control"
-                                    disabled
-                                />
-                            </div> */}
+
+
                         </div>
                     </div>
                 </div>
@@ -226,4 +169,4 @@ const EditCity = () => {
     )
 }
 
-export default EditCity
+export default EditLanguage
