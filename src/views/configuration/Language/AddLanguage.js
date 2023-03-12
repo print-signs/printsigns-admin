@@ -9,11 +9,11 @@ import axios from 'axios'
 import { isAutheticated } from 'src/auth'
 
 
-const AddBusiness = () => {
+const AddLanguage = () => {
     const token = isAutheticated();
     const navigate = useNavigate()
     const [data, setData] = useState({
-        business: '',
+        language: '',
 
 
     })
@@ -43,7 +43,7 @@ const AddBusiness = () => {
     }
 
     const handleSubmit = () => {
-        if (data.business.trim() === '') {
+        if (data.language.trim() === '') {
             swal({
                 title: 'Warning',
                 text: 'Fill all mandatory fields',
@@ -55,7 +55,7 @@ const AddBusiness = () => {
         }
         setLoading(true)
         axios
-            .post(`/api/business`, data, {
+            .post(`/api/language`, data, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     Authorization: `Bearer ${token}`,
@@ -64,12 +64,12 @@ const AddBusiness = () => {
             .then((res) => {
                 swal({
                     title: 'Added',
-                    text: 'Business added successfully!',
+                    text: 'Language added successfully!',
                     icon: 'success',
                     button: 'Return',
                 })
                 setLoading(false)
-                navigate('/businesss', { replace: true })
+                navigate('/languages', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -97,7 +97,7 @@ const AddBusiness = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Add Business
+                            Add Language
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
@@ -118,7 +118,7 @@ const AddBusiness = () => {
                             >
                                 {loading ? 'Loading' : 'Save'}
                             </Button>
-                            <Link to="/businesss">
+                            <Link to="/languages">
                                 <Button
                                     variant="contained"
                                     color="secondary"
@@ -140,19 +140,19 @@ const AddBusiness = () => {
                     <div className="card h-100">
                         <div className="card-body px-5">
                             <div className="mb-3">
-                                <label htmlFor="business" className="form-label">
-                                    Business *
+                                <label htmlFor="language" className="form-label">
+                                    Language *
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="business"
-                                    value={data.business}
+                                    id="language"
+                                    value={data.language}
                                     maxLength="50"
                                     onChange={(e) => handleChange(e)}
                                 />
-                                {data.business && <p className="pt-1 pl-2 text-secondary">
-                                    Remaining characters : {50 - data.business.length}
+                                {data.language && <p className="pt-1 pl-2 text-secondary">
+                                    Remaining characters : {50 - data.language.length}
                                 </p>}
                             </div>
 
@@ -165,4 +165,4 @@ const AddBusiness = () => {
     )
 }
 
-export default AddBusiness
+export default AddLanguage

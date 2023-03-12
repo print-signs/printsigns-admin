@@ -54,7 +54,7 @@ const AddBusiness = () => {
                     button: 'Return',
                 })
                 setLoading(false)
-                navigate('/business', { replace: true })
+                navigate('/business_type', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -82,8 +82,9 @@ const AddBusiness = () => {
                   "
                     >
                         <div style={{ fontSize: '22px' }} className="fw-bold">
-                            Add Business
+                            Add Business Type
                         </div>
+
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <h4 className="mb-0"></h4>
                         </div>
@@ -103,7 +104,7 @@ const AddBusiness = () => {
                             >
                                 {loading ? 'Loading' : 'Save'}
                             </Button>
-                            <Link to="/cities">
+                            <Link to="/business_type">
                                 <Button
                                     variant="contained"
                                     color="secondary"

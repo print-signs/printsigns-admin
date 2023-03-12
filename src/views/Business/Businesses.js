@@ -23,14 +23,14 @@ const Businesses = () => {
         setItemPerPage(e.target.value)
     }
 
-    const getCategories = () => {
+    const getbusinesses = () => {
         axios
-            .get(`/api/franchisee`, {
+            .get(`/api/businesses/getall`, {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                // console.log(res.data.data)
-                setBusinessesData(res.data.data)
+                console.log(res.data)
+                setBusinessesData(res.data?.businesses)
                 setLoading(false)
             })
             .catch((err) => {
@@ -40,7 +40,7 @@ const Businesses = () => {
     }
 
     useEffect(() => {
-        getCategories()
+        getbusinesses()
     }, [success])
 
     useEffect(() => {
@@ -53,42 +53,42 @@ const Businesses = () => {
     }, [currentPage, itemPerPage, BusinessesData])
 
 
-    const handleVarification = (id) => {
-        swal({
-            title: 'Are you sure?',
-            icon: 'warning',
-            buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
-        }).then((value) => {
-            if (value === true) {
-                axios
-                    .get(`/api/franchisee/admin/verify/${id}`, {
-                        headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
-                    .then((res) => {
-                        swal({
-                            title: 'success',
-                            text: res.data.message ? res.data.message : 'Verified Successfully!',
-                            icon: 'success',
-                            button: 'ok',
-                            dangerMode: true,
-                        })
-                        setSuccess((prev) => !prev)
-                    })
-                    .catch((err) => {
-                        swal({
-                            title: 'Failled',
-                            text: 'Something went wrong!',
-                            icon: 'error',
-                            button: 'Retry',
-                            dangerMode: true,
-                        })
-                    })
-            }
-        })
-    }
+    // const handleVarification = (id) => {
+    //     swal({
+    //         title: 'Are you sure?',
+    //         icon: 'warning',
+    //         buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
+    //     }).then((value) => {
+    //         if (value === true) {
+    //             axios
+    //                 .get(`/api/i/admin/verify/${id}`, {
+    //                     headers: {
+    //                         'Access-Control-Allow-Origin': '*',
+    //                         Authorization: `Bearer ${token}`,
+    //                     },
+    //                 })
+    //                 .then((res) => {
+    //                     swal({
+    //                         title: 'success',
+    //                         text: res.data.message ? res.data.message : 'Verified Successfully!',
+    //                         icon: 'success',
+    //                         button: 'ok',
+    //                         dangerMode: true,
+    //                     })
+    //                     setSuccess((prev) => !prev)
+    //                 })
+    //                 .catch((err) => {
+    //                     swal({
+    //                         title: 'Failled',
+    //                         text: 'Something went wrong!',
+    //                         icon: 'error',
+    //                         button: 'Retry',
+    //                         dangerMode: true,
+    //                     })
+    //                 })
+    //         }
+    //     })
+    // }
     const handleDelete = (id) => {
         swal({
             title: 'Are you sure?',
@@ -97,7 +97,7 @@ const Businesses = () => {
         }).then((value) => {
             if (value === true) {
                 axios
-                    .delete(`/api/franchisee/${id}`, {
+                    .delete(`/api/businesses/delete/${id}`, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             Authorization: `Bearer ${token}`,
@@ -192,11 +192,11 @@ const Businesses = () => {
                                         >
                                             <thead className="thead-info" style={{ background: 'rgb(140, 213, 213)' }}>
                                                 <tr>
-                                                    <th className="text-start">Business Name</th>
-                                                    <th className="text-start">Logo</th>
-                                                    <th className="text-start">City </th>
+                                                    <th className="text-start">Business </th>
+                                                    {/* <th className="text-start">Logo</th> */}
+                                                    <th className="text-start">Purpose </th>
                                                     <th className="text-start">Created On</th>
-                                                    <th className="text-start">Status</th>
+                                                    {/* <th className="text-start">Status</th> */}
                                                     <th className="text-center">Actions</th>
                                                 </tr>
                                             </thead>
@@ -215,20 +215,20 @@ const Businesses = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    showData.map((franchisee, i) => {
+                                                    showData.map((i, idx) => {
                                                         return (
-                                                            <tr key={i}>
-                                                                <td className="text-start">{franchisee.name}</td>
-                                                                {franchisee.banner && franchisee.banner ?
+                                                            <tr key={idx}>
+                                                                <td className="text-start">{i.business}</td>
+                                                                {/* {i.banner && i.banner ?
                                                                     <td className="text-start">
-                                                                        <img src={franchisee.banner.url} alt="No Image" height="50" />
+                                                                        <img src={i.banner.url} alt="No Image" height="50" />
                                                                     </td> :
                                                                     <p>No image!</p>
-                                                                }
-                                                                <td className="text-start">{franchisee?.city?.city_name}</td>
+                                                                } */}
+                                                                <td className="text-start">{i?.purpose}</td>
 
                                                                 <td className="text-start">
-                                                                    {new Date(franchisee.createdAt).toLocaleString('en-IN', {
+                                                                    {new Date(i.createdAt).toLocaleString('en-IN', {
                                                                         month: '2-digit',
                                                                         day: 'numeric',
                                                                         year: 'numeric',
@@ -237,29 +237,29 @@ const Businesses = () => {
                                                                         // hour12: true,
                                                                     })}
                                                                 </td>
-                                                                <td className="text-start">
+                                                                {/* <td className="text-start">
                                                                     <button
                                                                         style={{ color: 'white' }}
                                                                         type="button"
                                                                         className={`
                                                                         
-                                    btn ${franchisee?.verify === true ? 'btn-success' : 'btn-danger'} btn-sm
+                                    btn ${i?.verify === true ? 'btn-success' : 'btn-danger'} btn-sm
                                     waves-effect waves-light
                                     ms-2
                                     
                                   `}
-                                                                        disabled={franchisee?.verify === true}
+                                                                        disabled={i?.verify === true}
                                                                         onClick={() => {
-                                                                            handleVarification(franchisee._id)
+                                                                            handleVarification(i._id)
                                                                         }}
                                                                     >
-                                                                        {franchisee?.verify ? 'verified' : 'Not Verify'}
+                                                                        {i?.verify ? 'verified' : 'Not Verify'}
                                                                     </button>
-                                                                </td>
+                                                                </td> */}
                                                                 <td className=" text-center">
-                                                                    <OverLayButton data={{ url: franchisee?.url }} />
+                                                                    {/* <OverLayButton data={{ url: i?.url }} />
 
-                                                                    <Link to={`/business/products/${franchisee._id}`}>
+                                                                    <Link to={`/business/products/${i._id}`}>
                                                                         <button
                                                                             style={{ color: 'white' }}
                                                                             type="button"
@@ -271,9 +271,9 @@ const Businesses = () => {
                                                                         >
                                                                             Products
                                                                         </button>
-                                                                    </Link>
+                                                                    </Link> */}
 
-                                                                    <Link to={`/business/edit/${franchisee._id}`}>
+                                                                    <Link to={`/business/edit/${i._id}`}>
                                                                         <button
                                                                             style={{ color: 'white' }}
                                                                             type="button"
@@ -296,7 +296,7 @@ const Businesses = () => {
                                     
                                   "
                                                                         onClick={() => {
-                                                                            handleDelete(franchisee._id)
+                                                                            handleDelete(i._id)
                                                                         }}
                                                                     >
                                                                         Delete

@@ -61,14 +61,16 @@ import Testimonials from './views/Testimonials/Testimonials'
 import AddTestimonial from './views/Testimonials/AddTestimonial'
 import ViewTestimonial from './views/Testimonials/ViewTestimonial'
 import Policies from './views/configuration/Policies/Policies'
+////purpose
 import Purpose from './views/configuration/Purpose/Purpose'
 import AddPurpose from './views/configuration/Purpose/AddPurpose'
+//language
 import Languages from './views/configuration/Language/Languages'
 import AddLanguage from './views/configuration/Language/AddLanguage'
 import EditLanguage from './views/configuration/Language/EditLanguage'
-//
+//BusinessType
 import BusinessType from './views/configuration/Business/Business'
-import AddBusinessType from './views/configuration/Language/AddLanguage'
+import AddBusinessType from './views/configuration/Business/AddBusiness'
 import EditBusinessType from './views/configuration/Business/EditLanguage'
 import EditPurpose from './views/configuration/Purpose/EditPurpose.js'
 const routes = [
@@ -140,16 +142,16 @@ const routes = [
   { path: '/languages', name: 'languages', element: Languages },
   { path: '/language/add', name: 'Add languages', element: AddLanguage },
   { path: '/language/edit/:id', name: 'Edit languages', element: EditLanguage },
-  //business
+  //business Type
 
-  { path: '/business', name: 'business', element: BusinessType },
-  { path: '/business/add', name: 'Add business', element: AddBusinessType },
-  { path: '/business/edit/:id', name: 'Edit business', element: EditBusinessType },
+  { path: '/business_type', name: 'business', element: BusinessType },
+  { path: '/business_type/add', name: 'Add business', element: AddBusinessType },
+  { path: '/business_type/edit/:id', name: 'Edit business', element: EditBusinessType },
 
   //purpose
 
-  { path: '/purpose', name: 'purpose', element: Languages },
-  { path: '/purpose/add', name: 'Add purpose', element: AddLanguage },
+  { path: '/purpose', name: 'purpose', element: Purpose },
+  { path: '/purpose/add', name: 'Add purpose', element: AddPurpose },
   { path: '/purpose/edit/:id', name: 'Edit purpose', element: EditPurpose },
 
   //languge

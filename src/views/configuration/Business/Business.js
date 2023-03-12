@@ -100,11 +100,11 @@ const Business = () => {
                   "
                             >
                                 <div style={{ fontSize: '22px' }} className="fw-bold">
-                                    Business
+                                    Business Type
                                 </div>
 
                                 <div className="page-title-right">
-                                    <Link to="/business/add">
+                                    <Link to="/business_type/add">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -114,7 +114,7 @@ const Business = () => {
                                                 textTransform: 'capitalize',
                                             }}
                                         >
-                                            Add Business
+                                            Add Business Type
                                         </Button>
                                     </Link>
                                 </div>
@@ -196,7 +196,7 @@ const Business = () => {
                                                                 </td>
 
                                                                 <td className="text-start">
-                                                                    <Link to={`/business/edit/${business._id}`}>
+                                                                    <Link to={`/business_type/edit/${business._id}`}>
                                                                         <button
                                                                             style={{ color: 'white', margin: '0 1rem' }}
                                                                             type="button"

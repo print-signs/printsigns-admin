@@ -73,7 +73,7 @@ const EditBusiness = () => {
                     button: 'Close',
                 })
                 setLoading(false)
-                navigate('/business', { replace: true })
+                navigate('/business_type', { replace: true })
             })
             .catch((err) => {
                 setLoading(false)
@@ -121,7 +121,7 @@ const EditBusiness = () => {
                             >
                                 {loading ? 'Loading' : 'Update'}
                             </Button>
-                            <Link to="/cities">
+                            <Link to="/business_type">
                                 <Button
                                     variant="contained"
                                     color="secondary"

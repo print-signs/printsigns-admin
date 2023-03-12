@@ -7,16 +7,16 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import { isAutheticated } from 'src/auth'
 
-const Cities = () => {
+const Purpose = () => {
     const token = isAutheticated();
 
     const [loading, setLoading] = useState(true)
     const [success, setSuccess] = useState(true)
-    const [citiesData, setCitiesData] = useState([])
+    const [purposeData, setPurposeData] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const [itemPerPage, setItemPerPage] = useState(10)
-    const [showData, setShowData] = useState(citiesData)
+    const [showData, setShowData] = useState(purposeData)
 
     const handleShowEntries = (e) => {
         setCurrentPage(1)
@@ -29,7 +29,7 @@ const Cities = () => {
                 headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                setCitiesData(res.data.data)
+                setPurposeData(res.data.data)
                 setLoading(false)
             })
             .catch((err) => {
@@ -46,10 +46,10 @@ const Cities = () => {
         const loadData = () => {
             const indexOfLastPost = currentPage * itemPerPage
             const indexOfFirstPost = indexOfLastPost - itemPerPage
-            setShowData(citiesData.slice(indexOfFirstPost, indexOfLastPost))
+            setShowData(purposeData.slice(indexOfFirstPost, indexOfLastPost))
         }
         loadData()
-    }, [currentPage, itemPerPage, citiesData])
+    }, [currentPage, itemPerPage, purposeData])
 
     const handleDelete = (id) => {
         swal({
@@ -248,8 +248,8 @@ const Cities = () => {
                                                 aria-live="polite"
                                             >
                                                 Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                                                {Math.min(currentPage * itemPerPage, citiesData.length)} of{' '}
-                                                {citiesData.length} entries
+                                                {Math.min(currentPage * itemPerPage, purposeData.length)} of{' '}
+                                                {purposeData.length} entries
                                             </div>
                                         </div>
 
@@ -292,7 +292,7 @@ const Cities = () => {
 
                                                     {!(
                                                         (currentPage + 1) * itemPerPage - itemPerPage >
-                                                        citiesData.length - 1
+                                                        purposeData.length - 1
                                                     ) && (
                                                             <li className="paginate_button page-item ">
                                                                 <span
@@ -311,7 +311,7 @@ const Cities = () => {
                                                         className={
                                                             !(
                                                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                                                citiesData.length - 1
+                                                                purposeData.length - 1
                                                             )
                                                                 ? 'paginate_button page-item next'
                                                                 : 'paginate_button page-item next disabled'
@@ -339,4 +339,4 @@ const Cities = () => {
     )
 }
 
-export default Cities
+export default Purpose

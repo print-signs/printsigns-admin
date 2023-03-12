@@ -155,7 +155,7 @@ const _nav = [
         component: CNavItem,
         name: 'Business Type',
         icon: <CIcon icon={cilBrush} customClassName="nav-icon" />,
-        to: '/business',
+        to: '/business_type',
       },
 
       // {
