@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import axios from 'axios'
 import { store } from './redux/store';
+import { cibGmail } from '@coreui/icons';
 
 const setupAxios = () => {
   axios.defaults.baseURL = 'https://bolo-api.checkapp.one/'

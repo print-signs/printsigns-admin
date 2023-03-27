@@ -101,7 +101,7 @@ const selectLanguage = (props) => {
                                     marginRight: '5px',
 
                                 }}
-                                onClick={() => props.handleView(2)}
+                                onClick={() => props.handleView(3)}
 
                             >
                                 Prev
@@ -117,7 +117,7 @@ const selectLanguage = (props) => {
                                     textTransform: 'capitalize',
                                     //  marginRight: '5px',
                                 }}
-                                onClick={() => props.handleView(4)}
+                                onClick={() => props.handleView(5)}
                             // disabled={loading}
                             // disabled={data.language.length < 0 && data.language.length > 3}
 

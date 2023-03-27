@@ -7,6 +7,7 @@ import { CCard, CCardBody, CCardGroup, CCol, CContainer, CRow } from '@coreui/re
 import SelectPurpose from './multiform/SelectPurpose.js'
 import SelectBusiness from './multiform/SelectBusiness.js'
 import SelectLanguage from './multiform/selectLanguage.js'
+import Contacts from './multiform/Contacts.js'
 import BAddress from './multiform/BAddress.js'
 import Button from '@material-ui/core/Button'
 
@@ -18,12 +19,14 @@ const AddBusiness = () => {
     const token = isAutheticated()
     const [productId, setProductId] = useState('')
     const [viewState, setViewState] = useState(1)
+    // const [WebsiteURL, setWebsiteURL] = useState('https://bolo.ai.in/')
 
 
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
     const [data, setData] = useState({
+        WebsiteURL: 'https://bolo.ai.in/',
         business: '',
         purpose: '',
 
@@ -33,7 +36,16 @@ const AddBusiness = () => {
         city: '',
         address_Line_1: '',
         address_Line_2: '',
-        pincode: ''
+        pincode: '',
+        //contacts
+        image: '',
+        imageURL: '',
+        business_name: '',
+        email: '',
+
+        short_url: '',
+        contact_Number: '',
+        contact_Person_Name: '',
     })
 
 
@@ -55,7 +67,17 @@ const AddBusiness = () => {
             data.country === '' ||
             data.state === '' ||
             data.city === '' ||
-            data.pincode.trim() === ''
+            data.pincode.trim() === '' ||
+            //Contacts
+            // data.image === '' ||
+            // data.imageURL.trim() === '' ||
+            data.business_name.trim() === '' ||
+            data.email.trim() === '' ||
+
+            data.short_url.trim() === '' ||
+            data.contact_Number === '' ||
+            data.contact_Person_Name.trim() === ''
+
         ) {
             swal({
                 title: 'Warning',
@@ -81,6 +103,17 @@ const AddBusiness = () => {
 
 
         formData.set('pincode', data.pincode)
+        //contacts
+        formData.set('business_name', data.business_name)
+        formData.set('email', data.email)
+
+
+        formData.set('contact_Number', data.contact_Number)
+        formData.set('contact_Person_Name', data.contact_Person_Name)
+
+
+        formData.set('url', data.WebsiteURL + data.short_url + '/login')
+        formData.set('short_url', data.short_url)
 
         axios
             .post(`/api/businesses/add`, formData, {
@@ -151,7 +184,13 @@ const AddBusiness = () => {
                                         data.country === '' ||
                                         data.state === '' ||
                                         data.city === '' ||
-                                        data.pincode.trim() === ''}
+                                        data.pincode.trim() === '' ||
+                                        data.business_name.trim() === '' ||
+                                        data.email.trim() === '' ||
+
+                                        data.short_url.trim() === '' ||
+                                        data.contact_Number === '' ||
+                                        data.contact_Person_Name.trim() === ''}
                                 >
                                     {loading ? 'Loading' : 'Add Now'}
                                 </Button>
@@ -186,7 +225,19 @@ const AddBusiness = () => {
                                         loading={{ loading, setLoading }}
                                     />
                                 )}
+
+
+
                                 {viewState === 3 && (
+                                    <Contacts
+                                        data={{ data, setData }}
+                                        handleView={handleView}
+                                        // productId={productId}
+                                        // data={{ images, setImages }}
+                                        loading={{ loading, setLoading }}
+                                    />
+                                )}
+                                {viewState === 4 && (
                                     <SelectLanguage
                                         data={{ data, setData }}
                                         handleView={handleView}
@@ -196,7 +247,7 @@ const AddBusiness = () => {
                                         loading={{ loading, setLoading }}
                                     />
                                 )}
-                                {viewState === 4 && (
+                                {viewState === 5 && (
                                     <BAddress
                                         data={{ data, setData }}
                                         handleView={handleView}
@@ -236,12 +287,19 @@ const AddBusiness = () => {
                                         type="button"
                                         onClick={() => handleView(3)}
                                     >
-                                        Select Languages
+                                        Contacts
                                     </button>
                                     <button
                                         className={viewState === 4 ? 'btn btn-light' : 'btn btn-info text-white'}
                                         type="button"
                                         onClick={() => handleView(4)}
+                                    >
+                                        Select Languages
+                                    </button>
+                                    <button
+                                        className={viewState === 5 ? 'btn btn-light' : 'btn btn-info text-white'}
+                                        type="button"
+                                        onClick={() => handleView(5)}
                                     >
                                         Address
                                     </button>
