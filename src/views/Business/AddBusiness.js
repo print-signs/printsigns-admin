@@ -50,7 +50,7 @@ const AddBusiness = () => {
 
 
 
-    console.log(data)
+    // console.log(data)
 
     const handleView = (n) => {
         if (viewState === n) return

@@ -69,9 +69,9 @@ import Languages from './views/configuration/Language/Languages'
 import AddLanguage from './views/configuration/Language/AddLanguage'
 import EditLanguage from './views/configuration/Language/EditLanguage'
 //BusinessType
-import BusinessType from './views/configuration/Business/Business'
-import AddBusinessType from './views/configuration/Business/AddBusiness'
-import EditBusinessType from './views/configuration/Business/EditLanguage'
+import BusinessType from './views/configuration/Business_Type/Business'
+import AddBusinessType from './views/configuration/Business_Type/AddBusiness'
+import EditBusinessType from './views/configuration/Business_Type/EditLanguage'
 import EditPurpose from './views/configuration/Purpose/EditPurpose.js'
 const routes = [
 
