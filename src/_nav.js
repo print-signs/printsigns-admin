@@ -1,5 +1,5 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
+import React from "react";
+import CIcon from "@coreui/icons-react";
 import {
   cilAddressBook,
   cilAirplaneMode,
@@ -7,6 +7,7 @@ import {
   cilBell,
   cilBrush,
   cilCalculator,
+  cilCalendar,
   cilCart,
   cilChartPie,
   cilClipboard,
@@ -36,25 +37,22 @@ import {
   cilTennisBall,
   cilText,
   cilUser,
-
-
-} from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+} from "@coreui/icons";
+import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
 const _nav = [
   {
     component: CNavItem,
-    name: 'Dashboard',
-    to: '/dashboard',
+    name: "Dashboard",
+    to: "/dashboard",
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-
   },
 
   {
     component: CNavItem,
-    name: 'Products',
+    name: "Products",
     icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
-    to: '/products',
+    to: "/products",
   },
   // {
   //   component: CNavItem,
@@ -64,15 +62,15 @@ const _nav = [
   // },
   {
     component: CNavItem,
-    name: 'Testimonials',
+    name: "Testimonials",
     icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
-    to: '/testimonials',
+    to: "/testimonials",
   },
   {
     component: CNavItem,
-    name: 'Contact Requests',
+    name: "Contact Requests",
     icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
-    to: '/contact/request',
+    to: "/contact/request",
   },
 
   // {
@@ -84,78 +82,83 @@ const _nav = [
 
   {
     component: CNavItem,
-    name: 'Businesses',
+    name: "Appointments",
+    icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    to: "/appointments",
+  },
+
+  {
+    component: CNavItem,
+    name: "HealthCare Providers",
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
-    to: '/businesses',
+    to: "/healthcare/providers",
   },
   {
     component: CNavGroup,
-    name: 'Franchisee Orders',
+    name: "Franchisee Orders",
     icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'New',
+        name: "New",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/new',
+        to: "/orders/new",
       },
       {
         component: CNavItem,
-        name: 'Paid',
+        name: "Paid",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/returned',
+        to: "/orders/returned",
       },
       {
         component: CNavItem,
-        name: 'Processing',
+        name: "Processing",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/processing',
+        to: "/orders/processing",
       },
       {
         component: CNavItem,
-        name: 'Dispatched',
+        name: "Dispatched",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/dispatched',
+        to: "/orders/dispatched",
       },
       {
         component: CNavItem,
-        name: 'Delivered',
+        name: "Delivered",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/delivered',
+        to: "/orders/delivered",
       },
       {
         component: CNavItem,
-        name: 'Cancelled',
+        name: "Cancelled",
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: '/orders/cancelled',
+        to: "/orders/cancelled",
       },
-
     ],
   },
 
-
   {
     component: CNavItem,
-    name: 'Users',
+    name: "Users",
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    to: '/users',
+    to: "/users",
   },
   {
     component: CNavGroup,
-    name: 'Configuration',
+    name: "Configuration",
     icon: <CIcon icon={cilAppsSettings} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Purpose',
+        name: "Purpose",
         icon: <CIcon icon={cilLoopCircular} customClassName="nav-icon" />,
-        to: '/purpose',
+        to: "/purpose",
       },
       {
         component: CNavItem,
-        name: 'Business Type',
+        name: "Business Type",
         icon: <CIcon icon={cilBrush} customClassName="nav-icon" />,
-        to: '/business_type',
+        to: "/business_type",
       },
 
       // {
@@ -190,52 +193,49 @@ const _nav = [
       // },
       {
         component: CNavItem,
-        name: 'Languages',
+        name: "Languages",
         icon: <CIcon icon={cilLanguage} customClassName="nav-icon" />,
-        to: '/languages',
+        to: "/languages",
       },
       {
         component: CNavItem,
-        name: 'Policies',
+        name: "Policies",
         icon: <CIcon icon={cilSwapHorizontal} customClassName="nav-icon" />,
-        to: '/policies',
+        to: "/policies",
       },
       {
         component: CNavItem,
-        name: 'Social Media',
+        name: "Social Media",
         icon: <CIcon icon={cilMedicalCross} customClassName="nav-icon" />,
-        to: '/socialmedia',
+        to: "/socialmedia",
       },
       {
         component: CNavItem,
-        name: 'Application Name',
+        name: "Application Name",
         icon: <CIcon icon={cilText} customClassName="nav-icon" />,
-        to: '/application/name',
+        to: "/application/name",
       },
 
       {
         component: CNavItem,
-        name: 'Address',
+        name: "Address",
         icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" />,
-        to: '/address',
+        to: "/address",
       },
       {
         component: CNavItem,
-        name: 'Logos',
+        name: "Logos",
         icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
-        to: '/logo',
+        to: "/logo",
       },
       {
         component: CNavItem,
-        name: 'Copyright Message',
+        name: "Copyright Message",
         icon: <CIcon icon={cilText} customClassName="nav-icon" />,
-        to: '/copyright/message',
+        to: "/copyright/message",
       },
     ],
   },
+];
 
-
-
-]
-
-export default _nav
+export default _nav;

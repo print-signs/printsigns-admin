@@ -1,9 +1,23 @@
 // Here you can add other styles
-$a-tags: 'a, a:active, a:hover, a:visited';
+$a-tags: "a, a:active, a:hover, a:visited";
 #{$a-tags} {
-    text-decoration: none;
-  }
-  .overflow-table { display: block; max-width: -moz-fit-content; max-width: fit-content; overflow-x: auto; white-space: nowrap; }
-  .edit_text{
-    width: 22%;
-  }
+  text-decoration: none;
+}
+.overflow-table {
+  display: block;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.edit_text {
+  width: 22%;
+}
+
+.highlighted-row {
+  background-color: yellow;
+}
+
+.past-row {
+  background-color: #f2f2f2;
+}

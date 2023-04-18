@@ -4,14 +4,41 @@ import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { isAutheticated } from "src/auth";
+import { CFormLabel, CFormSelect } from "@coreui/react";
 // import { WebsiteURL } from '../WebsiteURL'
 
-const Contacts = (props) => {
+const DcotorInfo = (props) => {
   const token = isAutheticated();
 
   const navigate = useNavigate();
 
   const { data, setData } = props.data;
+
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = () => {
+    axios.get("/api/config/specialty/getall").then((res) => {
+      setCategories(res.data.specialty);
+    });
+  };
+
+  // create options from categories with placeholder select Specialization
+  const options = [
+    {
+      label: "Select Specialization",
+      value: "",
+    },
+    ...categories.map((category) => {
+      return {
+        label: category.name,
+        value: category.name,
+      };
+    }),
+  ];
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   const { loading, setLoading } = props.loading;
   // const [data, setData] = useState({
@@ -66,7 +93,7 @@ const Contacts = (props) => {
   }, [errors]);
 
   const handleChange = (e) => {
-    if (e.target.id === "business_name") {
+    if (e.target.id === "contact_Person_Name") {
       if (e.target.value.length < 0) return;
 
       setData((prev) => ({
@@ -137,7 +164,7 @@ const Contacts = (props) => {
                   "
           >
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Contact Information
+              Doctor Information
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <h4 className="mb-0"></h4>
@@ -186,6 +213,32 @@ const Contacts = (props) => {
                 <input
                   type="text"
                   className="form-control"
+                  id="contact_Person_Name"
+                  value={data.contact_Person_Name}
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+
+              <div className="mb-3">
+                <CFormLabel htmlFor="specialization">
+                  Specialization *
+                </CFormLabel>
+                <CFormSelect
+                  id="specialization"
+                  name="specialization"
+                  value={data.specialization}
+                  options={options}
+                  onChange={handleChange}
+                ></CFormSelect>
+              </div>
+
+              {/*  <div className="mb-3">
+                <label htmlFor="title" className="form-label">
+                  Business Name*
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
                   id="business_name"
                   value={data.business_name}
                   maxLength={50}
@@ -196,7 +249,7 @@ const Contacts = (props) => {
                     Remaining characters : {50 - data.business_name.length}
                   </p>
                 )}
-              </div>
+                </div>*/}
 
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
@@ -233,20 +286,8 @@ const Contacts = (props) => {
                   </p>
                 )}
               </div>
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Contact Person Name*
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="contact_Person_Name"
-                  value={data.contact_Person_Name}
-                  onChange={(e) => handleChange(e)}
-                />
-              </div>
 
-              {/*<div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="title" className="form-label">
                   URL*
                 </label>
@@ -294,4 +335,4 @@ const Contacts = (props) => {
   );
 };
 
-export default Contacts;
+export default DcotorInfo;
