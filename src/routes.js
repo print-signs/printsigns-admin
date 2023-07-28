@@ -79,6 +79,7 @@ import EditPurpose from "./views/configuration/Purpose/EditPurpose.js";
 import ViewAppointment from "./views/Appointments/ViewAppointment";
 import EditAppointment from "./views/Appointments/EditAppointment";
 import AddNewAppointment from "./views/Appointments/AddNewAppointment";
+import ViewHealthCareProvider from "./views/Business/ViewHealthCareProvider";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -133,6 +134,11 @@ const routes = [
     path: "/healthcare/providers/edit/:id",
     name: "Edit healthcare providers",
     element: EditBusiness,
+  },
+  {
+    path: "/healthcare/providers/view/:id",
+    name: "view healthcare providers",
+    element: ViewHealthCareProvider,
   },
 
   // { path: '/franchisee/view/:id', name: 'view franchisee', element: ViewFra },

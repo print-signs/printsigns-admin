@@ -31,7 +31,6 @@ const Businesses = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setBusinessesData(res.data?.businesses);
         setLoading(false);
       })
@@ -208,8 +207,6 @@ const Businesses = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {console.log(showData, "showData")}
-
                         {!loading && showData.length === 0 && (
                           <tr className="text-center">
                             <td colSpan="6">
@@ -269,21 +266,23 @@ const Businesses = () => {
                                                                     </button>
                                                                 </td> */}
                                 <td className=" text-center">
-                                  {/* <OverLayButton data={{ url: i?.url }} />
+                                  <OverLayButton data={{ url: i?.url }} />
 
-                                                                    <Link to={`/business/products/${i._id}`}>
-                                                                        <button
-                                                                            style={{ color: 'white' }}
-                                                                            type="button"
-                                                                            className="
+                                  <Link
+                                    to={`/healthcare/providers/view/${i._id}`}
+                                  >
+                                    <button
+                                      style={{ color: "white" }}
+                                      type="button"
+                                      className="
                                                                                  btn btn-primary btn-sm
                                                                               waves-effect waves-light
                                     ms-2
                                   "
-                                                                        >
-                                                                            Products
-                                                                        </button>
-                                                                    </Link> */}
+                                    >
+                                      View
+                                    </button>
+                                  </Link>
 
                                   <Link
                                     to={`/healthcare/providers/edit/${i._id}`}
