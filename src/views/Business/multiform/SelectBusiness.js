@@ -58,14 +58,14 @@ const SelectBusiness = (props) => {
                   "
           >
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Select Provider Type
+              Select User Type
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <h4 className="mb-0"></h4>
             </div>
 
             <div className="page-title-right">
-              <Link to="/healthcare/providers">
+              <Link to="/users">
                 <Button
                   variant="contained"
                   color="secondary"

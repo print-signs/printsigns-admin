@@ -65,7 +65,7 @@ const ViewHealthCareProvider = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                navigate("/healthcare/providers", { replace: true });
+                navigate("/users", { replace: true });
               }}
             >
               Back

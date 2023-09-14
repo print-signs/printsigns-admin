@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import axios from "axios";
 import { store } from "./redux/store";
 import { cibGmail } from "@coreui/icons";
+import { createRoot } from "react-dom/client";
 
 const setupAxios = () => {
   //axios.defaults.baseURL = 'https://bolo-api.checkapp.one/'
@@ -24,12 +25,18 @@ const setupAxios = () => {
 };
 
 setupAxios();
-
-ReactDOM.render(
+const domNode = document.getElementById("root");
+const root = createRoot(domNode);
+// ReactDOM.render(
+//   <Provider store={store}>
+//     <App />
+//   </Provider>,
+//   document.getElementById("root")
+// );
+root.render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change

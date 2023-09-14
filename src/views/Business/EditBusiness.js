@@ -166,7 +166,7 @@ const EditBusiness = () => {
           button: "Return",
         });
         setLoading(false);
-        navigate("/healthcare/providers", { replace: true });
+        navigate("/users", { replace: true });
       })
       .catch((err) => {
         setLoading(false);

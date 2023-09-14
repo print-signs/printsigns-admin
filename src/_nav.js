@@ -89,9 +89,9 @@ const _nav = [
 
   {
     component: CNavItem,
-    name: "HealthCare Providers",
+    name: "Users",
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
-    to: "/healthcare/providers",
+    to: "/users",
   },
   {
     component: CNavGroup,
@@ -139,9 +139,9 @@ const _nav = [
 
   {
     component: CNavItem,
-    name: "Users",
+    name: "Recipients",
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    to: "/users",
+    to: "/recipents",
   },
   {
     component: CNavGroup,

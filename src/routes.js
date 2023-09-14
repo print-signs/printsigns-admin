@@ -121,22 +121,22 @@ const routes = [
 
   // health care providers
   {
-    path: "//healthcare/providers",
+    path: "//users",
     name: "healthcare providers",
     element: Businesses,
   },
   {
-    path: "//healthcare/providers/add",
+    path: "//users/add",
     name: "Add healthcare providers",
     element: AddBusiness,
   },
   {
-    path: "/healthcare/providers/edit/:id",
+    path: "/users/edit/:id",
     name: "Edit healthcare providers",
     element: EditBusiness,
   },
   {
-    path: "/healthcare/providers/view/:id",
+    path: "/users/view/:id",
     name: "view healthcare providers",
     element: ViewHealthCareProvider,
   },

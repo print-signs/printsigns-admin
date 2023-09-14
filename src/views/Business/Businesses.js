@@ -137,11 +137,11 @@ const Businesses = () => {
                   "
               >
                 <div style={{ fontSize: "22px" }} className="fw-bold">
-                  Health Care Providers
+                  Users
                 </div>
 
                 <div className="page-title-right">
-                  <Link to="/healthcare/providers/add">
+                  <Link to="/users/add">
                     <Button
                       variant="contained"
                       color="primary"
@@ -198,12 +198,13 @@ const Businesses = () => {
                         style={{ background: "rgb(140, 213, 213)" }}
                       >
                         <tr>
-                          <th className="text-start">HealthCare Provider </th>
+                          <th className="text-start">User Name </th>
                           {/* <th className="text-start">Logo</th> */}
-                          <th className="text-start">Name </th>
+                          <th className="text-start">User Type </th>
                           <th className="text-start">Created On</th>
                           {/* <th className="text-start">Status</th> */}
                           <th className="text-center">Actions</th>
+                          <th className="text-center">Campaigns</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -268,9 +269,7 @@ const Businesses = () => {
                                 <td className=" text-center">
                                   <OverLayButton data={{ url: i?.url }} />
 
-                                  <Link
-                                    to={`/healthcare/providers/view/${i._id}`}
-                                  >
+                                  <Link to={`/users/view/${i._id}`}>
                                     <button
                                       style={{ color: "white" }}
                                       type="button"
@@ -284,9 +283,7 @@ const Businesses = () => {
                                     </button>
                                   </Link>
 
-                                  <Link
-                                    to={`/healthcare/providers/edit/${i._id}`}
-                                  >
+                                  <Link to={`/users/edit/${i._id}`}>
                                     <button
                                       style={{ color: "white" }}
                                       type="button"

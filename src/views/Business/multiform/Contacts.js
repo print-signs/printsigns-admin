@@ -137,7 +137,7 @@ const Contacts = (props) => {
                   "
           >
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Contact Information
+              Basic Information
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <h4 className="mb-0"></h4>
@@ -232,18 +232,6 @@ const Contacts = (props) => {
                     {errors.phoneError}
                   </p>
                 )}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Contact Person Name*
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="contact_Person_Name"
-                  value={data.contact_Person_Name}
-                  onChange={(e) => handleChange(e)}
-                />
               </div>
 
               {/*<div className="mb-3">

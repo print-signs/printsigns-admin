@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "build:n17": "react-scripts --openssl-legacy-provider build",
     "changelog": "auto-changelog --starting-version 4.1.0 --commit-limit false --hide-credit",
@@ -53,7 +53,7 @@
     "enzyme": "^3.11.0",
     "file-saver": "^2.0.5",
     "prop-types": "^15.7.2",
-    "react": "18.2",
+    "react": "18.0.0",
     "react-app-polyfill": "^2.0.0",
     "react-bootstrap": "^2.7.0",
     "react-date-picker": "^8.4.0",

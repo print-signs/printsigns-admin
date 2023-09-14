@@ -135,7 +135,7 @@ const AddBusiness = () => {
           button: "Return",
         });
         setLoading(false);
-        navigate("/healthcare/providers", { replace: true });
+        navigate("/users", { replace: true });
       })
       .catch((err) => {
         setLoading(false);
@@ -163,7 +163,7 @@ const AddBusiness = () => {
                   "
           >
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Add Healthcare Provider
+              Add User
             </div>
             <div className="page-title-right">
               <div className="page-title-right">
@@ -286,7 +286,7 @@ const AddBusiness = () => {
                     type="button"
                     onClick={() => handleView(1)}
                   >
-                    Select Provider Type
+                    Select User Type
                   </button>
                   {/*<button
                     className={
@@ -308,18 +308,7 @@ const AddBusiness = () => {
                     type="button"
                     onClick={() => handleView(3)}
                   >
-                    Contact Information
-                  </button>
-                  <button
-                    className={
-                      viewState === 4
-                        ? "btn btn-light"
-                        : "btn btn-info text-white"
-                    }
-                    type="button"
-                    onClick={() => handleView(4)}
-                  >
-                    Select Languages
+                    Basic Information
                   </button>
                   <button
                     className={
