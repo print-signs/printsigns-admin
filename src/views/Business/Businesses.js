@@ -151,7 +151,7 @@ const Businesses = () => {
                         textTransform: "capitalize",
                       }}
                     >
-                      Add Healthcare Providers
+                      Add user
                     </Button>
                   </Link>
                 </div>
