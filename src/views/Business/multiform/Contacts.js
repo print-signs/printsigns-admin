@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { isAutheticated } from "src/auth";
+import toast from "react-hot-toast";
 // import { WebsiteURL } from '../WebsiteURL'
 
 const Contacts = (props) => {
@@ -66,7 +67,7 @@ const Contacts = (props) => {
   }, [errors]);
 
   const handleChange = (e) => {
-    if (e.target.id === "business_name") {
+    if (e.target.id === "userName") {
       if (e.target.value.length < 0) return;
 
       setData((prev) => ({
@@ -167,7 +168,17 @@ const Contacts = (props) => {
                   marginBottom: "1rem",
                   textTransform: "capitalize",
                 }}
-                onClick={() => props.handleView(4)}
+                onClick={() => {
+                  if (
+                    data.business_name === "" ||
+                    data.email === "" ||
+                    data.contact_Number === ""
+                  ) {
+                    toast.error("Enter All Details");
+                  } else {
+                    props.handleView(4);
+                  }
+                }}
               >
                 Next
               </Button>
@@ -186,14 +197,14 @@ const Contacts = (props) => {
                 <input
                   type="text"
                   className="form-control"
-                  id="business_name"
-                  value={data.business_name}
+                  id="userName"
+                  value={data.userName}
                   maxLength={50}
                   onChange={(e) => handleChange(e)}
                 />
-                {data.business_name.length > 0 && (
+                {data.userName.length > 0 && (
                   <p className="pt-1 pl-2 text-secondary">
-                    Remaining characters : {50 - data.business_name.length}
+                    Remaining characters : {50 - data.userName.length}
                   </p>
                 )}
               </div>

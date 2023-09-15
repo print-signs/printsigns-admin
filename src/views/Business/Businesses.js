@@ -122,6 +122,12 @@ const Businesses = () => {
     });
   };
 
+  const formatDate = (inputDate) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(inputDate);
+    return date.toLocaleDateString('en-US', options);
+  }
+
   return (
     <div className="main-content">
       <div className="page-content">
@@ -200,7 +206,7 @@ const Businesses = () => {
                         <tr>
                           <th className="text-start">User Name </th>
                           {/* <th className="text-start">Logo</th> */}
-                          <th className="text-start">User Type </th>
+                          <th className="text-start">User Type</th>
                           <th className="text-start">Created On</th>
                           {/* <th className="text-start">Status</th> */}
                           <th className="text-center">Actions</th>
@@ -225,27 +231,47 @@ const Businesses = () => {
                           showData.map((i, idx) => {
                             return (
                               <tr key={idx}>
-                                <td className="text-start">{i.business}</td>
+                                <td className="text-start">
+                                  {i.userName ? i.userName : i.business}
+                                </td>
                                 {/* {i.banner && i.banner ?
                                                                     <td className="text-start">
                                                                         <img src={i.banner.url} alt="No Image" height="50" />
                                                                     </td> :
                                                                     <p>No image!</p>
                                                                 } */}
-                                <td className="text-start">{i?.short_url}</td>
+
+
+
+
+
+
+
+
+
 
                                 <td className="text-start">
-                                  {new Date(i.createdAt).toLocaleString(
-                                    "en-IN",
-                                    {
-                                      month: "2-digit",
-                                      day: "numeric",
-                                      year: "numeric",
-                                      // hour: 'numeric',
-                                      // minute: 'numeric',
-                                      // hour12: true,
-                                    }
-                                  )}
+                                  {i.userType ? i.userType : i.short_url}
+                                </td>
+
+
+
+
+
+
+
+
+
+
+
+                                <td className="text-start">
+                                  {formatDate(i.createdAt)
+                                  }
+
+
+
+
+
                                 </td>
                                 {/* <td className="text-start">
                                                                     <button
@@ -267,7 +293,7 @@ const Businesses = () => {
                                                                     </button>
                                                                 </td> */}
                                 <td className=" text-center">
-                                  <OverLayButton data={{ url: i?.url }} />
+                                  {/* <OverLayButton data={{ url: i?.url }} /> */}
 
                                   <Link to={`/users/view/${i._id}`}>
                                     <button
@@ -312,6 +338,7 @@ const Businesses = () => {
                                     Delete
                                   </button>
                                 </td>
+                                <td className="text-center">0</td>
                               </tr>
                             );
                           })

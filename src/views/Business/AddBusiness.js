@@ -32,7 +32,7 @@ const AddBusiness = () => {
 
   const [data, setData] = useState({
     WebsiteURL: "https://bolo.ai.in/",
-    business: "",
+    userType: "",
     purpose: "",
 
     language: [],
@@ -45,7 +45,7 @@ const AddBusiness = () => {
     //contacts
     image: "",
     imageURL: "",
-    business_name: "",
+    userName: "",
     email: "",
 
     short_url: "",
@@ -65,7 +65,7 @@ const AddBusiness = () => {
     if (
       data.address_Line_1.trim() === "" ||
       data.address_Line_2.trim() === "" ||
-      data.business === "" ||
+      data.userType === "" ||
       data.language === "" ||
       data.country === "" ||
       data.state === "" ||
@@ -74,13 +74,15 @@ const AddBusiness = () => {
       //Contacts
       // data.image === '' ||
       // data.imageURL.trim() === '' ||
-      (data.business_name.trim() === "" &&
-        (data.contact_Person_Name.trim() === "" ||
-          data.specialization === "")) ||
+      (data.userName.trim() === "" 
+      // &&
+      //   (data.contact_Person_Name.trim() === "" ||
+      //     data.specialization === "")
+      ) ||
       data.email.trim() === "" ||
-      data.short_url.trim() === "" ||
-      data.contact_Number === "" ||
-      data.contact_Person_Name.trim() === ""
+      // data.short_url.trim() === "" ||
+      data.contact_Number === "" 
+      // || data.contact_Person_Name.trim() === ""
     ) {
       swal({
         title: "Warning",
@@ -97,8 +99,8 @@ const AddBusiness = () => {
     formData.set("address_Line_2", data.address_Line_2);
 
     formData.set("purpose", data.purpose);
-    formData.set("business", data.business);
-    formData.set("language", data.language);
+    formData.set("userType", data.userType);
+    // formData.set("language", data.language);
 
     formData.set("country", data.country);
     formData.set("city", data.city);
@@ -106,7 +108,7 @@ const AddBusiness = () => {
 
     formData.set("pincode", data.pincode);
     //contacts
-    formData.set("business_name", data.business_name);
+    formData.set("userName", data.userName);
     formData.set("email", data.email);
 
     formData.set("contact_Number", data.contact_Number);
@@ -149,6 +151,7 @@ const AddBusiness = () => {
         });
       });
   };
+  console.log(data);
 
   return (
     <CContainer>
@@ -181,19 +184,21 @@ const AddBusiness = () => {
                   disabled={
                     data.address_Line_1.trim() === "" ||
                     data.address_Line_2.trim() === "" ||
-                    data.business === "" ||
+                    data.userType === "" ||
                     data.language === "" ||
                     data.country === "" ||
                     data.state === "" ||
                     data.city === "" ||
                     data.pincode.trim() === "" ||
-                    (data.business_name.trim() === "" &&
-                      (data.contact_Person_Name.trim() === "" ||
-                        data.specialization === "")) ||
+                    data.userName.trim() === "" ||
+                    //  &&
+                    //   (data.contact_Person_Name.trim() === "" ||
+                    //     data.specialization === "")
                     data.email.trim() === "" ||
-                    data.short_url.trim() === "" ||
-                    data.contact_Number === "" ||
-                    data.contact_Person_Name.trim() === ""
+                    // data.short_url.trim() === "" ||
+                    data.contact_Number === ""
+                    //  ||
+                    // data.contact_Person_Name.trim() === ""
                   }
                 >
                   {loading ? "Loading" : "Add Now"}
@@ -250,7 +255,7 @@ const AddBusiness = () => {
                     />
                   ))}
 
-                {viewState === 4 && (
+                {/* {viewState === 4 && (
                   <SelectLanguage
                     data={{ data, setData }}
                     handleView={handleView}
@@ -258,8 +263,8 @@ const AddBusiness = () => {
                     // data={{ images, setImages }}
                     loading={{ loading, setLoading }}
                   />
-                )}
-                {viewState === 5 && (
+                )} */}
+                {viewState === 4 && (
                   <BAddress
                     data={{ data, setData }}
                     handleView={handleView}

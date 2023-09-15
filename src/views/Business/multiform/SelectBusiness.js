@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { isAutheticated } from "src/auth";
+import toast from "react-hot-toast";
 
 const SelectBusiness = (props) => {
   const token = isAutheticated();
@@ -88,7 +89,14 @@ const SelectBusiness = (props) => {
                   textTransform: "capitalize",
                   // marginRight: '5px',
                 }}
-                onClick={() => props.handleView(3)}
+                onClick={() => {
+                  if (data.userType !== "") {
+                    props.handleView(3);
+                  } else {
+                    toast.error("Fill User Type");
+                  }
+                }}
+
                 // disabled={loading}
                 // disabled={data.business === ''}
               >
@@ -105,14 +113,13 @@ const SelectBusiness = (props) => {
           <div className="card h-100">
             <div className="card-body px-5">
               <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Provider *
-                </label>
                 <select
-                  onChange={(e) => handleChange(e)}
-                  value={data.business}
+                  onChange={(e) => {handleChange(e)
+                  console.log(e.target.id);
+                  }}
+                  value={data.userType}
                   className="form-control"
-                  id="business"
+                  id="userType"
                   disabled={BusinessData.length < 1}
                 >
                   <option value="1">---select---</option>
