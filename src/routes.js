@@ -80,6 +80,8 @@ import ViewAppointment from "./views/Appointments/ViewAppointment";
 import EditAppointment from "./views/Appointments/EditAppointment";
 import AddNewAppointment from "./views/Appointments/AddNewAppointment";
 import ViewHealthCareProvider from "./views/Business/ViewHealthCareProvider";
+import Campaign from "./views/Campaigns/Campaign.js";
+import AddCampaign from "./views/Campaigns/AddCampaign.js";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -141,8 +143,37 @@ const routes = [
     element: ViewHealthCareProvider,
   },
 
+
+
+
+  {
+    path: "//campaigns",
+    name: "campaigns",
+    element: Campaign,
+  },
+  {
+    path: "//campaign/add",
+    name: "Add Campaigns",
+    element: AddCampaign,
+  },
+  {
+    path: "/campaigns/edit/:id",
+    name: "Edit healthcare providers",
+    element: EditBusiness,
+  },
+  {
+    path: "/campaigns/view/:id",
+    name: "view healthcare providers",
+    element: ViewHealthCareProvider,
+  },
+
+
+
+
+
   // { path: '/franchisee/view/:id', name: 'view franchisee', element: ViewFra },
   //Contact Requests
+
   {
     path: "/contact/request",
     name: "Contact Requests",
