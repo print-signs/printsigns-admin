@@ -68,15 +68,21 @@ const Preview = ({ props }) => {
                 <td>{data?.campaignType}</td>
               </tr>
               <tr>
-                <th scope="col"> Video</th>
+                <th scope="col">
+                  {data?.campaignType === "email" ? "Video" : "Spreadsheet"}
+                </th>
                 <td>
-                  <video
-                    className="rounded"
-                    autoPlay={true}
-                    height={300}
-                    width={250}
-                    src={data?.video}
-                  ></video>
+                  {data?.campaignType === "email" ? (
+                    <video
+                      className="rounded"
+                      autoPlay={true}
+                      height={300}
+                      width={250}
+                      src={data?.video}
+                    ></video>
+                  ) : (
+                    <td>{data?.spreadSheet}</td>
+                  )}
                 </td>
               </tr>
               <tr>

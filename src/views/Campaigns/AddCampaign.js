@@ -37,6 +37,7 @@ const AddCampaign = () => {
     language: "",
     campaignType: "",
     video: null,
+    spreadSheet: null,
     recipients: [{ name: "", phoneNumber: "" }],
   });
 
