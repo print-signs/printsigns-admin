@@ -138,7 +138,7 @@ const AddCampaign = () => {
   //       });
   //   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <CContainer>
@@ -153,7 +153,7 @@ const AddCampaign = () => {
                   "
           >
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Add Campaign
+              Contact Details
             </div>
             <div className="page-title-right">
               <div className="page-title-right">
