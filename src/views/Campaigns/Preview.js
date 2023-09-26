@@ -41,7 +41,7 @@ const Preview = ({ props }) => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                handleView(4);
+                handleView(5);
               }}
             >
               Next

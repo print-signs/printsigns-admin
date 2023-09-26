@@ -22,6 +22,10 @@ import { isAutheticated } from "src/auth";
 import BasicDetaiils from "./BasicDetaiils.js";
 import ContactDetails from "./ContactDetails.js";
 import Preview from "./Preview.js";
+import Videos from "./Video.js";
+import TestLaunch from "./TestLaunch.js";
+import Status from "./Status.js";
+import VideoTemplate from "./VideoTemplate.js";
 
 const AddCampaign = () => {
   const token = isAutheticated();
@@ -38,7 +42,16 @@ const AddCampaign = () => {
     campaignType: "",
     video: null,
     spreadSheet: null,
-    recipients: [{ name: "", phoneNumber: "" }],
+    videos: [null, null],
+    recipients: [{ name: "", phoneNumber: "", email: "" }],
+    testRecipents: [
+      {
+        name: "",
+        phoneNumber: "",
+        email: "",
+        status: ["delivered"],
+      },
+    ],
   });
 
   // console.log(data)
@@ -139,7 +152,7 @@ const AddCampaign = () => {
   //       });
   //   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <CContainer>
@@ -209,14 +222,15 @@ const AddCampaign = () => {
                   />
                 )}
 
-                {viewState === 2 && (
+                {viewState === 2 && <VideoTemplate />}
+                {viewState === 3 && (
                   <ContactDetails props={{ data, setData, handleView }} />
                 )}
 
-                {viewState === 3 && (
+                {viewState === 4 && (
                   <Preview props={{ data, setData, handleView }} />
                 )}
-                {viewState === 4 && (
+                {/* {viewState === 4 && (
                   <BAddress
                     data={{ data, setData }}
                     handleView={handleView}
@@ -224,6 +238,15 @@ const AddCampaign = () => {
                     // data={{ images, setImages }}
                     loading={{ loading, setLoading }}
                   />
+                )} */}
+                {viewState === 5 && (
+                  <Videos props={{ data, setData, handleView }} />
+                )}
+                {viewState === 6 && (
+                  <TestLaunch props={{ data, setData, handleView }} />
+                )}
+                {viewState === 7 && (
+                  <Status props={{ data, setData, handleView }} />
                 )}
               </CCardBody>
             </CCard>
@@ -263,6 +286,17 @@ const AddCampaign = () => {
                         : "btn btn-info text-white"
                     }
                     type="button"
+                    onClick={() => handleView(2)}
+                  >
+                    Video Template
+                  </button>
+                  <button
+                    className={
+                      viewState === 3
+                        ? "btn btn-light"
+                        : "btn btn-info text-white"
+                    }
+                    type="button"
                     onClick={() => handleView(3)}
                   >
                     Contact Details
@@ -274,7 +308,7 @@ const AddCampaign = () => {
                         : "btn btn-info text-white"
                     }
                     type="button"
-                    onClick={() => handleView(5)}
+                    onClick={() => handleView(4)}
                   >
                     Preview
                   </button>
@@ -296,7 +330,7 @@ const AddCampaign = () => {
                         : "btn btn-info text-white"
                     }
                     type="button"
-                    onClick={() => handleView(5)}
+                    onClick={() => handleView(6)}
                   >
                     Test & Launch
                   </button>
@@ -307,7 +341,7 @@ const AddCampaign = () => {
                         : "btn btn-info text-white"
                     }
                     type="button"
-                    onClick={() => handleView(5)}
+                    onClick={() => handleView(7)}
                   >
                     Status
                   </button>
