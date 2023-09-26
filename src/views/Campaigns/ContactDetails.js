@@ -10,6 +10,7 @@ const ContactDetails = ({ props }) => {
   const [csvData, setCsvData] = useState([]);
   // const [recipients, setRecipients] = useState([{ name: "", phoneNumber: "" }]);
   // console.log("data", data);
+
   const addRecord = () => {
     setData((prevData) => ({
       ...prevData,
@@ -107,7 +108,7 @@ const ContactDetails = ({ props }) => {
             : recipient.email !== "")
       )
     ) {
-      handleView(3);
+      handleView(4);
     } else {
       toast.error("Fill all contact details");
     }
@@ -115,49 +116,49 @@ const ContactDetails = ({ props }) => {
 
   return (
     <div className="container">
-      <div>
-        <div className="row">
-          <div className="col-12">
-            <div className="page-title-box d-flex align-items-center justify-content-between">
-              <div>
-                <label>
-                  Data Entry Method:
-                  <select
-                    value={dataEntryMethod}
-                    onChange={(e) => setDataEntryMethod(e.target.value)}
-                  >
-                    <option value="manual">Manually</option>
-                    <option value="spreadsheet">Using Spreadsheet</option>
-                  </select>
-                </label>
-              </div>
-              <div className="page-title-right">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  style={{
-                    fontWeight: "bold",
-                    marginBottom: "1rem",
-                    textTransform: "capitalize",
-                    marginRight: "5px",
-                  }}
-                  onClick={() => handleView(1)}
+      <div className="row">
+        <div className="col-12">
+          <div className="page-title-box d-flex align-items-center justify-content-between">
+            <div className="form-group">
+              <label htmlFor="dataEntryMethod">
+                Data Entry Method:
+                <select
+                  className="form-control"
+                  id="dataEntryMethod"
+                  value={dataEntryMethod}
+                  onChange={(e) => setDataEntryMethod(e.target.value)}
                 >
-                  Prev
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  style={{
-                    fontWeight: "bold",
-                    marginBottom: "1rem",
-                    textTransform: "capitalize",
-                  }}
-                  onClick={handleSubmit}
-                >
-                  Next
-                </Button>
-              </div>
+                  <option value="manual">Manually</option>
+                  <option value="spreadsheet">Using Spreadsheet</option>
+                </select>
+              </label>
+            </div>
+            <div className="page-title-right">
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                  textTransform: "capitalize",
+                  marginRight: "5px",
+                }}
+                onClick={() => handleView(2)}
+              >
+                Prev
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                  textTransform: "capitalize",
+                }}
+                onClick={handleSubmit}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </div>
@@ -255,7 +256,7 @@ const ContactDetails = ({ props }) => {
                 <div className="card-body px-5">
                   <div className="row mb-3 border p-3 rounded">
                     <div className="mb-3">
-                      <label htmlFor="title" className="form-label">
+                      <label htmlFor="spreadsheet" className="form-label">
                         Upload Spreadsheet
                       </label>
                       <input
