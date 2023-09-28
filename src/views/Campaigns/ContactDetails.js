@@ -8,15 +8,13 @@ const ContactDetails = ({ props }) => {
   const { data, setData, handleView } = props;
   const [dataEntryMethod, setDataEntryMethod] = useState("manual");
   const [csvData, setCsvData] = useState([]);
-  // const [recipients, setRecipients] = useState([{ name: "", phoneNumber: "" }]);
-  // console.log("data", data);
 
   const addRecord = () => {
     setData((prevData) => ({
       ...prevData,
       recipients: [
         ...prevData.recipients,
-        { name: "", phoneNumber: "", email: "" },
+        { name: "", contact: "" }, // Initialize contact as an empty string
       ],
     }));
   };
@@ -35,14 +33,13 @@ const ContactDetails = ({ props }) => {
           const row = rows[i].split(",");
           if (row.length >= 2) {
             const name = row[0].trim();
-            const email = row[1].trim();
-            if (name && email) {
-              extractedData.push({ name, email });
+            const contact = row[1].trim();
+            if (name && contact) {
+              extractedData.push({ name, contact });
             }
           }
         }
         setCsvData(extractedData);
-        // console.log(csvData);
         setData((prevData) => ({
           ...prevData,
           recipients: extractedData,
@@ -74,23 +71,11 @@ const ContactDetails = ({ props }) => {
     }));
   };
 
-  const recipientNumberChange = (e, index) => {
+  const recipientContactChange = (e, index) => {
     const updatedRecipients = [...data.recipients];
     updatedRecipients[index] = {
       ...updatedRecipients[index],
-      phoneNumber: e.target.value,
-    };
-    setData((prevData) => ({
-      ...prevData,
-      recipients: updatedRecipients,
-    }));
-  };
-
-  const recipientEmailChange = (e, index) => {
-    const updatedRecipients = [...data.recipients];
-    updatedRecipients[index] = {
-      ...updatedRecipients[index],
-      email: e.target.value,
+      contact: e.target.value,
     };
     setData((prevData) => ({
       ...prevData,
@@ -101,11 +86,7 @@ const ContactDetails = ({ props }) => {
   const handleSubmit = () => {
     if (
       data?.recipients.every(
-        (recipient) =>
-          recipient.name !== "" &&
-          (data?.campaignType !== "email"
-            ? recipient.phoneNumber !== ""
-            : recipient.email !== "")
+        (recipient) => recipient.name !== "" && recipient.contact !== ""
       )
     ) {
       handleView(4);
@@ -171,50 +152,41 @@ const ContactDetails = ({ props }) => {
                 <div className="card-body px-5">
                   {data?.recipients.map((recipient, index) => {
                     return (
-                      <div className="row mb-3 border p-3 rounded">
+                      <div className="row mb-3 border p-3 rounded" key={index}>
                         <div className="col-md-6 d-flex align-items-center">
-                          <label htmlFor="title" className="form-label me-2">
+                          <label
+                            htmlFor={`name-${index}`}
+                            className="form-label me-2"
+                          >
                             Name
                           </label>
                           <input
                             type="text"
                             className="form-control"
-                            name={`name-${index}`}
+                            id={`name-${index}`}
                             value={recipient?.name}
                             onChange={(e) => recipientNameChange(e, index)}
                             maxLength="50"
                           />
                         </div>
                         <div className="col-md-6 d-flex align-items-center">
-                          <label htmlFor="title" className="form-label me-2">
-                            {data?.campaignType === "rcs" ||
-                            data?.campaignType === "whatsapp"
-                              ? "Phone Number"
-                              : "Email"}
+                          <label
+                            htmlFor={`contact-${index}`}
+                            className="form-label me-2"
+                          >
+                            {data?.campaignType === "email"
+                              ? "Email"
+                              : "Phone Number"}
                           </label>
                           <input
                             type={
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? "number"
-                                : "email"
+                              data?.campaignType === "email" ? "email" : "tel"
                             }
                             className="form-control"
-                            id={`recipients-phone-number-${index}`}
+                            id={`contact-${index}`}
                             maxLength="50"
-                            name={`toPhoneNumber-${index}`}
-                            value={
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? recipient?.phoneNumber
-                                : recipient?.email
-                            }
-                            onChange={(e) =>
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? recipientNumberChange(e, index)
-                                : recipientEmailChange(e, index)
-                            }
+                            value={recipient?.contact}
+                            onChange={(e) => recipientContactChange(e, index)}
                           />
                         </div>
                         {index !== 0 && (

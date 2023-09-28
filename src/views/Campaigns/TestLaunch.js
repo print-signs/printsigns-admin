@@ -3,6 +3,14 @@ import Button from "@material-ui/core/Button";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { CFormInput, CFormLabel, CCol, CRow } from "@coreui/react";
+import {
+  CButton,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableRow,
+} from "@coreui/react";
 
 const TestLaunch = ({ props }) => {
   const { data, setData, handleView } = props;
@@ -112,7 +120,7 @@ const TestLaunch = ({ props }) => {
         </Button>
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         <div className="col-md-12 my-3">
           <div className="card h-100">
             <div className="card-body px-5">
@@ -201,7 +209,75 @@ const TestLaunch = ({ props }) => {
             <button className="btn btn-primary">Launch</button>
           </div>
         </div>
-      </div>
+      </div> */}
+      {data && (
+        <div>
+          <CTable striped>
+            <CTableHead>
+              <CTableRow>
+                <CTableDataCell scope="col">Video</CTableDataCell>
+                <CTableDataCell scope="col">Name</CTableDataCell>
+                <CTableDataCell scope="col">Contact</CTableDataCell>
+                <CTableDataCell scope="col"></CTableDataCell>
+              </CTableRow>
+            </CTableHead>
+            {/* <CTableBody>{renderTableRows()}</CTableBody> */}
+            <CTableBody>
+              <CTableRow>
+                <CTableDataCell>
+                  <video
+                    className="rounded"
+                    style={{ height: "100px" }}
+                    autoPlay={true}
+                    height={300}
+                    width={250}
+                    src={data.video}
+                  ></video>
+                </CTableDataCell>
+                <CTableDataCell>test</CTableDataCell>
+                <CTableDataCell>test@gmail.com</CTableDataCell>
+                <CTableDataCell>
+                  <CButton className="btn btn-primary">Send</CButton>
+                </CTableDataCell>
+              </CTableRow>
+              <CTableRow>
+                <CTableDataCell>
+                  <video
+                    className="rounded"
+                    style={{ height: "100px" }}
+                    autoPlay={true}
+                    height={300}
+                    width={250}
+                    src={data.video}
+                  ></video>
+                </CTableDataCell>
+                <CTableDataCell>test</CTableDataCell>
+                <CTableDataCell>test@gmail.com</CTableDataCell>
+                <CTableDataCell>
+                  <CButton className="btn btn-primary">Send</CButton>
+                </CTableDataCell>
+              </CTableRow>
+              <CTableRow>
+                <CTableDataCell>
+                  <video
+                    className="rounded"
+                    style={{ height: "100px" }}
+                    autoPlay={true}
+                    height={300}
+                    width={250}
+                    src={data.video}
+                  ></video>
+                </CTableDataCell>
+                <CTableDataCell>test</CTableDataCell>
+                <CTableDataCell>test@gmail.com</CTableDataCell>
+                <CTableDataCell>
+                  <CButton className="btn btn-primary">Send</CButton>
+                </CTableDataCell>
+              </CTableRow>
+            </CTableBody>
+          </CTable>
+        </div>
+      )}
     </div>
   );
 };

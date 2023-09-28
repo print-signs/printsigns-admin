@@ -54,8 +54,7 @@ const BasicDetaiils = ({ props }) => {
                   if (
                     data?.campaignName === "" ||
                     data?.campaignType === "" ||
-                    data?.selectedLanguage === null ||
-                    data?.video === null
+                    data?.selectedLanguage === null
                   ) {
                     toast.error("Fill all details");
                   } else {
@@ -74,34 +73,6 @@ const BasicDetaiils = ({ props }) => {
         <div className="col-sm-12 col-md-12 col-lg-12 my-1">
           <div className="card h-100">
             <div className="card-body px-5">
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Campaign Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="campaignName"
-                  value={data?.campaignName}
-                  maxLength="50"
-                  onChange={(e) => handleChange(e)}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Select Language
-                </label>
-                <select
-                  onChange={(e) => handleChange(e)}
-                  value={data?.language}
-                  className="form-control"
-                  id="language"
-                >
-                  <option value="">---English/Hindi---</option>
-                  <option value="english">English</option>
-                  <option value="hindi">Hindi</option>
-                </select>
-              </div>
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
                   Select Campaign Type
@@ -140,17 +111,33 @@ const BasicDetaiils = ({ props }) => {
                   EMAIL
                 </button>
               </div>
-
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
-                  Upload Video
+                  Campaign Name
                 </label>
                 <input
-                  type="file"
+                  type="text"
                   className="form-control"
-                  id="video"
-                  onChange={(e) => handleVideoUpload(e)}
+                  id="campaignName"
+                  value={data?.campaignName}
+                  maxLength="50"
+                  onChange={(e) => handleChange(e)}
                 />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="title" className="form-label">
+                  Select Language
+                </label>
+                <select
+                  onChange={(e) => handleChange(e)}
+                  value={data?.language}
+                  className="form-control"
+                  id="language"
+                >
+                  <option value="">---English/Hindi---</option>
+                  <option value="english">English</option>
+                  <option value="hindi">Hindi</option>
+                </select>
               </div>
             </div>
           </div>

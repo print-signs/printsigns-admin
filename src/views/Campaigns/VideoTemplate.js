@@ -1,19 +1,176 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
+import styled from "styled-components";
+import axios from "axios";
+import { isAutheticated } from "src/auth";
 
-const VideoTemplate = () => {
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 0px;
+`;
+
+const GridItem = styled.div`
+  display: grid;
+  font-size: 20px;
+  text-align: center;
+`;
+
+const UploadContainer = styled.div`
+  width: 100%;
+  border: 1.5px dashed gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
+
+const UploadButton = styled.button`
+  margin-top: 20px;
+  border: none;
+  font-size: 15px;
+  padding: 10px;
+`;
+
+const VideoPreview = styled.video`
+  width: 100%;
+  height: 20rem;
+  margin-top: 50px;
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+`;
+
+const VideoTemplate = ({ props }) => {
+  const token = isAutheticated();
+  const { data, setData, handleView } = props;
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [transcribedText, setTranscribedText] = useState("");
 
-  const handleFileChange = (e) => {
+  const handleVideoUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedFile(URL.createObjectURL(file));
+      setData((prev) => ({
+        ...prev,
+        [e.target.id]: file,
+      }));
+    }
+
+    setSelectedFile(URL.createObjectURL(file));
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      // console.log(data.video);
+      formData.append("videoTemplate", data.video);
+
+      const response = await axios.post("/api/campaign/convert", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+
+      const { success, message, text } = response.data;
+      if (success) {
+        setTranscribedText(text);
+        setIsLoading(false);
+        swal({
+          title: "Converted",
+          text: "Text Extracted Successfully",
+          icon: "success",
+          button: "Close",
+        });
+      } else {
+        swal({
+          title: "API Error",
+          text: message,
+          icon: "error",
+          button: "Close",
+        });
+        setIsLoading(false);
+        console.log("API Error:", message);
+      }
+    } catch (error) {
+      swal({
+        title: "Network Error",
+        text: error.message,
+        icon: "error",
+        button: "Close",
+      });
+      setIsLoading(false);
+      console.log("Network Error:", error.message);
     }
   };
 
   const handleDelete = () => {
     setSelectedFile(null);
-    // You can also perform additional actions here, such as clearing the file input field.
+  };
+
+  const extractText = async (e) => {
+    e.preventDefault();
+
+    if (data.video === null) {
+      swal({
+        title: "Error",
+        text: "Please upload video",
+        icon: "error",
+        button: "Close",
+      });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      // console.log(data.video);
+      formData.append("videoTemplate", data.video);
+
+      const response = await axios.post("/api/campaign/convert", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+
+      const { success, message, text } = response.data;
+      if (success) {
+        setTranscribedText(text);
+        setIsLoading(false);
+        swal({
+          title: "Converted",
+          text: "Text Extracted Successfully",
+          icon: "success",
+          button: "Close",
+        });
+      } else {
+        swal({
+          title: "API Error",
+          text: message,
+          icon: "error",
+          button: "Close",
+        });
+        setIsLoading(false);
+        console.log("API Error:", message);
+      }
+    } catch (error) {
+      swal({
+        title: "Network Error",
+        text: error.message,
+        icon: "error",
+        button: "Close",
+      });
+      setIsLoading(false);
+      console.log("Network Error:", error.message);
+    }
   };
 
   return (
@@ -22,7 +179,7 @@ const VideoTemplate = () => {
         <div className="col-12">
           <div className="page-title-box d-flex align-items-center justify-content-between">
             <div style={{ fontSize: "22px" }} className="fw-bold">
-              Upload Video
+              Upload Video to Create Template
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <h4 className="mb-0"></h4>
@@ -39,7 +196,7 @@ const VideoTemplate = () => {
                   marginRight: "5px",
                 }}
                 onClick={() => {
-                  handeView(1);
+                  handleView(1);
                 }}
               >
                 Prev
@@ -53,7 +210,7 @@ const VideoTemplate = () => {
                   textTransform: "capitalize",
                 }}
                 onClick={() => {
-                  handeView(3);
+                  handleView(3);
                 }}
               >
                 Next
@@ -64,55 +221,51 @@ const VideoTemplate = () => {
       </div>
       <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
-          <div
-            className="card"
-            style={{
-              height: "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className="card-body px-5">
-              <div className="mb-3">
-                <label>Upload Video</label>
-                <div>
-                  <input
-                    type="file"
-                    id="video"
-                    accept="video/*"
-                    onChange={handleFileChange}
-                  />
-                </div>
-              </div>
-              {selectedFile && (
-                <div className="video-preview-container">
-                  <div className="text-container">
-                    {/* Add spacing text on the left */}
-                    <p>This is some text with spacing</p>
-                  </div>
-                  <div className="video-container">
-                    <span
-                      className="d-flex justify-content-end"
-                      style={{ fontSize: "30px", cursor: "pointer" }}
-                      onClick={handleDelete}
-                    >
-                      &times;
-                    </span>
-                    <video
-                      controls
-                      width="80%"
-                      style={{ height: "auto", maxWidth: "100%" }}
-                    >
-                      <source src={selectedFile} type="video/mp4" />
+          <GridContainer>
+            <GridItem
+              style={{
+                overflowY: "auto",
+                height: "30rem",
+                textAlign: "left",
+              }}
+            >
+              {isLoading
+                ? "Please wait. We are converting your video to text ..."
+                : transcribedText || "Transcribed Text will be displayed here"}
+            </GridItem>
+            <GridItem style={{ width: "30rem" }}>
+              <>
+                {selectedFile ? (
+                  <>
+                    <VideoPreview controls src={selectedFile}>
                       Your browser does not support the video tag.
-                    </video>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+                    </VideoPreview>
+                    <DeleteButton onClick={handleDelete}>&times;</DeleteButton>
+                  </>
+                ) : (
+                  <UploadContainer>
+                    <input
+                      type="file"
+                      id="video"
+                      accept="video/*"
+                      onChange={handleVideoUpload}
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="video">
+                      {isLoading
+                        ? "Please wait. We are converting your video to text ..."
+                        : "Upload Your Videos to extract text from it"}
+                    </label>
+                    <UploadButton
+                      onClick={() => document.getElementById("video").click()}
+                    >
+                      SELECT FILES
+                    </UploadButton>
+                  </UploadContainer>
+                )}
+              </>
+            </GridItem>
+          </GridContainer>
         </div>
       </div>
     </div>

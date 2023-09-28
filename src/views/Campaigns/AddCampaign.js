@@ -43,7 +43,7 @@ const AddCampaign = () => {
     video: null,
     spreadSheet: null,
     videos: [null, null],
-    recipients: [{ name: "", phoneNumber: "", email: "" }],
+    recipients: [{ name: "", contact: "" }],
     testRecipents: [
       {
         name: "",
@@ -169,9 +169,9 @@ const AddCampaign = () => {
             <div style={{ fontSize: "22px" }} className="fw-bold">
               Add Campaign
             </div>
-            <div className="page-title-right">
+            {/* <div className="page-title-right">
               <div className="page-title-right">
-                {/* <Button
+                <Button
                   variant="contained"
                   color="primary"
                   style={{
@@ -182,30 +182,30 @@ const AddCampaign = () => {
                   onClick={() => {
                     handleSubmit();
                   }}
-                  disabled={
-                    data.address_Line_1.trim() === "" ||
-                    data.address_Line_2.trim() === "" ||
-                    data.userType === "" ||
-                    data.language === "" ||
-                    data.country === "" ||
-                    data.state === "" ||
-                    data.city === "" ||
-                    data.pincode.trim() === "" ||
-                    data.userName.trim() === "" ||
-                    //  &&
-                    //   (data.contact_Person_Name.trim() === "" ||
-                    //     data.specialization === "")
-                    data.email.trim() === "" ||
-                    // data.short_url.trim() === "" ||
-                    data.contact_Number === ""
-                    //  ||
-                    // data.contact_Person_Name.trim() === ""
-                  }
+                  // disabled={
+                  //   data.address_Line_1.trim() === "" ||
+                  //   data.address_Line_2.trim() === "" ||
+                  //   data.userType === "" ||
+                  //   data.language === "" ||
+                  //   data.country === "" ||
+                  //   data.state === "" ||
+                  //   data.city === "" ||
+                  //   data.pincode.trim() === "" ||
+                  //   data.userName.trim() === "" ||
+                  //   //  &&
+                  //   //   (data.contact_Person_Name.trim() === "" ||
+                  //   //     data.specialization === "")
+                  //   data.email.trim() === "" ||
+                  //   // data.short_url.trim() === "" ||
+                  //   data.contact_Number === ""
+                  //   //  ||
+                  //   // data.contact_Person_Name.trim() === ""
+                  // }
                 >
                   {loading ? "Loading" : "Add Now"}
-                </Button> */}
+                </Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </CCol>
       </CRow>
@@ -222,7 +222,9 @@ const AddCampaign = () => {
                   />
                 )}
 
-                {viewState === 2 && <VideoTemplate />}
+                {viewState === 2 && (
+                  <VideoTemplate props={{ data, setData, handleView }} />
+                )}
                 {viewState === 3 && (
                   <ContactDetails props={{ data, setData, handleView }} />
                 )}
@@ -303,7 +305,7 @@ const AddCampaign = () => {
                   </button>
                   <button
                     className={
-                      viewState === 3
+                      viewState === 4
                         ? "btn btn-light"
                         : "btn btn-info text-white"
                     }
@@ -314,18 +316,18 @@ const AddCampaign = () => {
                   </button>
                   <button
                     className={
-                      viewState === 4
+                      viewState === 5
                         ? "btn btn-light"
                         : "btn btn-info text-white"
                     }
                     type="button"
                     onClick={() => handleView(5)}
                   >
-                    Videos
+                    Videos (Internal Process)
                   </button>
                   <button
                     className={
-                      viewState === 5
+                      viewState === 6
                         ? "btn btn-light"
                         : "btn btn-info text-white"
                     }
@@ -336,7 +338,7 @@ const AddCampaign = () => {
                   </button>
                   <button
                     className={
-                      viewState === 6
+                      viewState === 7
                         ? "btn btn-light"
                         : "btn btn-info text-white"
                     }
