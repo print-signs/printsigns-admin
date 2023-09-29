@@ -180,7 +180,9 @@ const ContactDetails = ({ props }) => {
                           </label>
                           <input
                             type={
-                              data?.campaignType === "email" ? "email" : "tel"
+                              data?.campaignType === "email"
+                                ? "email"
+                                : "number"
                             }
                             className="form-control"
                             id={`contact-${index}`}

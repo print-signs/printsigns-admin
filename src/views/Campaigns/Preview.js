@@ -10,36 +10,37 @@ const Preview = ({ props }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(data);
 
-    // const campaignData = {
-    //   campaignType: data.campaignType,
-    //   campaignName: data.campaignName,
-    //   language: data.language,
-    //   videoTemplate: data.video,
-    //   recipients: data.recipients,
-    // };
+    const hasEmptyRecipients = data.recipients.some((recipient) => {
+      return !recipient.name || !recipient.contact;
+    });
+
+    if (hasEmptyRecipients) {
+      swal({
+        title: "Validation Error",
+        text: "Please fill Conatct details",
+        icon: "error",
+        button: "Close",
+      });
+      return;
+    }
 
     const formattedRecipients = data.recipients.map((recipient) => ({
       name: recipient.name,
-      contact: recipient.contact.email || recipient.contact.phoneNumber,
+      contact: recipient.contact,
     }));
-    // console.log(data.campaignType);
 
-    const formData = new FormData();
-    formData.append("campaignType", data.campaignType);
-    formData.append("campaignName", data.campaignName);
-    formData.append("language", data.language);
-    formData.append("videoTemplate", data.video);
-    // formData.set("recipients",JSON.stringify(formattedRecipients));
-    // console.log("campaignData", campaignData);
-    // console.log("formData", formData);
+    const campaignData = {
+      campaignType: data.campaignType,
+      campaignName: data.campaignName,
+      language: data.language,
+      recipients: formattedRecipients,
+    };
 
     axios
-      .post(`/api/campaign/create`, formData, {
+      .post(`/api/campaign/create`, campaignData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
           "Access-Control-Allow-Origin": "*",
         },
       })
@@ -51,10 +52,10 @@ const Preview = ({ props }) => {
             ? res?.data?.message
             : "Campaign added successfully!",
           icon: "success",
-          button: "Return",
+          button: "Close",
         });
         setLoading(false);
-        // handleView(5);
+        handleView(5);
       })
       .catch((err) => {
         setLoading(false);
@@ -64,7 +65,7 @@ const Preview = ({ props }) => {
           title: "Warning",
           text: message,
           icon: "error",
-          button: "Retry",
+          button: "Close",
           dangerMode: true,
         });
       });
@@ -100,9 +101,7 @@ const Preview = ({ props }) => {
                 marginBottom: "1rem",
                 textTransform: "capitalize",
               }}
-              onClick={() => {
-                handleView(5);
-              }}
+              onClick={handleSubmit}
             >
               Next
             </Button>
@@ -147,20 +146,6 @@ const Preview = ({ props }) => {
           </table>
         </div>
       )}
-      <div className="page-title-right d-flex justify-content-end">
-        <Button
-          variant="contained"
-          color="primary"
-          style={{
-            fontWeight: "bold",
-            marginBottom: "1rem",
-            textTransform: "capitalize",
-          }}
-          onClick={handleSubmit}
-        >
-          {loading ? "Loading" : "Add Now"}
-        </Button>
-      </div>
     </React.Fragment>
   );
 };
