@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Button from "@material-ui/core/Button";
 import toast from "react-hot-toast";
+
 const BasicDetaiils = ({ props }) => {
   const { data, setData, handleView } = props;
 
