@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { isAutheticated } from "src/auth";
@@ -7,71 +7,44 @@ const Preview = ({ props }) => {
   const token = isAutheticated();
   const { data, handleView, setData } = props;
   const [loading, setLoading] = useState(false);
+  const [campaignData, setCampaignData] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const hasEmptyRecipients = data.recipients.some((recipient) => {
-      return !recipient.name || !recipient.contact;
-    });
-
-    if (hasEmptyRecipients) {
-      swal({
-        title: "Validation Error",
-        text: "Please fill Conatct details",
-        icon: "error",
-        button: "Close",
-      });
-      return;
+    if (
+      data?.recipients.every(
+        (recipient) => recipient.name !== "" && recipient.contact !== ""
+      )
+    ) {
+      handleView(4);
+    } else {
+      toast.error("Fill all contact details");
     }
+  };
 
-    const formattedRecipients = data.recipients.map((recipient) => ({
-      name: recipient.name,
-      contact: recipient.contact,
-    }));
-
-    const campaignData = {
-      campaignType: data.campaignType,
-      campaignName: data.campaignName,
-      language: data.language,
-      recipients: formattedRecipients,
-    };
-
+  const getCampaign = () => {
     axios
-      .post(`/api/campaign/create`, campaignData, {
+      .get(`/api/campaign/getAll`, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        // console.log(res);
-        swal({
-          title: "Added",
-          text: res?.data?.message
-            ? res?.data?.message
-            : "Campaign added successfully!",
-          icon: "success",
-          button: "Close",
-        });
+        setCampaignData(res.data?.campaigns);
         setLoading(false);
-        handleView(5);
       })
       .catch((err) => {
+        console.log(err);
         setLoading(false);
-        const message = err.response?.data?.message || "Something went wrong!";
-        // console.log(message);
-        swal({
-          title: "Warning",
-          text: message,
-          icon: "error",
-          button: "Close",
-          dangerMode: true,
-        });
       });
   };
 
-  // console.log(data);
+  useEffect(() => {
+    getCampaign();
+  }, []);
+
   return (
     <React.Fragment>
       <div className="col-12">
@@ -115,16 +88,16 @@ const Preview = ({ props }) => {
             <tbody>
               <tr>
                 <th scope="col">Campaign Name</th>
-                <td>{data?.campaignName}</td>
+                <td>{campaignData.campaignName}</td>
               </tr>
               <tr>
                 <th scope="col">Language</th>
-                <td>{data?.language}</td>
+                <td>{campaignData.language}</td>
               </tr>
 
               <tr>
                 <th scope="col">Campaign Type</th>
-                <td>{data?.campaignType}</td>
+                <td>{campaignData.campaignType}</td>
               </tr>
               <tr>
                 <th scope="col">Video</th>
@@ -140,7 +113,7 @@ const Preview = ({ props }) => {
               </tr>
               <tr>
                 <th scope="col">Recipients</th>
-                <td>{data?.recipients?.length}</td>
+                <td>{campaignData.recipients}</td>
               </tr>
             </tbody>
           </table>

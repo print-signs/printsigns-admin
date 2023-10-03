@@ -23,7 +23,6 @@ const Video = ({ props }) => {
 
   const deleteRecord = (index) => {
     if (index >= 2) {
-      // Only allow deletion for videos starting from the third one
       setData((prev) => ({
         ...prev,
         videos: prev.videos.filter((_, i) => i !== index),
@@ -31,7 +30,6 @@ const Video = ({ props }) => {
     }
   };
 
-  console.log(data);
   return (
     <div className="container">
       <div className="row">
@@ -106,7 +104,7 @@ const Video = ({ props }) => {
                     id={`videoTitle${index + 1}`}
                     onChange={(e) => handleVideoUpload(e, index)}
                   />
-                  {index >= 2 && ( // Render delete button for videos starting from the third one
+                  {index >= 2 && (
                     <div className="col-12">
                       <button
                         onClick={() => {

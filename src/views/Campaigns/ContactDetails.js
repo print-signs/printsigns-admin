@@ -3,8 +3,11 @@ import Button from "@material-ui/core/Button";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { CFormInput, CFormLabel, CCol, CRow } from "@coreui/react";
+import axios from "axios";
+import { isAutheticated } from "src/auth";
 
 const ContactDetails = ({ props }) => {
+  const token = isAutheticated();
   const { data, setData, handleView } = props;
   const [dataEntryMethod, setDataEntryMethod] = useState("manual");
   const [csvData, setCsvData] = useState([]);
@@ -12,10 +15,7 @@ const ContactDetails = ({ props }) => {
   const addRecord = () => {
     setData((prevData) => ({
       ...prevData,
-      recipients: [
-        ...prevData.recipients,
-        { name: "", contact: "" }, // Initialize contact as an empty string
-      ],
+      recipients: [...prevData.recipients, { name: "", contact: "" }],
     }));
   };
 
@@ -83,16 +83,59 @@ const ContactDetails = ({ props }) => {
     }));
   };
 
-  const handleSubmit = () => {
-    if (
-      data?.recipients.every(
-        (recipient) => recipient.name !== "" && recipient.contact !== ""
-      )
-    ) {
-      handleView(4);
-    } else {
-      toast.error("Fill all contact details");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const hasEmptyRecipients = data.recipients.some((recipient) => {
+      return !recipient.name || !recipient.contact;
+    });
+
+    if (hasEmptyRecipients) {
+      toast.error("Please fill Conatct details");
+      return;
     }
+
+    const formattedRecipients = data.recipients.map((recipient) => ({
+      name: recipient.name,
+      contact: recipient.contact,
+    }));
+
+    const campaignData = {
+      campaignType: data.campaignType,
+      campaignName: data.campaignName,
+      language: data.language,
+      recipients: formattedRecipients,
+    };
+
+    axios
+      .post(`/api/campaign/create`, campaignData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        // console.log(res);
+        handleView(4);
+        toast.success("Campaign added successfully!");
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        const message = err.response?.data?.message || "Something went wrong!";
+        // console.log(message);
+        toast.error(message);
+      });
+
+    //   if (
+    //     data?.recipients.every(
+    //       (recipient) => recipient.name !== "" && recipient.contact !== ""
+    //     )
+    //   ) {
+    //     handleView(4);
+    //   } else {
+    //     toast.error("Fill all contact details");
+    //   }
   };
 
   return (
