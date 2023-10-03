@@ -1,23 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { isAutheticated } from "src/auth";
+
 const Preview = ({ props }) => {
+  const token = isAutheticated();
   const { data, handleView, setData } = props;
-  console.log(data);
+  const [loading, setLoading] = useState(false);
+  const [campaignData, setCampaignData] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      data?.recipients.every(
+        (recipient) => recipient.name !== "" && recipient.contact !== ""
+      )
+    ) {
+      handleView(4);
+    } else {
+      toast.error("Fill all contact details");
+    }
+  };
+
+  const getCampaign = () => {
+    axios
+      .get(`/api/campaign/getAll`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setCampaignData(res.data?.campaigns);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getCampaign();
+  }, []);
+
   return (
-    <div>
+    <React.Fragment>
       <div className="col-12">
-        <div
-          className="
-                    page-title-box
-                    d-flex
-                    align-items-center
-                    justify-content-between
-                  "
-        >
+        <div className="page-title-box d-flex align-items-center justify-content-between">
           <div style={{ fontSize: "22px" }} className="fw-bold">
             Campaign Details
           </div>
-
           <div className="page-title-right">
             <Button
               variant="contained"
@@ -40,9 +74,7 @@ const Preview = ({ props }) => {
                 marginBottom: "1rem",
                 textTransform: "capitalize",
               }}
-              onClick={() => {
-                handleView(5);
-              }}
+              onClick={handleSubmit}
             >
               Next
             </Button>
@@ -56,44 +88,38 @@ const Preview = ({ props }) => {
             <tbody>
               <tr>
                 <th scope="col">Campaign Name</th>
-                <td>{data?.campaignName}</td>
+                <td>{campaignData.campaignName}</td>
               </tr>
               <tr>
                 <th scope="col">Language</th>
-                <td>{data?.language}</td>
+                <td>{campaignData.language}</td>
               </tr>
 
               <tr>
                 <th scope="col">Campaign Type</th>
-                <td>{data?.campaignType}</td>
+                <td>{campaignData.campaignType}</td>
               </tr>
               <tr>
-                <th scope="col">
-                  {data?.campaignType === "email" ? "Video" : "Spreadsheet"}
-                </th>
+                <th scope="col">Video</th>
                 <td>
-                  {data?.campaignType === "email" ? (
-                    <video
-                      className="rounded"
-                      autoPlay={true}
-                      height={300}
-                      width={250}
-                      src={data?.video}
-                    ></video>
-                  ) : (
-                    <td>{data?.spreadSheet}</td>
-                  )}
+                  <video
+                    className="rounded"
+                    autoPlay={true}
+                    height={300}
+                    width={250}
+                    src={data?.video ? URL.createObjectURL(data?.video) : null}
+                  ></video>
                 </td>
               </tr>
               <tr>
                 <th scope="col">Recipients</th>
-                <td>{data?.recipients?.length}</td>
+                <td>{campaignData.recipients}</td>
               </tr>
             </tbody>
           </table>
         </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

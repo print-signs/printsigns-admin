@@ -10,27 +10,28 @@ const Campaign = () => {
   const token = isAutheticated();
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(true);
-  const [BusinessesData, setBusinessesData] = useState([]);
+  const [campaignData, setCampaignData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
-  const [showData, setShowData] = useState(BusinessesData);
+  const [showData, setShowData] = useState(campaignData);
 
   const handleShowEntries = (e) => {
     setCurrentPage(1);
     setItemPerPage(e.target.value);
   };
 
-  const getbusinesses = () => {
+  const getCampaign = () => {
     axios
-      .get(`/api/businesses/getall`, {
+      .get(`/api/campaign/getAll`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        setBusinessesData(res.data?.businesses);
+        setCampaignData(res.data?.campaigns);
+        // console.log(res.data?.campaigns);
         setLoading(false);
       })
       .catch((err) => {
@@ -40,17 +41,17 @@ const Campaign = () => {
   };
 
   useEffect(() => {
-    getbusinesses();
+    getCampaign();
   }, [success]);
 
   useEffect(() => {
     const loadData = () => {
       const indexOfLastPost = currentPage * itemPerPage;
       const indexOfFirstPost = indexOfLastPost - itemPerPage;
-      setShowData(BusinessesData.slice(indexOfFirstPost, indexOfLastPost));
+      setShowData(campaignData.slice(indexOfFirstPost, indexOfLastPost));
     };
     loadData();
-  }, [currentPage, itemPerPage, BusinessesData]);
+  }, [currentPage, itemPerPage, campaignData]);
 
   // const handleVarification = (id) => {
   //     swal({
@@ -89,36 +90,36 @@ const Campaign = () => {
   //     })
   // }
   const handleDelete = (id) => {
-    swal({
-      title: "Are you sure?",
-      icon: "error",
-      buttons: {
-        Yes: { text: "Yes", value: true },
-        Cancel: { text: "Cancel", value: "cancel" },
-      },
-    }).then((value) => {
-      if (value === true) {
-        axios
-          .delete(`/api/businesses/delete/${id}`, {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            setSuccess((prev) => !prev);
-          })
-          .catch((err) => {
-            swal({
-              title: "Warning",
-              text: "Something went wrong!",
-              icon: "error",
-              button: "Retry",
-              dangerMode: true,
-            });
-          });
-      }
-    });
+    // swal({
+    //   title: "Are you sure?",
+    //   icon: "error",
+    //   buttons: {
+    //     Yes: { text: "Yes", value: true },
+    //     Cancel: { text: "Cancel", value: "cancel" },
+    //   },
+    // }).then((value) => {
+    //   if (value === true) {
+    //     axios
+    //       .delete(`/api/businesses/delete/${id}`, {
+    //         headers: {
+    //           "Access-Control-Allow-Origin": "*",
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       })
+    //       .then((res) => {
+    //         setSuccess((prev) => !prev);
+    //       })
+    //       .catch((err) => {
+    //         swal({
+    //           title: "Warning",
+    //           text: "Something went wrong!",
+    //           icon: "error",
+    //           button: "Retry",
+    //           dangerMode: true,
+    //         });
+    //       });
+    //   }
+    // });
   };
 
   const formatDate = (inputDate) => {
@@ -203,9 +204,9 @@ const Campaign = () => {
                         style={{ background: "rgb(140, 213, 213)" }}
                       >
                         <tr>
-                          <th className="text-start">User Name </th>
+                          <th className="text-start">Campaign Name </th>
                           {/* <th className="text-start">Logo</th> */}
-                          <th className="text-start"> Type</th>
+                          <th className="text-start">Campaign Type</th>
                           <th className="text-start">Recipients</th>
                           {/* <th className="text-start">Status</th> */}
                           <th className="text-center">Action</th>
@@ -231,9 +232,7 @@ const Campaign = () => {
                           showData.map((i, idx) => {
                             return (
                               <tr key={idx}>
-                                <td className="text-start">
-                                  {i.userName ? i.userName : i.business}
-                                </td>
+                                <td className="text-start">{i.campaignName}</td>
                                 {/* {i.banner && i.banner ?
                                                                     <td className="text-start">
                                                                         <img src={i.banner.url} alt="No Image" height="50" />
@@ -241,9 +240,7 @@ const Campaign = () => {
                                                                     <p>No image!</p>
                                                                 } */}
 
-                                <td className="text-start">
-                                  {i.userType ? i.userType : i.short_url}
-                                </td>
+                                <td className="text-start">{i.campaignType}</td>
 
                                 <td className="text-start">
                                   {formatDate(i.createdAt)}
@@ -284,7 +281,7 @@ const Campaign = () => {
                                     </button>
                                   </Link>
 
-                                  <Link to={`/users/edit/${i._id}`}>
+                                  <Link to={`/campaigns/edit/${i._id}`}>
                                     <button
                                       style={{ color: "white" }}
                                       type="button"
@@ -334,9 +331,9 @@ const Campaign = () => {
                         Showing {currentPage * itemPerPage - itemPerPage + 1} to{" "}
                         {Math.min(
                           currentPage * itemPerPage,
-                          BusinessesData.length
+                          campaignData.length
                         )}{" "}
-                        of {BusinessesData.length} entries
+                        of {campaignData.length} entries
                       </div>
                     </div>
 
@@ -384,7 +381,7 @@ const Campaign = () => {
 
                           {!(
                             (currentPage + 1) * itemPerPage - itemPerPage >
-                            BusinessesData.length - 1
+                            campaignData.length - 1
                           ) && (
                             <li className="paginate_button page-item ">
                               <span
@@ -403,7 +400,7 @@ const Campaign = () => {
                             className={
                               !(
                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                BusinessesData.length - 1
+                                campaignData.length - 1
                               )
                                 ? "paginate_button page-item next"
                                 : "paginate_button page-item next disabled"

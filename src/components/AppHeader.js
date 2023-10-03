@@ -1,6 +1,6 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CContainer,
   CHeader,
@@ -10,24 +10,23 @@ import {
   CHeaderToggler,
   CNavLink,
   CNavItem,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from "@coreui/icons";
 
-import { AppBreadcrumb } from './index'
-import { AppHeaderDropdown } from './header/index'
-import { logo } from 'src/assets/brand/logo'
-import axios from 'axios'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { isAutheticated } from 'src/auth'
+import { AppBreadcrumb } from "./index";
+import { AppHeaderDropdown } from "./header/index";
+import { logo } from "src/assets/brand/logo";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import { isAutheticated } from "src/auth";
 
 const AppHeader = () => {
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
-  const [AppName, setAppName] = useState('')
-  const token = isAutheticated()
-
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector((state) => state.sidebarShow);
+  const [AppName, setAppName] = useState("");
+  const token = isAutheticated();
 
   useEffect(() => {
     async function getConfiguration() {
@@ -35,18 +34,17 @@ const AppHeader = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      setAppName(configDetails.data.result[0]?.appName)
-
+      });
+      setAppName(configDetails.data.result[0]?.appName);
     }
-    getConfiguration()
-  }, [])
+    getConfiguration();
+  }, []);
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
         <CHeaderToggler
           className="ps-1"
-          onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
+          onClick={() => dispatch({ type: "set", sidebarShow: !sidebarShow })}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
@@ -55,7 +53,11 @@ const AppHeader = () => {
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink} activeClassName="active">
+            <CNavLink
+              to="/dashboard"
+              component={NavLink}
+              activeclassname="active"
+            >
               <h3>{AppName}</h3>
             </CNavLink>
           </CNavItem>
@@ -88,11 +90,9 @@ const AppHeader = () => {
         </CHeaderNav>
       </CContainer>
       <CHeaderDivider />
-      <CContainer fluid>
-        {/* <AppBreadcrumb /> */}
-      </CContainer>
+      <CContainer fluid>{/* <AppBreadcrumb /> */}</CContainer>
     </CHeader>
-  )
-}
+  );
+};
 
-export default AppHeader
+export default AppHeader;

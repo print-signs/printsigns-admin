@@ -36,8 +36,7 @@ import {
   cilTags,
   cilTennisBall,
   cilText,
-  cilUser
-  ,
+  cilUser,
 } from "@coreui/icons";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -48,46 +47,12 @@ const _nav = [
     to: "/dashboard",
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
-
   {
     component: CNavItem,
-    name: "Products",
-    icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
-    to: "/products",
+    name: "Campaigns",
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    to: "/campaigns",
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Departures',
-  //   icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
-  //   to: '/departures',
-  // },
-  {
-    component: CNavItem,
-    name: "Testimonials",
-    icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
-    to: "/testimonials",
-  },
-  {
-    component: CNavItem,
-    name: "Contact Requests",
-    icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
-    to: "/contact/request",
-  },
-
-  // {
-  //   component: CNavItem,
-  //   name: 'Information',
-  //   icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
-  //   to: '/informations',
-  // },
-
-  {
-    component: CNavItem,
-    name: "Appointments",
-    icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
-    to: "/appointments",
-  },
-
   {
     component: CNavItem,
     name: "Users",
@@ -95,8 +60,20 @@ const _nav = [
     to: "/users",
   },
   {
+    component: CNavItem,
+    name: "Recipients",
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    to: "/recipents",
+  },
+  {
+    component: CNavItem,
+    name: "Products",
+    icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+    to: "/products",
+  },
+  {
     component: CNavGroup,
-    name: "Franchisee Orders",
+    name: "Orders",
     icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
     items: [
       {
@@ -137,19 +114,24 @@ const _nav = [
       },
     ],
   },
-
   {
-    component: CNavItem,
-    name: "Recipients",
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    to: "/recipents",
-  },
-  {
-    component: CNavItem,
-    name: "Campaigns",
-    icon: <CIcon icon={cilUser
-    } customClassName="nav-icon" />,
-    to: "/campaigns",
+    component: CNavGroup,
+    name: "Website Related",
+    icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: "Testimonials",
+        icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
+        to: "/testimonials",
+      },
+      {
+        component: CNavItem,
+        name: "Contact Requests",
+        icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
+        to: "/contact/request",
+      },
+    ],
   },
   {
     component: CNavGroup,
@@ -244,6 +226,40 @@ const _nav = [
       },
     ],
   },
+
+  // {
+  //   component: CNavItem,
+  //   name: 'Departures',
+  //   icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
+  //   to: '/departures',
+  // },
+
+  // {
+  //   component: CNavItem,
+  //   name: "Testimonials",
+  //   icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
+  //   to: "/testimonials",
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: "Contact Requests",
+  //   icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
+  //   to: "/contact/request",
+  // },
+
+  // {
+  //   component: CNavItem,
+  //   name: 'Information',
+  //   icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
+  //   to: '/informations',
+  // },
+
+  // {
+  //   component: CNavItem,
+  //   name: "Appointments",
+  //   icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+  //   to: "/appointments",
+  // },
 ];
 
 export default _nav;

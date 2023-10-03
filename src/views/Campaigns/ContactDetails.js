@@ -3,21 +3,19 @@ import Button from "@material-ui/core/Button";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { CFormInput, CFormLabel, CCol, CRow } from "@coreui/react";
+import axios from "axios";
+import { isAutheticated } from "src/auth";
 
 const ContactDetails = ({ props }) => {
+  const token = isAutheticated();
   const { data, setData, handleView } = props;
   const [dataEntryMethod, setDataEntryMethod] = useState("manual");
   const [csvData, setCsvData] = useState([]);
-  // const [recipients, setRecipients] = useState([{ name: "", phoneNumber: "" }]);
-  // console.log("data", data);
 
   const addRecord = () => {
     setData((prevData) => ({
       ...prevData,
-      recipients: [
-        ...prevData.recipients,
-        { name: "", phoneNumber: "", email: "" },
-      ],
+      recipients: [...prevData.recipients, { name: "", contact: "" }],
     }));
   };
 
@@ -35,14 +33,13 @@ const ContactDetails = ({ props }) => {
           const row = rows[i].split(",");
           if (row.length >= 2) {
             const name = row[0].trim();
-            const email = row[1].trim();
-            if (name && email) {
-              extractedData.push({ name, email });
+            const contact = row[1].trim();
+            if (name && contact) {
+              extractedData.push({ name, contact });
             }
           }
         }
         setCsvData(extractedData);
-        // console.log(csvData);
         setData((prevData) => ({
           ...prevData,
           recipients: extractedData,
@@ -74,11 +71,11 @@ const ContactDetails = ({ props }) => {
     }));
   };
 
-  const recipientNumberChange = (e, index) => {
+  const recipientContactChange = (e, index) => {
     const updatedRecipients = [...data.recipients];
     updatedRecipients[index] = {
       ...updatedRecipients[index],
-      phoneNumber: e.target.value,
+      contact: e.target.value,
     };
     setData((prevData) => ({
       ...prevData,
@@ -86,32 +83,59 @@ const ContactDetails = ({ props }) => {
     }));
   };
 
-  const recipientEmailChange = (e, index) => {
-    const updatedRecipients = [...data.recipients];
-    updatedRecipients[index] = {
-      ...updatedRecipients[index],
-      email: e.target.value,
-    };
-    setData((prevData) => ({
-      ...prevData,
-      recipients: updatedRecipients,
-    }));
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = () => {
-    if (
-      data?.recipients.every(
-        (recipient) =>
-          recipient.name !== "" &&
-          (data?.campaignType !== "email"
-            ? recipient.phoneNumber !== ""
-            : recipient.email !== "")
-      )
-    ) {
-      handleView(4);
-    } else {
-      toast.error("Fill all contact details");
+    const hasEmptyRecipients = data.recipients.some((recipient) => {
+      return !recipient.name || !recipient.contact;
+    });
+
+    if (hasEmptyRecipients) {
+      toast.error("Please fill Conatct details");
+      return;
     }
+
+    const formattedRecipients = data.recipients.map((recipient) => ({
+      name: recipient.name,
+      contact: recipient.contact,
+    }));
+
+    const campaignData = {
+      campaignType: data.campaignType,
+      campaignName: data.campaignName,
+      language: data.language,
+      recipients: formattedRecipients,
+    };
+
+    axios
+      .post(`/api/campaign/create`, campaignData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        // console.log(res);
+        handleView(4);
+        toast.success("Campaign added successfully!");
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        const message = err.response?.data?.message || "Something went wrong!";
+        // console.log(message);
+        toast.error(message);
+      });
+
+    //   if (
+    //     data?.recipients.every(
+    //       (recipient) => recipient.name !== "" && recipient.contact !== ""
+    //     )
+    //   ) {
+    //     handleView(4);
+    //   } else {
+    //     toast.error("Fill all contact details");
+    //   }
   };
 
   return (
@@ -171,50 +195,43 @@ const ContactDetails = ({ props }) => {
                 <div className="card-body px-5">
                   {data?.recipients.map((recipient, index) => {
                     return (
-                      <div className="row mb-3 border p-3 rounded">
+                      <div className="row mb-3 border p-3 rounded" key={index}>
                         <div className="col-md-6 d-flex align-items-center">
-                          <label htmlFor="title" className="form-label me-2">
+                          <label
+                            htmlFor={`name-${index}`}
+                            className="form-label me-2"
+                          >
                             Name
                           </label>
                           <input
                             type="text"
                             className="form-control"
-                            name={`name-${index}`}
+                            id={`name-${index}`}
                             value={recipient?.name}
                             onChange={(e) => recipientNameChange(e, index)}
                             maxLength="50"
                           />
                         </div>
                         <div className="col-md-6 d-flex align-items-center">
-                          <label htmlFor="title" className="form-label me-2">
-                            {data?.campaignType === "rcs" ||
-                            data?.campaignType === "whatsapp"
-                              ? "Phone Number"
-                              : "Email"}
+                          <label
+                            htmlFor={`contact-${index}`}
+                            className="form-label me-2"
+                          >
+                            {data?.campaignType === "email"
+                              ? "Email"
+                              : "Phone Number"}
                           </label>
                           <input
                             type={
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? "number"
-                                : "email"
+                              data?.campaignType === "email"
+                                ? "email"
+                                : "number"
                             }
                             className="form-control"
-                            id={`recipients-phone-number-${index}`}
+                            id={`contact-${index}`}
                             maxLength="50"
-                            name={`toPhoneNumber-${index}`}
-                            value={
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? recipient?.phoneNumber
-                                : recipient?.email
-                            }
-                            onChange={(e) =>
-                              data?.campaignType === "rcs" ||
-                              data?.campaignType === "whatsapp"
-                                ? recipientNumberChange(e, index)
-                                : recipientEmailChange(e, index)
-                            }
+                            value={recipient?.contact}
+                            onChange={(e) => recipientContactChange(e, index)}
                           />
                         </div>
                         {index !== 0 && (
