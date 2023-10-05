@@ -53,6 +53,7 @@ const VideoTemplate = ({ props }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [transcribedText, setTranscribedText] = useState("");
+  const [audioUrl, setAudioUrl] = useState();
 
   const handleVideoUpload = async (e) => {
     const file = e.target.files[0];
@@ -70,7 +71,7 @@ const VideoTemplate = ({ props }) => {
       const formData = new FormData();
       // console.log(data.video);
       formData.append("videoTemplate", data.video);
-
+      // console.log(Object.fromEntries(formData));
       const response = await axios.post("/api/campaign/convert", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,8 +80,9 @@ const VideoTemplate = ({ props }) => {
         },
       });
 
-      const { success, message, text } = response.data;
+      const { success, message, text, audio } = response.data;
       if (success) {
+        setAudioUrl(audio);
         setTranscribedText(text);
         setIsLoading(false);
         swal({
@@ -113,64 +115,6 @@ const VideoTemplate = ({ props }) => {
 
   const handleDelete = () => {
     setSelectedFile(null);
-  };
-
-  const extractText = async (e) => {
-    e.preventDefault();
-
-    if (data.video === null) {
-      swal({
-        title: "Error",
-        text: "Please upload video",
-        icon: "error",
-        button: "Close",
-      });
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      // console.log(data.video);
-      formData.append("videoTemplate", data.video);
-
-      const response = await axios.post("/api/campaign/convert", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-
-      const { success, message, text } = response.data;
-      if (success) {
-        setTranscribedText(text);
-        setIsLoading(false);
-        swal({
-          title: "Converted",
-          text: "Text Extracted Successfully",
-          icon: "success",
-          button: "Close",
-        });
-      } else {
-        swal({
-          title: "API Error",
-          text: message,
-          icon: "error",
-          button: "Close",
-        });
-        setIsLoading(false);
-        console.log("API Error:", message);
-      }
-    } catch (error) {
-      swal({
-        title: "Network Error",
-        text: error.message,
-        icon: "error",
-        button: "Close",
-      });
-      setIsLoading(false);
-      console.log("Network Error:", error.message);
-    }
   };
 
   return (
@@ -221,6 +165,15 @@ const VideoTemplate = ({ props }) => {
       </div>
       <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
+          <div>
+            <a
+              style={{ padding: "10px", backgroundColor: "#f5f5f5" }}
+              href={audioUrl}
+              target="_blank"
+            >
+              {audioUrl ? audioUrl : null}
+            </a>
+          </div>
           <GridContainer>
             <GridItem
               style={{

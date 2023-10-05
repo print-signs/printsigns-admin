@@ -142,10 +142,6 @@ const routes = [
     name: "view healthcare providers",
     element: ViewHealthCareProvider,
   },
-
-
-
-
   {
     path: "//campaigns",
     name: "campaigns",
@@ -166,10 +162,6 @@ const routes = [
     name: "view healthcare providers",
     element: ViewHealthCareProvider,
   },
-
-
-
-
 
   // { path: '/franchisee/view/:id', name: 'view franchisee', element: ViewFra },
   //Contact Requests

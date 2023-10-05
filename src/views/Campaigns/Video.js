@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { isAutheticated } from "src/auth";
 
 const Video = ({ props }) => {
+  const token = isAutheticated();
   const { data, setData, handleView } = props;
+  const [isLoading, setIsLoading] = useState(false);
+  const [videos, setVideos] = useState({});
 
   const handleVideoUpload = (e, index) => {
     const file = e.target.files[0];
@@ -11,6 +17,10 @@ const Video = ({ props }) => {
       videos: prev.videos.map((video, i) =>
         i === index ? { ...video, title: URL.createObjectURL(file) } : video
       ),
+    }));
+    setVideos((prev) => ({
+      ...prev,
+      [e.target.id]: file,
     }));
   };
 
@@ -27,6 +37,50 @@ const Video = ({ props }) => {
         ...prev,
         videos: prev.videos.filter((_, i) => i !== index),
       }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const selectedVideos = Object.values(videos);
+
+    if (!selectedVideos || selectedVideos.length === 0) {
+      console.error("No videos to merge.");
+      setIsLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    // console.log(selectedVideos);
+    selectedVideos.forEach((video) => {
+      formData.append("videos", video);
+      // console.log(Object.fromEntries(formData));
+    });
+
+    try {
+      const response = await axios.post("/api/campaign/merge", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Video merged successfully");
+        setIsLoading(false);
+        handleView(6);
+      } else {
+        console.log("Failed to merge videos");
+        setIsLoading(false);
+        toast.error("Failed to merge videos");
+      }
+    } catch (error) {
+      console.log("An error occurred while merging videos:", error);
+      setIsLoading(false);
+      toast.error(error.message);
     }
   };
 
@@ -71,13 +125,7 @@ const Video = ({ props }) => {
                   marginBottom: "1rem",
                   textTransform: "capitalize",
                 }}
-                onClick={() => {
-                  if (data?.videos === null) {
-                    toast.error("Fill all details");
-                  } else {
-                    handleView(6);
-                  }
-                }}
+                onClick={() => props.handleView(6)}
               >
                 Next
               </Button>
@@ -103,6 +151,7 @@ const Video = ({ props }) => {
                     className="form-control"
                     id={`videoTitle${index + 1}`}
                     onChange={(e) => handleVideoUpload(e, index)}
+                    accept=".mp4"
                   />
                   {index >= 2 && (
                     <div className="col-12">
@@ -128,8 +177,8 @@ const Video = ({ props }) => {
         </div>
       </div>
       <div className="col-md-12">
-        <button onClick={addRecord} className="btn btn-primary">
-          Merge Videos
+        <button onClick={handleSubmit} className="btn btn-primary">
+          {isLoading ? "Merging" : "Merge Videos"}
         </button>
       </div>
     </div>
