@@ -2,38 +2,19 @@ import React from "react";
 import CIcon from "@coreui/icons-react";
 import {
   cilAddressBook,
-  cilAirplaneMode,
   cilAppsSettings,
-  cilBell,
   cilBrush,
-  cilCalculator,
-  cilCalendar,
   cilCart,
-  cilChartPie,
   cilClipboard,
   cilCommand,
   cilCompress,
   cilContact,
-  cilCursor,
-  cilDrop,
-  cilFace,
-  cilFilterSquare,
-  cilInfo,
   cilLanguage,
   cilLoopCircular,
   cilMedicalCross,
-  cilMoney,
-  cilMugTea,
-  cilNewspaper,
   cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilSitemap,
   cilSpeedometer,
-  cilStar,
   cilSwapHorizontal,
-  cilTablet,
-  cilTags,
   cilTennisBall,
   cilText,
   cilUser,
@@ -150,37 +131,6 @@ const _nav = [
         icon: <CIcon icon={cilBrush} customClassName="nav-icon" />,
         to: "/business_type",
       },
-
-      // {
-      //   component: CNavItem,
-      //   name: 'States',
-      //   icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-      //   to: '/states',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Standard Shipping',
-      //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
-      //   to: '/shipping',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Custom Shipping',
-      //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
-      //   to: '/custom-shipping',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Pincode',
-      //   icon: <CIcon icon={cilCommand} customClassName="nav-icon" />,
-      //   to: '/pincode',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Tax Rates',
-      //   icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
-      //   to: '/tax',
-      // },
       {
         component: CNavItem,
         name: "Languages",
@@ -226,40 +176,6 @@ const _nav = [
       },
     ],
   },
-
-  // {
-  //   component: CNavItem,
-  //   name: 'Departures',
-  //   icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
-  //   to: '/departures',
-  // },
-
-  // {
-  //   component: CNavItem,
-  //   name: "Testimonials",
-  //   icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
-  //   to: "/testimonials",
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: "Contact Requests",
-  //   icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
-  //   to: "/contact/request",
-  // },
-
-  // {
-  //   component: CNavItem,
-  //   name: 'Information',
-  //   icon: <CIcon icon={cilInfo} customClassName="nav-icon" />,
-  //   to: '/informations',
-  // },
-
-  // {
-  //   component: CNavItem,
-  //   name: "Appointments",
-  //   icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
-  //   to: "/appointments",
-  // },
 ];
 
 export default _nav;

@@ -50,26 +50,27 @@ const DeleteButton = styled.button`
 const VideoTemplate = ({ props }) => {
   const token = isAutheticated();
   const { data, setData, handleView } = props;
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [transcribedText, setTranscribedText] = useState("");
   const [audioUrl, setAudioUrl] = useState();
+  const [elevenLabsVoiceId, setElevenLabsVoiceId] = useState("");
 
   const handleVideoUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setData((prev) => ({
-        ...prev,
-        [e.target.id]: file,
-      }));
-    }
+    if (!file) return;
+
+    setData((prev) => ({
+      ...prev,
+      [e.target.id]: file,
+    }));
 
     setSelectedFile(URL.createObjectURL(file));
 
     setIsLoading(true);
     try {
       const formData = new FormData();
-      // console.log(data.video);
+      console.log(data.video);
       formData.append("videoTemplate", data.video);
       // console.log(Object.fromEntries(formData));
       const response = await axios.post("/api/campaign/convert", formData, {
@@ -80,10 +81,11 @@ const VideoTemplate = ({ props }) => {
         },
       });
 
-      const { success, message, text, audio } = response.data;
+      const { success, message, text, audio, voiceId } = response.data;
       if (success) {
         setAudioUrl(audio);
         setTranscribedText(text);
+        setElevenLabsVoiceId(voiceId);
         setIsLoading(false);
         swal({
           title: "Converted",
@@ -109,7 +111,7 @@ const VideoTemplate = ({ props }) => {
         button: "Close",
       });
       setIsLoading(false);
-      console.log("Network Error:", error.message);
+      console.log("Network Error:", error);
     }
   };
 
@@ -165,14 +167,13 @@ const VideoTemplate = ({ props }) => {
       </div>
       <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
-          <div>
-            <a
-              style={{ padding: "10px", backgroundColor: "#f5f5f5" }}
-              href={audioUrl}
-              target="_blank"
-            >
-              {audioUrl ? audioUrl : null}
+          <div style={{ padding: "10px" }}>
+            <a href={audioUrl} target="_blank">
+              Your audioUrl: {audioUrl ? audioUrl : null}
             </a>
+            <p>
+              {elevenLabsVoiceId ? `Your VoiceId: ${elevenLabsVoiceId}` : null}
+            </p>
           </div>
           <GridContainer>
             <GridItem
