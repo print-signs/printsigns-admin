@@ -26,7 +26,7 @@ const AppFooter = () => {
     <CFooter>
       <div>
         <span className="ms-1">
-          {new Date().getFullYear()} &copy; {copyright ? copyright : ""} .
+          {/* {new Date().getFullYear()} &copy; {copyright ? copyright : ""} . */}
         </span>
       </div>
     </CFooter>

@@ -18,7 +18,6 @@ function Address() {
   const [website, setWebsite] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
-  const [gstin, setGSTIN] = useState("");
 
   useEffect(() => {
     async function getConfiguration() {
@@ -38,7 +37,6 @@ function Address() {
           setWebsite(el.website);
           setContact(el.contact);
           setEmail(el.email);
-          setGSTIN(el?.gstin);
         });
       });
     }
@@ -63,13 +61,9 @@ function Address() {
       setContact(e.target.value);
     } else if (e.target.name.toLowerCase() === "email") {
       setEmail(e.target.value);
-    } else if (e.target.name.toLowerCase() === "gstin") {
-      setGSTIN(e.target.value);
     }
   }
   async function handelSubmit() {
-    if (!/^[0-9A-Za-z]{15}$/.test(gstin))
-      return swal("Warning!", "Enter valid GSTIN");
     setLoading(true);
     let data = {
       company,
@@ -81,7 +75,6 @@ function Address() {
       website,
       contact,
       email,
-      gstin,
     };
     let res = await axios.post(`/api/config/address`, data, {
       headers: {
@@ -194,20 +187,6 @@ function Address() {
                                     value={pincode}
                                     type="text"
                                     name="pincode"
-                                    onChange={(e) => handelChange(e)}
-                                    className="form-control input-field "
-                                    id="basicpill-phoneno-input"
-                                  />
-                                  <label
-                                    htmlFor="basicpill-phoneno-input"
-                                    className="label-100 mt-3"
-                                  >
-                                    GSTIN
-                                  </label>
-                                  <input
-                                    value={gstin}
-                                    type="text"
-                                    name="gstin"
                                     onChange={(e) => handelChange(e)}
                                     className="form-control input-field "
                                     id="basicpill-phoneno-input"

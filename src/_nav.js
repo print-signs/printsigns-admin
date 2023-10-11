@@ -121,30 +121,6 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: "Purpose",
-        icon: <CIcon icon={cilLoopCircular} customClassName="nav-icon" />,
-        to: "/purpose",
-      },
-      {
-        component: CNavItem,
-        name: "Business Type",
-        icon: <CIcon icon={cilBrush} customClassName="nav-icon" />,
-        to: "/business_type",
-      },
-      {
-        component: CNavItem,
-        name: "Languages",
-        icon: <CIcon icon={cilLanguage} customClassName="nav-icon" />,
-        to: "/languages",
-      },
-      {
-        component: CNavItem,
-        name: "Policies",
-        icon: <CIcon icon={cilSwapHorizontal} customClassName="nav-icon" />,
-        to: "/policies",
-      },
-      {
-        component: CNavItem,
         name: "Social Media",
         icon: <CIcon icon={cilMedicalCross} customClassName="nav-icon" />,
         to: "/socialmedia",
