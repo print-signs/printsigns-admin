@@ -34,7 +34,7 @@ const Categories = () => {
   const [saveLoding, setSaveLoading] = useState(true);
   const [edit, setEdit] = useState(false);
   const [categoryName, setCategoryName] = useState("");
-  const [success, setSuccess] = useState(false);
+
   const [categoryId, setCategoryId] = useState("");
   const [category, setCategory] = useState([]);
   const [itemPerPage, setItemPerPage] = useState(10);
