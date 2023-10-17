@@ -5,6 +5,7 @@ import {
   cilAppsSettings,
   cilBrush,
   cilCart,
+  cilCat,
   cilClipboard,
   cilCommand,
   cilCompress,
@@ -33,6 +34,12 @@ const _nav = [
     name: "Users",
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
     to: "/users",
+  },
+  {
+    component: CNavItem,
+    name: "Categories",
+    icon: <CIcon icon={cilCat} customClassName="nav-icon" />,
+    to: "/categories",
   },
   {
     component: CNavItem,

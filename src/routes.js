@@ -82,6 +82,7 @@ import AddNewAppointment from "./views/Appointments/AddNewAppointment";
 import ViewHealthCareProvider from "./views/Business/ViewHealthCareProvider";
 import Campaign from "./views/Campaigns/Campaign.js";
 import AddCampaign from "./views/Campaigns/AddCampaign.js";
+import Categories from "./views/Categories/categories";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -141,6 +142,12 @@ const routes = [
     path: "/users/view/:id",
     name: "view healthcare providers",
     element: ViewHealthCareProvider,
+  },
+  // Categories
+  {
+    path: "//categories",
+    name: "Categories",
+    element: Categories,
   },
   {
     path: "//campaigns",
