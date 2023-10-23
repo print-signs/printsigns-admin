@@ -4,6 +4,17 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { isAutheticated } from "src/auth";
+
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 // import { WebsiteURL } from '../WebsiteURL'
 
 const EditProduct = () => {
@@ -11,20 +22,18 @@ const EditProduct = () => {
 
   const token = isAutheticated();
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    image: [],
-    imageURL: [],
-    name: "",
-    description: "",
-    category: "",
-
-    price: "",
-  });
 
   const [loading, setLoading] = useState(false);
   const [allTax, setAllTax] = useState([]);
   const [categories, setCatgories] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [productImages, setProductImages] = useState([]);
+  const [price, setPrice] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+  const [error, setError] = useState("");
+  const [newUpdatedImages, setNewUpdatedImages] = useState([]);
 
   //get Productdata
   const getProduct = async () => {
@@ -36,23 +45,22 @@ const EditProduct = () => {
         },
       })
       .then((res) => {
-        // console.log(res.data?.product?.image)
-        // if (res.data?.product?.image) {
-        //     res.data?.product?.image.map(item => {
-        //     })
-
-        // }
-
-        // setImagesPreview(res.data?.product?.image)
-        setData((prev) => ({
-          ...prev,
-          ...res.data?.product,
-          imageURL: res.data?.product?.image?.url,
-        }));
+        setName(res?.data?.product.name);
+        setDescription(res.data.product.description);
+        setProductImages(res.data.product.image);
+        setPrice(res.data.product.price);
+        setCategoryName(res.data.product.category);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        swal({
+          title: error,
+          text: " Can not fetch the product  ",
+          icon: "error",
+          button: "Retry",
+          dangerMode: true,
+        });
+      });
   };
-  // console.log(imagesPreview)
 
   const getCategories = async () => {
     try {
@@ -95,101 +103,12 @@ const EditProduct = () => {
     getAllTax();
   }, [token]);
 
-  const handleChange = (e) => {
-    if (e.target.id === "image") {
-      if (
-        e.target.files[0]?.type === "image/jpeg" ||
-        e.target.files[0]?.type === "image/png" ||
-        e.target.files[0]?.type === "image/jpg"
-      ) {
-        if (imagesPreview.length > 3) {
-          swal({
-            title: "Warning",
-            text: "maximum Four image Upload ",
-            icon: "error",
-            button: "Close",
-            dangerMode: true,
-          });
-          return;
-        }
-        // only for file preview------------------------------------
-        const files = Array.from(e.target.files);
-        files.forEach((file) => {
-          const reader = new FileReader();
-
-          reader.onload = () => {
-            if (reader.readyState === 2) {
-              setImagesPreview((old) => [...old, reader.result]);
-            }
-          };
-
-          reader.readAsDataURL(file);
-        });
-        // -----------------------------------------------------------------------------
-
-        setData((prev) => ({
-          ...prev,
-
-          image: [...data.image, ...e.target.files],
-        }));
-        return;
-      } else {
-        swal({
-          title: "Warning",
-          text: "Upload jpg, jpeg, png only.",
-          icon: "error",
-          button: "Close",
-          dangerMode: true,
-        });
-        setData((prev) => ({
-          ...prev,
-          imageURL: "",
-          image: "",
-        }));
-        e.target.value = null;
-        return;
-      }
-    }
-    setData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  };
-
-  const TaxRatechange = async (e) => {
-    let taxDetails = {
-      name: e.target.value.slice(12, 16),
-      rate: Number(e.target.value.slice(4, 6)),
-
-      taxId: e.target.value.slice(24),
-    };
-
-    let trRate = taxDetails.rate / 100;
-    let PriceWithT = Number(data.price);
-    PriceWithT += +(PriceWithT * trRate).toFixed();
-
-    //price_Level_2_With_Tax
-    let price_Level_2_With_Tax = Number(data.price_Level_2);
-    price_Level_2_With_Tax += +(price_Level_2_With_Tax * trRate).toFixed();
-    //
-    //price_Level_3_With_Tax
-    let price_Level_3_With_Tax = Number(data.price_Level_3);
-    price_Level_3_With_Tax += +(price_Level_3_With_Tax * trRate).toFixed();
-    setData((prev) => ({
-      ...prev,
-      price_With_Tax: PriceWithT,
-
-      price_Level_2_With_Tax: price_Level_2_With_Tax,
-
-      price_Level_3_With_Tax: price_Level_3_With_Tax,
-      taxId: taxDetails.taxId,
-    }));
-  };
-
-  // console.log(data.image.length)
   const handleSubmit = () => {
     if (
-      data.name.trim() === "" ||
-      data.description.trim() === "" ||
-      data.price === "" ||
-      data.image === ""
+      name == "" ||
+      description == "" ||
+      price == "" ||
+      (productImages.length == 0 && newUpdatedImages.length == 0)
       // data.price_With_Tax === '' ||
       // data.price_Level_2 === '' ||
       // data.price_Level_2_With_Tax === '' ||
@@ -208,21 +127,25 @@ const EditProduct = () => {
     }
     setLoading(true);
     const formData = new FormData();
-    formData.append("name", data.name);
+    formData.append("name", name);
 
-    formData.append("description", data.description);
-    formData.append("price", data.price);
-    formData.append("category", data.category);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", categoryName);
 
-    data.image.forEach((Singleimage) => {
-      formData.append("image", Singleimage);
-    });
+    newUpdatedImages.length > 0 &&
+      newUpdatedImages.forEach((Singleimage) => {
+        formData.append("newImages", Singleimage);
+      });
+
+    formData.append("image", JSON.stringify(productImages));
 
     axios
-      .put(`/api/product/update/${id}`, formData, {
+      .patch(`/api/product/update/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/formdata",
+          "Content-Type": "multipart/form-data",
+
           "Access-Control-Allow-Origin": "*",
         },
       })
@@ -238,6 +161,7 @@ const EditProduct = () => {
       })
       .catch((err) => {
         setLoading(false);
+
         const message = err.response?.data?.message
           ? err.response?.data?.message
           : "Something went wrong!";
@@ -250,7 +174,63 @@ const EditProduct = () => {
         });
       });
   };
+  const handleFileChange = (e) => {
+    const files = e.target.files;
 
+    // Check the total number of selected files
+    if (newUpdatedImages.length + files.length > 4 - productImages.length) {
+      setError("You can only upload up to 4 images.");
+      return;
+    }
+
+    // Check file types and append to selectedFiles
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const selected = [];
+
+    for (let i = 0; i < files.length; i++) {
+      if (
+        newUpdatedImages.length + selected.length >=
+        4 - productImages.length
+      ) {
+        break; // Don't allow more than 4 images
+      }
+
+      if (allowedTypes.includes(files[i].type)) {
+        selected.push(files[i]);
+      }
+    }
+
+    if (selected.length === 0) {
+      setError("Please upload only PNG, JPEG, or JPG files.");
+    } else {
+      setError("");
+      setNewUpdatedImages([...newUpdatedImages, ...selected]);
+    }
+  };
+
+  const handelDelete = async (public_id) => {
+    const ary = public_id.split("/");
+
+    const res = await axios.delete(
+      `/api/product/deleteImage/jatinMor/product/${ary[2]}`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res) {
+      const filtered = productImages.filter(
+        (item) => item.public_id !== public_id
+      );
+      setProductImages(filtered);
+    }
+  };
+  const handellocalDelete = (image) => {
+    const filtered = productImages.filter((item) => item !== image);
+    setProductImages(filtered);
+  };
   return (
     <div className="container">
       <div className="row">
@@ -314,14 +294,14 @@ const EditProduct = () => {
                   type="text"
                   className="form-control"
                   id="name"
-                  value={data.name}
+                  value={name}
                   maxLength={25}
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setName(e.target.value)}
                 />
-                {data.name ? (
+                {name ? (
                   <>
                     <small className="charLeft mt-4 fst-italic">
-                      {25 - data.name.length} characters left
+                      {25 - name.length} characters left
                     </small>
                   </>
                 ) : (
@@ -337,14 +317,14 @@ const EditProduct = () => {
                   type="text"
                   className="form-control"
                   id="description"
-                  value={data.description}
+                  value={description}
                   maxLength="100"
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
-                {data.description ? (
+                {description ? (
                   <>
                     <small className="charLeft mt-4 fst-italic">
-                      {100 - data.description.length} characters left
+                      {100 - description.length} characters left
                     </small>
                   </>
                 ) : (
@@ -352,40 +332,119 @@ const EditProduct = () => {
                 )}
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="image" className="form-label">
-                  Product Image*
+              <Box>
+                <label htmlFor="upload-Image">
+                  <TextField
+                    style={{
+                      display: "none",
+                      width: "350px",
+                      height: "350px",
+                      borderRadius: "10%",
+                    }}
+                    fullWidth
+                    id="upload-Image"
+                    type="file"
+                    accept=".jpg , .png ,.jpeg"
+                    label="file"
+                    multiple
+                    variant="outlined"
+                    onChange={(e) => handleFileChange(e)}
+                  />
+                  <Box
+                    style={{ borderRadius: "10%" }}
+                    sx={{
+                      margin: "1rem 0rem",
+                      cursor: "pointer",
+                      width: "140px",
+                      height: "140px",
+                      border: "2px solid grey",
+                      // borderRadius: '50%',
+
+                      "&:hover": {
+                        background: "rgba(112,112,112,0.5)",
+                      },
+                    }}
+                  >
+                    <CloudUploadIcon
+                      style={{
+                        color: "grey",
+                        margin: "auto",
+                        fontSize: "5rem",
+                      }}
+                      fontSize="large"
+                    />
+                  </Box>
                 </label>
-                <input
-                  type="file"
-                  className="form-control"
-                  id="image"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => handleChange(e)}
-                />
-                <p className="pt-1 pl-2 text-secondary">
-                  Upload jpg, jpeg and png only*
-                </p>
-              </div>
+              </Box>
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <div>
                 <strong className="fs-6 fst-italic">
-                  *Please Upload maximum four images
+                  *You cannot upload more than 4 images
                 </strong>
               </div>
 
-              {imagesPreview.length > 0 && (
-                <div id="createProductFormImage" className="w-25 d-flex">
-                  {imagesPreview.map((image, index) => (
-                    <img
-                      className=" w-50 p-1 "
-                      key={index}
-                      src={image}
-                      alt="Product Preview"
-                    />
+              <Box style={{ display: "flex" }}>
+                {productImages &&
+                  productImages.map((image, i) => (
+                    <Box marginRight={"2rem"}>
+                      <img
+                        src={image.url}
+                        alt="profileImage"
+                        style={{
+                          width: 70,
+                          height: 70,
+
+                          marginBottom: "1rem",
+                        }}
+                      />
+                      {productImages.length + newUpdatedImages.length > 1 && (
+                        <DeleteSharpIcon
+                          onClick={() => handelDelete(image.public_id)}
+                          fontSize="small"
+                          sx={{
+                            color: "white",
+                            position: "absolute",
+                            cursor: "pointer",
+                            padding: "0.2rem",
+                            background: "black",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      )}
+                      {/* </IconButton> */}
+                    </Box>
                   ))}
-                </div>
-              )}
+                {newUpdatedImages &&
+                  newUpdatedImages.map((image, i) => (
+                    <Box marginRight={"2rem"}>
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt="profileImage"
+                        style={{
+                          width: 70,
+                          height: 70,
+
+                          marginBottom: "1rem",
+                        }}
+                      />
+                      {productImages.length + newUpdatedImages.length > 1 && (
+                        <DeleteSharpIcon
+                          onClick={() => handellocalDelete(image)}
+                          fontSize="small"
+                          sx={{
+                            color: "white",
+                            position: "absolute",
+                            cursor: "pointer",
+                            padding: "0.2rem",
+                            background: "black",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      )}
+                      {/* </IconButton> */}
+                    </Box>
+                  ))}
+              </Box>
             </div>
           </div>
         </div>
@@ -400,17 +459,17 @@ const EditProduct = () => {
                   type="number"
                   className="form-control"
                   id="price"
-                  value={data.price}
-                  onChange={(e) => handleChange(e)}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
               <div>
                 <label htmlFor="categorySelect">Select a Category:</label>
-                <select
+                {/* <select
                   id="category"
                   style={{ width: "100%" }}
-                  value={data.category}
-                  onChange={handleChange}
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
                 >
                   <option value={""}>None</option>
                   {categories.map((category, index) => (
@@ -418,7 +477,44 @@ const EditProduct = () => {
                       {category.categoryName}
                     </option>
                   ))}
-                </select>
+                </select> */}
+                <FormControl fullWidth>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    fullWidth
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                  >
+                    <MenuItem
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "left",
+                        textAlign: "left",
+                        padding: "0.5rem",
+                      }}
+                      value={""}
+                    >
+                      None
+                    </MenuItem>
+                    {categories.map((category, i) => (
+                      <MenuItem
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "left",
+                          textAlign: "left",
+                          padding: "0.5rem",
+                        }}
+                        key={i}
+                        value={category.categoryName}
+                      >
+                        {category.categoryName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </div>
 
               {allTax.length > 0 && (

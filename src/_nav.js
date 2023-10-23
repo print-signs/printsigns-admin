@@ -107,6 +107,12 @@ const _nav = [
         icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
         to: "/contact/request",
       },
+      {
+        component: CNavItem,
+        name: "Content ",
+        icon: <CIcon icon={cilText} customClassName="nav-icon" />,
+        to: "/content",
+      },
     ],
   },
   {

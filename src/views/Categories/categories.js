@@ -277,11 +277,23 @@ const Categories = () => {
                         placeholder="category name"
                         value={categoryName}
                         fullWidth
+                        inputProps={{
+                          maxLength: 25,
+                        }}
                         style={{
                           padding: "1rem",
                         }}
                         onChange={(e) => setCategoryName(e.target.value)}
                       />
+                      {categoryName ? (
+                        <>
+                          <small className="charLeft mt-2 ml-3 fst-italic">
+                            {25 - categoryName.length} characters left
+                          </small>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                       <Box
                         p={2}
                         display={"flex"}

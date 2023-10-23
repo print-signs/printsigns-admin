@@ -36,6 +36,7 @@ function ViewProduct() {
     return strTime;
   }
 
+  // console.log(product);
   return (
     <div className=" main-content">
       <div className="  my-3 page-content">
@@ -45,13 +46,13 @@ function ViewProduct() {
             <div className="col-12">
               <div className="page-title-box d-flex align-items-center justify-content-between">
                 <h4 className="mb-3">Product</h4>
-                <Link to="/product/add">
+                <Link to="/products">
                   <button
                     type="button"
                     className="btn btn-info float-end mb-3 ml-4"
                   >
                     {" "}
-                    + Add Product
+                    Back
                   </button>
                 </Link>
                 {/* <div className="page-title-right">
@@ -78,7 +79,7 @@ function ViewProduct() {
                         <tr>
                           <th>Id</th>{" "}
                           <td>
-                            <h5>{product?._id}</h5>
+                            <h5>{product.uniqueId}</h5>
                           </td>
                         </tr>
                         <tr>
@@ -106,7 +107,7 @@ function ViewProduct() {
                         </tr>
                         <tr>
                           <th>Base Price</th>
-                          <td>₹{product?.price}</td>
+                          <td>${product?.price}</td>
                         </tr>
 
                         {/* <tr><th>Product Time</th><td>{product?.time}</td></tr>

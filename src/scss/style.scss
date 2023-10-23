@@ -3,7 +3,6 @@
 $enable-ltr: true;
 $enable-rtl: true;
 
-
 // Import CoreUI for React components library
 //@import "@coreui/coreui/scss/coreui";
 // Import Chart.js custom tooltips styles
@@ -15,3 +14,9 @@ $enable-rtl: true;
 
 // If you want to add custom CSS you can put it here.
 @import "custom";
+
+.container .ql-editor {
+  min-height: 5in;
+
+  background-color: white;
+}

@@ -83,6 +83,11 @@ import ViewHealthCareProvider from "./views/Business/ViewHealthCareProvider";
 import Campaign from "./views/Campaigns/Campaign.js";
 import AddCampaign from "./views/Campaigns/AddCampaign.js";
 import Categories from "./views/Categories/categories";
+import Content from "./views/Content/content";
+
+import EditPrivacyPolicy from "./views/Content/editPrivacyPolicy";
+import EditTermsConditions from "./views/Content/editTermsConditions";
+import EditShippingPolicy from "./views/Content/editShippingPolicy";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -183,6 +188,30 @@ const routes = [
     name: "AddContact Request",
     element: AddContactRequest,
   },
+
+  // Content ---- >
+
+  {
+    path: "/content",
+    name: "Content",
+    element: Content,
+  },
+  {
+    path: "/content/terms-and-conditions",
+    name: "Content",
+    element: EditTermsConditions,
+  },
+  {
+    path: "/content/privacy-policy",
+    name: "Content",
+    element: EditPrivacyPolicy,
+  },
+  {
+    path: "/content/shipping-policy",
+    name: "Content",
+    element: EditShippingPolicy,
+  },
+
   // { path: '/complaint/view/:id', name: 'view Complain', element: ViewComplaint },
   //Complaints
   { path: "/testimonials", name: "Testimonials", element: Testimonials },
