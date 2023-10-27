@@ -229,14 +229,6 @@ const Products = () => {
                               margin: "1rem 1rem 1rem 0rem",
                             }}
                           >
-                            {/* <input
-                          value={query}
-                          onChange={(e) => setQuery(e.target.value)}
-                          placeholder="Type your keywords..."
-                        />
-                        <button onClick={() => handleSearchClick(query)}>
-                          search
-                        </button>{" "} */}
                             <Typography
                               style={{
                                 display: "flex",

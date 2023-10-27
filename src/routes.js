@@ -27,9 +27,7 @@ import Login from "./views/pages/login/Login";
 import Appointments from "./views/Appointments/Appointments";
 
 //Businesses
-import Businesses from "./views/Business/Businesses.js";
-import AddBusiness from "./views/Business/AddBusiness.js";
-import EditBusiness from "./views/Business/EditBusiness.js";
+
 import Products from "./views/Products/Products";
 //product
 import AddProduct from "./views/Products/AddProduct";
@@ -79,7 +77,7 @@ import EditPurpose from "./views/configuration/Purpose/EditPurpose.js";
 import ViewAppointment from "./views/Appointments/ViewAppointment";
 import EditAppointment from "./views/Appointments/EditAppointment";
 import AddNewAppointment from "./views/Appointments/AddNewAppointment";
-import ViewHealthCareProvider from "./views/Business/ViewHealthCareProvider";
+
 import Campaign from "./views/Campaigns/Campaign.js";
 import AddCampaign from "./views/Campaigns/AddCampaign.js";
 import Categories from "./views/Categories/categories";
@@ -88,6 +86,11 @@ import Content from "./views/Content/content";
 import EditPrivacyPolicy from "./views/Content/editPrivacyPolicy";
 import EditTermsConditions from "./views/Content/editTermsConditions";
 import EditShippingPolicy from "./views/Content/editShippingPolicy";
+
+import UserTable from "./views/UserAddress/userTable";
+import EditUserAddress from "./views/UserAddress/editUserAddress";
+import AddUserAddress from "./views/UserAddress/addUserAddress";
+import ViewAddress from "./views/UserAddress/viewAddress";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -127,27 +130,48 @@ const routes = [
     element: AddNewAppointment,
   },
 
+  {
+    path: "/users-address",
+    name: "User Table",
+    element: UserTable,
+  },
+  {
+    path: "/users-address/add",
+    name: "User Address",
+    element: AddUserAddress,
+  },
+  {
+    path: "/users-address/edit/:id",
+    name: "Edit user address",
+    element: EditUserAddress,
+  },
+  {
+    path: "/users-address/view/:id",
+    name: "view address",
+    element: ViewAddress,
+  },
+
   // health care providers
-  {
-    path: "//users",
-    name: "healthcare providers",
-    element: Businesses,
-  },
-  {
-    path: "//users/add",
-    name: "Add healthcare providers",
-    element: AddBusiness,
-  },
-  {
-    path: "/users/edit/:id",
-    name: "Edit healthcare providers",
-    element: EditBusiness,
-  },
-  {
-    path: "/users/view/:id",
-    name: "view healthcare providers",
-    element: ViewHealthCareProvider,
-  },
+  // {
+  //   path: "//users",
+  //   name: "healthcare providers",
+  //   element: Businesses,
+  // },
+  // {
+  //   path: "//users/add",
+  //   name: "Add healthcare providers",
+  //   element: AddBusiness,
+  // },
+  // {
+  //   path: "/users/edit/:id",
+  //   name: "Edit healthcare providers",
+  //   element: EditBusiness,
+  // },
+  // {
+  //   path: "/users/view/:id",
+  //   name: "view healthcare providers",
+  //   element: ViewHealthCareProvider,
+  // },
   // Categories
   {
     path: "//categories",
@@ -164,16 +188,16 @@ const routes = [
     name: "Add Campaigns",
     element: AddCampaign,
   },
-  {
-    path: "/campaigns/edit/:id",
-    name: "Edit healthcare providers",
-    element: EditBusiness,
-  },
-  {
-    path: "/campaigns/view/:id",
-    name: "view healthcare providers",
-    element: ViewHealthCareProvider,
-  },
+  // {
+  //   path: "/campaigns/edit/:id",
+  //   name: "Edit healthcare providers",
+  //   element: EditBusiness,
+  // },
+  // {
+  //   path: "/campaigns/view/:id",
+  //   name: "view healthcare providers",
+  //   element: ViewHealthCareProvider,
+  // },
 
   // { path: '/franchisee/view/:id', name: 'view franchisee', element: ViewFra },
   //Contact Requests

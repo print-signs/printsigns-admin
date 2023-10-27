@@ -13,10 +13,12 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { ClipLoader } from "react-spinners";
 import swal from "sweetalert";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 
 const style = {
   position: "absolute",
-  top: "20%",
+  top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
@@ -34,21 +36,25 @@ const Categories = () => {
   const [saveLoding, setSaveLoading] = useState(true);
   const [edit, setEdit] = useState(false);
   const [categoryName, setCategoryName] = useState("");
-
+  const [categoryImage, setCategoryImage] = useState("");
+  const [error, setError] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [category, setCategory] = useState([]);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [olderCategoryName, setOlderCategoruName] = useState("");
+  const [olderImage, setOlderImage] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     // setUpdating(true)
+
     setCategoryName("");
     setCategoryId("");
-    // setUpdating(false);
-    // setIsUpdate(false);
+    setOlderImage("");
+    setCategoryImage("");
   };
 
   const getCategories = async () => {
@@ -78,34 +84,75 @@ const Categories = () => {
     getCategories();
   }, [token, category]);
 
-  console.log(category.length);
-  const handleEditClick = (_id, categoryName) => {
+  const handleEditClick = (_id, categoryName, categoryImage) => {
     setOpen(true);
-
+    setOlderImage(categoryImage);
     setCategoryName(categoryName);
     setCategoryId(_id);
+    setOlderCategoruName(categoryName);
     setEdit(true);
     // setUpdating(false);
   };
+  const categoryNamesArray = [];
+  const setCategoryNamesArray = () => {
+    category &&
+      category.map((category) => {
+        categoryNamesArray.push(category.categoryName.toLowerCase());
+      });
+  };
+  setCategoryNamesArray();
 
   const handleUpdate = () => {
+    const filteredArrayNames = categoryNamesArray.filter(
+      (item) => item !== olderCategoryName.toLowerCase()
+    );
+    console.log(filteredArrayNames, "filter");
+    const categoryExits = filteredArrayNames.includes(
+      categoryName.toLowerCase()
+    );
+    if (categoryExits) {
+      swal({
+        title: "Warning",
+        text: "Category already exists ",
+        icon: "error",
+        button: "Retry",
+        dangerMode: true,
+      });
+      return;
+    }
+
+    if (!categoryName || (!categoryImage && !olderImage)) {
+      swal({
+        title: "Warning",
+        text: "Please fill all the  required  fields!",
+        icon: "error",
+        button: "Retry",
+        dangerMode: true,
+      });
+      return;
+    }
     setUpdating(false);
+    const formData = new FormData();
+    formData.append("categoryName", categoryName);
+
+    formData.append("categoryImage", categoryImage);
+
+    formData.append("olderImage", JSON.stringify(olderImage));
+
     axios
-      .patch(
-        `/api/category/update/${categoryId}`,
-        { categoryName },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .patch(`/api/category/update/${categoryId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         // setUpdating(true);
         // setIsUpdate(false);
         handleClose();
         setCategoryId("");
         setCategoryName("");
+        setCategoryImage("");
+        setOlderImage("");
         setUpdating(true);
         setEdit(false);
         swal({
@@ -119,11 +166,12 @@ const Categories = () => {
       .catch((err) => {
         swal({
           title: "Sorry, please try again",
-          text: "Something went wrong!",
+          text: err,
           icon: "error",
           button: "Retry",
           dangerMode: true,
         });
+        setUpdating(true);
       });
   };
 
@@ -166,10 +214,23 @@ const Categories = () => {
   };
 
   const handleSaveCategory = async () => {
-    if (!categoryName) {
+    const categoryExits = categoryNamesArray.includes(
+      categoryName.toLowerCase()
+    );
+    if (categoryExits) {
       swal({
         title: "Warning",
-        text: "Category name is empty. Please enter the category name!",
+        text: "Category Already exits.",
+        icon: "error",
+        button: "Retry",
+        dangerMode: true,
+      });
+      return;
+    }
+    if (!categoryName || !categoryImage) {
+      swal({
+        title: "Warning",
+        text: "Please fill all the  required  fields!",
         icon: "error",
         button: "Retry",
         dangerMode: true,
@@ -178,23 +239,25 @@ const Categories = () => {
     }
     setSaveLoading(false);
     setLoading(true);
+    const formData = new FormData();
+    formData.append("categoryName", categoryName);
+    formData.append("categoryImage", categoryImage);
+
     axios
-      .post(
-        "/api/category/add",
-        { categoryName },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post("/api/category/add", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/formdata",
+        },
+      })
       .then((response) => {
         if (response.status === 201) {
           setOpen(false);
           setLoading(false);
           setSaveLoading(true);
           setCategoryName("");
+          setCategoryImage("");
+          setOlderImage("");
           swal({
             title: "Added",
             text: "New category added successfully!",
@@ -217,6 +280,19 @@ const Categories = () => {
   };
   const getPageCount = () => {
     return Math.max(1, Math.ceil(category.length / itemPerPage));
+  };
+
+  const handleFileChange = (e) => {
+    const files = e.target.files[0];
+
+    // Check file types and append to selectedFiles
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (allowedTypes.includes(files.type)) {
+      setCategoryImage(files);
+    }
+  };
+  const handeldeleteImage = () => {
+    setCategoryImage("");
   };
   return (
     <div className="main-content">
@@ -283,7 +359,12 @@ const Categories = () => {
                         style={{
                           padding: "1rem",
                         }}
-                        onChange={(e) => setCategoryName(e.target.value)}
+                        onChange={(e) =>
+                          setCategoryName(
+                            e.target.value.charAt(0).toUpperCase() +
+                              e.target.value.slice(1)
+                          )
+                        }
                       />
                       {categoryName ? (
                         <>
@@ -294,6 +375,112 @@ const Categories = () => {
                       ) : (
                         <></>
                       )}
+
+                      <Box
+                        style={{
+                          padding: "1rem",
+                        }}
+                      >
+                        <label htmlFor="upload-Image">
+                          <TextField
+                            style={{
+                              display: "none",
+                              width: "350px",
+                              height: "350px",
+                              borderRadius: "10%",
+                            }}
+                            fullWidth
+                            id="upload-Image"
+                            type="file"
+                            accept=".jpg , .png ,.jpeg"
+                            label="file"
+                            variant="outlined"
+                            onChange={(e) => handleFileChange(e)}
+                          />
+                          <Box
+                            style={{ borderRadius: "10%" }}
+                            sx={{
+                              margin: "1rem 0rem",
+                              cursor: "pointer",
+                              width: "140px",
+                              height: "140px",
+                              border: "2px solid grey",
+                              // borderRadius: '50%',
+
+                              "&:hover": {
+                                background: "rgba(112,112,112,0.5)",
+                              },
+                            }}
+                          >
+                            <CloudUploadIcon
+                              style={{
+                                color: "grey",
+                                margin: "auto",
+                                fontSize: "5rem",
+                              }}
+                              fontSize="large"
+                            />
+                          </Box>
+                        </label>
+                        {categoryImage && (
+                          <Box>
+                            <img
+                              src={URL.createObjectURL(categoryImage)}
+                              alt="categoryImage"
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: "1rem",
+                                marginLeft: "1rem",
+                              }}
+                            />
+                            <DeleteSharpIcon
+                              onClick={() => handeldeleteImage()}
+                              fontSize="small"
+                              sx={{
+                                color: "white",
+                                position: "absolute",
+                                cursor: "pointer",
+                                padding: "0.2rem",
+                                background: "black",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          </Box>
+                        )}
+                        {olderImage && (
+                          <Box>
+                            <img
+                              src={olderImage?.secure_url}
+                              alt="categoryImage"
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: "1rem",
+                                marginLeft: "1rem",
+                              }}
+                            />
+                            <DeleteSharpIcon
+                              onClick={() => setOlderImage("")}
+                              fontSize="small"
+                              sx={{
+                                color: "white",
+                                position: "absolute",
+                                cursor: "pointer",
+                                padding: "0.2rem",
+                                background: "black",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          </Box>
+                        )}
+                      </Box>
+
+                      {error && <p style={{ color: "red" }}>{error}</p>}
+                      <p className="pt-1 pl-2 text-secondary">
+                        Upload jpg, jpeg and png only*
+                      </p>
+
                       <Box
                         p={2}
                         display={"flex"}
@@ -405,6 +592,8 @@ const Categories = () => {
                         style={{ background: "rgb(140, 213, 213)" }}
                       >
                         <tr>
+                          <th> Image</th>
+
                           <th> Categories Name</th>
 
                           <th>Action</th>
@@ -434,6 +623,15 @@ const Categories = () => {
                             .map((item, i) => (
                               <tr key={i}>
                                 <td>
+                                  <img
+                                    className="me-2"
+                                    src={item?.categoryImage?.secure_url}
+                                    width="40"
+                                    alt=""
+                                  />
+                                  <h5>{} </h5>
+                                </td>
+                                <td>
                                   <h5>{item.categoryName} </h5>
                                 </td>
                                 <td className="text-start">
@@ -453,7 +651,8 @@ const Categories = () => {
                                     onClick={() =>
                                       handleEditClick(
                                         item._id,
-                                        item.categoryName
+                                        item.categoryName,
+                                        item.categoryImage
                                       )
                                     }
                                   >

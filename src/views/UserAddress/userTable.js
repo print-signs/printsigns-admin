@@ -1,94 +1,76 @@
-import React, { useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { isAutheticated } from "src/auth";
 import swal from "sweetalert";
-import OverLayButton from "./OverLayButton.js";
-import { isAutheticated } from "src/auth.js";
-
-const Businesses = () => {
+import {
+  Box,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import Fuse from "fuse.js";
+import { Typography } from "@material-ui/core";
+const UserTable = () => {
   const token = isAutheticated();
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(true);
-  const [BusinessesData, setBusinessesData] = useState([]);
+  const [userAddress, setUserAddress] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
-  const [showData, setShowData] = useState(BusinessesData);
+  const [showData, setShowData] = useState(userAddress);
 
   const handleShowEntries = (e) => {
     setCurrentPage(1);
     setItemPerPage(e.target.value);
   };
 
-  const getbusinesses = () => {
+  const getUserAddressess = async () => {
     axios
-      .get(`/api/businesses/getall`, {
+      .get(`/api/user-address/getAddressess`, {
         headers: {
-          "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        setBusinessesData(res.data?.businesses);
+        setUserAddress(res.data?.userAddress);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        swal({
+          title: error,
+          text: "please login to access the resource or refresh the page  ",
+          icon: "error",
+          button: "Retry",
+          dangerMode: true,
+        });
         setLoading(false);
       });
   };
 
   useEffect(() => {
-    getbusinesses();
+    getUserAddressess();
   }, [success]);
+  console.log(userAddress);
 
   useEffect(() => {
     const loadData = () => {
       const indexOfLastPost = currentPage * itemPerPage;
       const indexOfFirstPost = indexOfLastPost - itemPerPage;
-      setShowData(BusinessesData.slice(indexOfFirstPost, indexOfLastPost));
+      setShowData(userAddress.slice(indexOfFirstPost, indexOfLastPost));
     };
     loadData();
-  }, [currentPage, itemPerPage, BusinessesData]);
+  }, [currentPage, itemPerPage, userAddress]);
 
-  // const handleVarification = (id) => {
-  //     swal({
-  //         title: 'Are you sure?',
-  //         icon: 'warning',
-  //         buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
-  //     }).then((value) => {
-  //         if (value === true) {
-  //             axios
-  //                 .get(`/api/i/admin/verify/${id}`, {
-  //                     headers: {
-  //                         'Access-Control-Allow-Origin': '*',
-  //                         Authorization: `Bearer ${token}`,
-  //                     },
-  //                 })
-  //                 .then((res) => {
-  //                     swal({
-  //                         title: 'success',
-  //                         text: res.data.message ? res.data.message : 'Verified Successfully!',
-  //                         icon: 'success',
-  //                         button: 'ok',
-  //                         dangerMode: true,
-  //                     })
-  //                     setSuccess((prev) => !prev)
-  //                 })
-  //                 .catch((err) => {
-  //                     swal({
-  //                         title: 'Failled',
-  //                         text: 'Something went wrong!',
-  //                         icon: 'error',
-  //                         button: 'Retry',
-  //                         dangerMode: true,
-  //                     })
-  //                 })
-  //         }
-  //     })
-  // }
   const handleDelete = (id) => {
     swal({
       title: "Are you sure?",
@@ -100,13 +82,19 @@ const Businesses = () => {
     }).then((value) => {
       if (value === true) {
         axios
-          .delete(`/api/businesses/delete/${id}`, {
+          .delete(`/api/user-address/deleteAddress/${id}`, {
             headers: {
               "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,
             },
           })
           .then((res) => {
+            swal({
+              title: "Deleted",
+              text: "Address Deleted successfully!",
+              icon: "success",
+              button: "ok",
+            });
             setSuccess((prev) => !prev);
           })
           .catch((err) => {
@@ -121,12 +109,6 @@ const Businesses = () => {
       }
     });
   };
-
-  const formatDate = (inputDate) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    const date = new Date(inputDate);
-    return date.toLocaleDateString('en-US', options);
-  }
 
   return (
     <div className="main-content">
@@ -147,28 +129,30 @@ const Businesses = () => {
                 </div>
 
                 <div className="page-title-right">
-                  <Link to="/users/add">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{
-                        fontWeight: "bold",
-                        marginBottom: "1rem",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Add user
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "1rem",
+                      textTransform: "capitalize",
+                    }}
+                    onClick={() => {
+                      navigate("/users-address/add", { replace: true });
+                    }}
+                  >
+                    Add User
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
+
           <div className="row">
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-body">
-                  <div className="row ml-0 mr-0 mb-10">
+                  <div className="row ml-0 mr-0 mb-10 ">
                     <div className="col-sm-12 col-md-12">
                       <div className="dataTables_length">
                         <label className="w-100">
@@ -204,13 +188,12 @@ const Businesses = () => {
                         style={{ background: "rgb(140, 213, 213)" }}
                       >
                         <tr>
-                          <th className="text-start">User Name </th>
-                          {/* <th className="text-start">Logo</th> */}
-                          <th className="text-start">User Type</th>
-                          <th className="text-start">Created On</th>
-                          {/* <th className="text-start">Status</th> */}
-                          <th className="text-center">Actions</th>
-                          <th className="text-center">Campaigns</th>
+                          <th className="text-start">Id</th>
+                          <th className="text-start">User Name</th>
+                          <th className="text-start">Email</th>
+
+                          <th className="text-start">Added On</th>
+                          <th className="text-start">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -228,117 +211,96 @@ const Businesses = () => {
                             </td>
                           </tr>
                         ) : (
-                          showData.map((i, idx) => {
+                          showData.map((userAddress, i) => {
                             return (
-                              <tr key={idx}>
+                              <tr key={i}>
+                                <td>{userAddress._id}</td>
                                 <td className="text-start">
-                                  {i.userName ? i.userName : i.business}
+                                  {userAddress.name}
                                 </td>
-                                {/* {i.banner && i.banner ?
-                                                                    <td className="text-start">
-                                                                        <img src={i.banner.url} alt="No Image" height="50" />
-                                                                    </td> :
-                                                                    <p>No image!</p>
-                                                                } */}
-
-
-
-
-
-
-
-
-
-
                                 <td className="text-start">
-                                  {i.userType ? i.userType : i.short_url}
+                                  {userAddress.email}
                                 </td>
 
-
-
-
-
-
-
-
-
-
-
                                 <td className="text-start">
-                                  {formatDate(i.createdAt)
-                                  }
-
-
-
-
-
+                                  {new Date(
+                                    userAddress.createdAt
+                                  ).toLocaleString("en-IN", {
+                                    weekday: "short",
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                    hour12: true,
+                                  })}
                                 </td>
-                                {/* <td className="text-start">
-                                                                    <button
-                                                                        style={{ color: 'white' }}
-                                                                        type="button"
-                                                                        className={`
-                                                                        
-                                    btn ${i?.verify === true ? 'btn-success' : 'btn-danger'} btn-sm
-                                    waves-effect waves-light
-                                    ms-2
-                                    
-                                  `}
-                                                                        disabled={i?.verify === true}
-                                                                        onClick={() => {
-                                                                            handleVarification(i._id)
-                                                                        }}
-                                                                    >
-                                                                        {i?.verify ? 'verified' : 'Not Verify'}
-                                                                    </button>
-                                                                </td> */}
-                                <td className=" text-center">
-                                  {/* <OverLayButton data={{ url: i?.url }} /> */}
-
-                                  <Link to={`/users/view/${i._id}`}>
+                                <td className="text-start">
+                                  <Link
+                                    to={`/users-address/view/${userAddress._id}`}
+                                  >
                                     <button
-                                      style={{ color: "white" }}
+                                      style={{
+                                        color: "white",
+                                        marginRight: "1rem",
+                                      }}
                                       type="button"
                                       className="
-                                                                                 btn btn-primary btn-sm
-                                                                              waves-effect waves-light
-                                    ms-2
+                                      btn btn-primary btn-sm
+                                    waves-effect waves-light
+                                    btn-table
+                                    mx-1
+                                    mt-1
                                   "
                                     >
                                       View
                                     </button>
                                   </Link>
-
-                                  <Link to={`/users/edit/${i._id}`}>
+                                  <Link
+                                    to={`/users-address/edit/${userAddress._id}`}
+                                  >
                                     <button
-                                      style={{ color: "white" }}
+                                      style={{
+                                        color: "white",
+                                        marginRight: "1rem",
+                                      }}
                                       type="button"
                                       className="
-                                      btn btn-success btn-sm
+                                      btn btn-info btn-sm
                                     waves-effect waves-light
-                                    ms-2
+                                    btn-table
+                                    mt-1
+                                    mx-1
                                   "
                                     >
                                       Edit
                                     </button>
                                   </Link>
-                                  <button
-                                    style={{ color: "white" }}
-                                    type="button"
-                                    className="
-                                    btn btn-danger btn-sm
-                                    waves-effect waves-light
-                                    ms-2
-                                    
-                                  "
-                                    onClick={() => {
-                                      handleDelete(i._id);
+                                  <Link
+                                    to={"#"}
+                                    style={{
+                                      marginRight: "1rem",
                                     }}
                                   >
-                                    Delete
-                                  </button>
+                                    <button
+                                      style={{ color: "white" }}
+                                      type="button"
+                                      className="
+                                    btn btn-danger btn-sm
+                                    waves-effect waves-light
+                                    btn-table
+                                    mt-1
+                                    mx-1
+                                    
+                                  "
+                                      onClick={() => {
+                                        handleDelete(userAddress._id);
+                                      }}
+                                    >
+                                      Delete
+                                    </button>
+                                  </Link>
                                 </td>
-                                <td className="text-center">0</td>
                               </tr>
                             );
                           })
@@ -358,9 +320,9 @@ const Businesses = () => {
                         Showing {currentPage * itemPerPage - itemPerPage + 1} to{" "}
                         {Math.min(
                           currentPage * itemPerPage,
-                          BusinessesData.length
+                          userAddress.length
                         )}{" "}
-                        of {BusinessesData.length} entries
+                        of {userAddress.length} entries
                       </div>
                     </div>
 
@@ -408,7 +370,7 @@ const Businesses = () => {
 
                           {!(
                             (currentPage + 1) * itemPerPage - itemPerPage >
-                            BusinessesData.length - 1
+                            userAddress.length - 1
                           ) && (
                             <li className="paginate_button page-item ">
                               <span
@@ -427,7 +389,7 @@ const Businesses = () => {
                             className={
                               !(
                                 (currentPage + 1) * itemPerPage - itemPerPage >
-                                BusinessesData.length - 1
+                                userAddress.length - 1
                               )
                                 ? "paginate_button page-item next"
                                 : "paginate_button page-item next disabled"
@@ -455,4 +417,4 @@ const Businesses = () => {
   );
 };
 
-export default Businesses;
+export default UserTable;
