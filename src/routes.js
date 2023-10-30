@@ -91,6 +91,7 @@ import UserTable from "./views/UserAddress/userTable";
 import EditUserAddress from "./views/UserAddress/editUserAddress";
 import AddUserAddress from "./views/UserAddress/addUserAddress";
 import ViewAddress from "./views/UserAddress/viewAddress";
+import Design from "./views/Design/design";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -177,6 +178,12 @@ const routes = [
     path: "//categories",
     name: "Categories",
     element: Categories,
+  },
+  // Design
+  {
+    path: "/design",
+    name: "Design",
+    element: Design,
   },
   {
     path: "//campaigns",

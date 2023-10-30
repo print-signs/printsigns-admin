@@ -1,6 +1,7 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
 import {
+  cibMaterialDesign,
   cilAddressBook,
   cilAppsSettings,
   cilBrush,
@@ -34,6 +35,12 @@ const _nav = [
     name: "Users",
     icon: <CIcon icon={cilTennisBall} customClassName="nav-icon" />,
     to: "/users-address",
+  },
+  {
+    component: CNavItem,
+    name: "Design",
+    icon: <CIcon icon={cibMaterialDesign} customClassName="nav-icon" />,
+    to: "/design",
   },
   {
     component: CNavItem,

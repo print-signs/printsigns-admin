@@ -28,46 +28,45 @@ const style = {
   width: "500px",
 };
 
-const Categories = () => {
+const Design = () => {
   const token = isAutheticated();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(true); // for loading state
   // const [isUpdate, setIsUpdate] = useState(false); // for edit state
   const [saveLoding, setSaveLoading] = useState(true);
   const [edit, setEdit] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
-  const [categoryImage, setCategoryImage] = useState("");
+  const [designName, setDesignName] = useState("");
+  const [designImage, setDesignImage] = useState("");
   const [error, setError] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [category, setCategory] = useState([]);
+  const [designId, setDesignId] = useState("");
+  const [design, setDesign] = useState([]);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
-  const [olderCategoryName, setOlderCategoruName] = useState("");
+  const [olderDesignName, setOlderDesignName] = useState("");
   const [olderImage, setOlderImage] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    // setUpdating(false);
+    setUpdating(true);
     setEdit(false);
-
-    setCategoryName("");
-    setCategoryId("");
+    setDesignName("");
+    setDesignId("");
     setOlderImage("");
-    setCategoryImage("");
+    setDesignImage("");
   };
 
-  const getCategories = async () => {
+  const getDesigns = async () => {
     try {
-      const response = await axios.get("/api/category/getCategories", {
+      const response = await axios.get("/api/design/getDesigns", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 200) {
-        setCategory(response?.data?.categories);
+        setDesign(response?.data?.designs);
         setLoading(false);
       }
     } catch (error) {
@@ -82,39 +81,37 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    getCategories();
-  }, [token, category]);
+    getDesigns();
+  }, [token, design]);
 
-  const handleEditClick = (_id, categoryName, categoryImage) => {
+  const handleEditClick = (_id, designName, designImage) => {
     setOpen(true);
-    setOlderImage(categoryImage);
-    setCategoryName(categoryName);
-    setCategoryId(_id);
-    setOlderCategoruName(categoryName);
+    setOlderImage(designImage);
+    setDesignName(designName);
+    setDesignId(_id);
+    setOlderDesignName(designName);
     setEdit(true);
     // setUpdating(false);
   };
-  const categoryNamesArray = [];
-  const setCategoryNamesArray = () => {
-    category &&
-      category.map((category) => {
-        categoryNamesArray.push(category.categoryName.toLowerCase());
+  const designNamesArray = [];
+  const setDesignNamesArray = () => {
+    design &&
+      design.map((design) => {
+        designNamesArray.push(design?.designName?.toLowerCase());
       });
   };
-  setCategoryNamesArray();
+  setDesignNamesArray();
 
   const handleUpdate = () => {
-    const filteredArrayNames = categoryNamesArray.filter(
-      (item) => item !== olderCategoryName.toLowerCase()
+    const filteredArrayNames = designNamesArray.filter(
+      (item) => item !== olderDesignName.toLowerCase()
     );
-    console.log(filteredArrayNames, "filter");
-    const categoryExits = filteredArrayNames.includes(
-      categoryName.toLowerCase()
-    );
-    if (categoryExits) {
+
+    const designExits = filteredArrayNames.includes(designName.toLowerCase());
+    if (designExits) {
       swal({
         title: "Warning",
-        text: "Category already exists ",
+        text: "Design already exists ",
         icon: "error",
         button: "Retry",
         dangerMode: true,
@@ -122,7 +119,7 @@ const Categories = () => {
       return;
     }
 
-    if (!categoryName || (!categoryImage && !olderImage)) {
+    if (!designName || (!designImage && !olderImage)) {
       swal({
         title: "Warning",
         text: "Please fill all the  required  fields!",
@@ -134,14 +131,14 @@ const Categories = () => {
     }
     setUpdating(false);
     const formData = new FormData();
-    formData.append("categoryName", categoryName);
+    formData.append("designName", designName);
 
-    formData.append("categoryImage", categoryImage);
+    formData.append("designImage", designImage);
 
     formData.append("olderImage", JSON.stringify(olderImage));
 
     axios
-      .patch(`/api/category/update/${categoryId}`, formData, {
+      .patch(`/api/design/update/${designId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -150,15 +147,15 @@ const Categories = () => {
         // setUpdating(true);
         // setIsUpdate(false);
         handleClose();
-        setCategoryId("");
-        setCategoryName("");
-        setCategoryImage("");
+        setDesignId("");
+        setDesignName("");
+        setDesignImage("");
         setOlderImage("");
         setUpdating(true);
         setEdit(false);
         swal({
           title: "Congratulations!!",
-          text: "The category was updated successfully!",
+          text: "The Design was updated successfully!",
           icon: "success",
           button: "OK",
         });
@@ -187,7 +184,7 @@ const Categories = () => {
     }).then((value) => {
       if (value === true) {
         axios
-          .delete(`/api/category/delete/${_id}`, {
+          .delete(`/api/design/delete/${_id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -195,7 +192,7 @@ const Categories = () => {
           .then((res) => {
             swal({
               title: "Congratulations!!",
-              text: "The category was deleted successfully!",
+              text: "The design was deleted successfully!",
               icon: "success",
               button: "OK",
             });
@@ -215,20 +212,18 @@ const Categories = () => {
   };
 
   const handleSaveCategory = async () => {
-    const categoryExits = categoryNamesArray.includes(
-      categoryName.toLowerCase()
-    );
-    if (categoryExits) {
+    const designExits = designNamesArray.includes(designName.toLowerCase());
+    if (designExits) {
       swal({
         title: "Warning",
-        text: "Category Already exits.",
+        text: "Design Already exits.",
         icon: "error",
         button: "Retry",
         dangerMode: true,
       });
       return;
     }
-    if (!categoryName || !categoryImage) {
+    if (!designName || !designImage) {
       swal({
         title: "Warning",
         text: "Please fill all the  required  fields!",
@@ -241,11 +236,11 @@ const Categories = () => {
     setSaveLoading(false);
     setLoading(true);
     const formData = new FormData();
-    formData.append("categoryName", categoryName);
-    formData.append("categoryImage", categoryImage);
+    formData.append("designName", designName);
+    formData.append("designImage", designImage);
 
     axios
-      .post("/api/category/add", formData, {
+      .post("/api/design/add", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/formdata",
@@ -256,12 +251,12 @@ const Categories = () => {
           setOpen(false);
           setLoading(false);
           setSaveLoading(true);
-          setCategoryName("");
-          setCategoryImage("");
+          setDesignName("");
+          setDesignImage("");
           setOlderImage("");
           swal({
             title: "Added",
-            text: "New category added successfully!",
+            text: "New design added successfully!",
             icon: "success",
             button: "OK",
           });
@@ -280,7 +275,7 @@ const Categories = () => {
       });
   };
   const getPageCount = () => {
-    return Math.max(1, Math.ceil(category.length / itemPerPage));
+    return Math.max(1, Math.ceil(design.length / itemPerPage));
   };
 
   const handleFileChange = (e) => {
@@ -289,12 +284,13 @@ const Categories = () => {
     // Check file types and append to selectedFiles
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (allowedTypes.includes(files.type)) {
-      setCategoryImage(files);
+      setDesignImage(files);
     }
   };
   const handeldeleteImage = () => {
-    setCategoryImage("");
+    setDesignImage("");
   };
+
   return (
     <div className="main-content">
       <div className="page-content">
@@ -310,7 +306,7 @@ const Categories = () => {
                   "
               >
                 <div style={{ fontSize: "22px" }} className="fw-bold">
-                  Categories
+                  Design
                 </div>
 
                 <div className="page-title-right">
@@ -327,7 +323,7 @@ const Categories = () => {
                     //   navigate("/testimonial/new", { replace: true });
                     // }}
                   >
-                    Add New Category
+                    Add New Design
                   </Button>
                   <Modal
                     open={open}
@@ -343,7 +339,7 @@ const Categories = () => {
                           component="h2"
                           flex={1}
                         >
-                          Category Name
+                          Design Name
                         </Typography>
                         <IconButton onClick={() => handleClose()}>
                           <CloseIcon />
@@ -351,8 +347,8 @@ const Categories = () => {
                       </Box>
                       <hr />
                       <TextField
-                        placeholder="category name"
-                        value={categoryName}
+                        placeholder="Design name"
+                        value={designName}
                         fullWidth
                         inputProps={{
                           maxLength: 25,
@@ -361,16 +357,16 @@ const Categories = () => {
                           padding: "1rem",
                         }}
                         onChange={(e) =>
-                          setCategoryName(
+                          setDesignName(
                             e.target.value.charAt(0).toUpperCase() +
                               e.target.value.slice(1)
                           )
                         }
                       />
-                      {categoryName ? (
+                      {designName ? (
                         <>
                           <small className="charLeft mt-2 ml-3 fst-italic">
-                            {25 - categoryName.length} characters left
+                            {25 - designName.length} characters left
                           </small>
                         </>
                       ) : (
@@ -423,11 +419,11 @@ const Categories = () => {
                             />
                           </Box>
                         </label>
-                        {categoryImage && (
+                        {designImage && (
                           <Box>
                             <img
-                              src={URL.createObjectURL(categoryImage)}
-                              alt="categoryImage"
+                              src={URL.createObjectURL(designImage)}
+                              alt="designImage"
                               style={{
                                 width: 100,
                                 height: 100,
@@ -593,15 +589,15 @@ const Categories = () => {
                         style={{ background: "rgb(140, 213, 213)" }}
                       >
                         <tr>
-                          <th> Image</th>
+                          <th>Image</th>
 
-                          <th> Categories Name</th>
+                          <th> Design Name</th>
 
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {!loading && category.length === 0 && (
+                        {!loading && design.length === 0 && (
                           <tr className="text-center">
                             <td colSpan="6">
                               <h5>No Data Available</h5>
@@ -615,8 +611,8 @@ const Categories = () => {
                             </td>
                           </tr>
                         ) : (
-                          category &&
-                          category
+                          design &&
+                          design
                             .slice(
                               (`${page}` - 1) * itemPerPage,
                               `${page}` * itemPerPage
@@ -626,14 +622,14 @@ const Categories = () => {
                                 <td>
                                   <img
                                     className="me-2"
-                                    src={item?.categoryImage?.secure_url}
+                                    src={item?.designImage?.secure_url}
                                     width="40"
                                     alt=""
                                   />
                                   <h5>{} </h5>
                                 </td>
                                 <td>
-                                  <h5>{item.categoryName} </h5>
+                                  <h5>{item.designName} </h5>
                                 </td>
                                 <td className="text-start">
                                   <button
@@ -652,8 +648,8 @@ const Categories = () => {
                                     onClick={() =>
                                       handleEditClick(
                                         item._id,
-                                        item.categoryName,
-                                        item.categoryImage
+                                        item.designName,
+                                        item.designImage
                                       )
                                     }
                                   >
@@ -705,4 +701,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Design;
