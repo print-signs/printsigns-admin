@@ -14,9 +14,9 @@ import { createRoot } from "react-dom/client";
 
 const setupAxios = () => {
   //axios.defaults.baseURL = 'https://bolo-api.checkapp.one/'
-  // axios.defaults.baseURL = "http://localhost:8000";
+  axios.defaults.baseURL = "http://localhost:8000";
   // axios.defaults.baseURL = "https://happy-sombrero-ray.cyclic.app/"; //->latest deployed
-  axios.defaults.baseURL = "https://printsigns.onrender.com/"; //->latest deployed
+  // axios.defaults.baseURL = "https://printsigns.onrender.com/"; //->latest deployed
 
   axios.defaults.headers = {
     "Cache-Control": "no-cache,no-store",

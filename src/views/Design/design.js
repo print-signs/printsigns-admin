@@ -9,23 +9,28 @@ import {
   Pagination,
   TextField,
   Typography,
+  MenuItem,
+  Select,
+  FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ClipLoader } from "react-spinners";
 import swal from "sweetalert";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import { Grid } from "@material-ui/core";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "90%",
+  height: "900px",
   bgcolor: "background.paper",
   borderRadius: "0.5rem",
   boxShadow: 24,
-  width: "500px",
+  overflow: "scroll",
 };
 
 const Design = () => {
@@ -45,6 +50,52 @@ const Design = () => {
   const [open, setOpen] = useState(false);
   const [olderDesignName, setOlderDesignName] = useState("");
   const [olderImage, setOlderImage] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+  const [jsonSelectedFile, setJsonSelectedFile] = useState(null);
+  const [categories, setCategoies] = useState([]);
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get("/api/category/getCategories", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        setCategoies(response?.data?.categories);
+      }
+    } catch (error) {
+      swal({
+        title: error,
+        text: " please login to access the resource ",
+        icon: "error",
+        button: "Retry",
+        dangerMode: true,
+      });
+    }
+  };
+  useEffect(() => {
+    getCategories();
+  }, [token]);
+  const handleJsonFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file && file.name.endsWith(".json")) {
+      // Validate the file type
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const jsonData = event.target.result;
+        // You can now send the `jsonData` to the backend for insertion
+        setJsonSelectedFile(jsonData);
+      };
+      reader.readAsText(file);
+      setJsonSelectedFile(file);
+    } else {
+      // Reset the selected file if it's not a valid JSON file
+      setJsonSelectedFile(null);
+    }
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -55,6 +106,7 @@ const Design = () => {
     setDesignId("");
     setOlderImage("");
     setDesignImage("");
+    setJsonSelectedFile(null);
   };
 
   const getDesigns = async () => {
@@ -84,12 +136,20 @@ const Design = () => {
     getDesigns();
   }, [token, design]);
 
-  const handleEditClick = (_id, designName, designImage) => {
+  const handleEditClick = (
+    _id,
+    designName,
+    designImage,
+    designImageJson,
+    categoryName
+  ) => {
     setOpen(true);
     setOlderImage(designImage);
     setDesignName(designName);
     setDesignId(_id);
+    setCategoryName(categoryName);
     setOlderDesignName(designName);
+    setJsonSelectedFile(designImageJson);
     setEdit(true);
     // setUpdating(false);
   };
@@ -119,7 +179,7 @@ const Design = () => {
       return;
     }
 
-    if (!designName || (!designImage && !olderImage)) {
+    if (!designName || (!designImage && !olderImage) || !jsonSelectedFile) {
       swal({
         title: "Warning",
         text: "Please fill all the  required  fields!",
@@ -132,10 +192,11 @@ const Design = () => {
     setUpdating(false);
     const formData = new FormData();
     formData.append("designName", designName);
-
+    formData.append("categoryName", categoryName);
     formData.append("designImage", designImage);
 
     formData.append("olderImage", JSON.stringify(olderImage));
+    formData.append("designImageJson", jsonSelectedFile);
 
     axios
       .patch(`/api/design/update/${designId}`, formData, {
@@ -151,6 +212,8 @@ const Design = () => {
         setDesignName("");
         setDesignImage("");
         setOlderImage("");
+        setCategoryName("");
+        setJsonSelectedFile(null);
         setUpdating(true);
         setEdit(false);
         swal({
@@ -223,7 +286,7 @@ const Design = () => {
       });
       return;
     }
-    if (!designName || !designImage) {
+    if (!designName || !designImage || !jsonSelectedFile || !categoryName) {
       swal({
         title: "Warning",
         text: "Please fill all the  required  fields!",
@@ -237,7 +300,9 @@ const Design = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("designName", designName);
+    formData.append("categoryName", categoryName);
     formData.append("designImage", designImage);
+    formData.append("designImageJson", jsonSelectedFile);
 
     axios
       .post("/api/design/add", formData, {
@@ -254,6 +319,8 @@ const Design = () => {
           setDesignName("");
           setDesignImage("");
           setOlderImage("");
+          setJsonSelectedFile(null);
+          setCategoryName("");
           swal({
             title: "Added",
             text: "New design added successfully!",
@@ -289,6 +356,11 @@ const Design = () => {
   };
   const handeldeleteImage = () => {
     setDesignImage("");
+    setJsonSelectedFile(null);
+  };
+  const handelDeleteOlderImage = () => {
+    setOlderImage("");
+    setJsonSelectedFile(null);
   };
 
   return (
@@ -372,111 +444,202 @@ const Design = () => {
                       ) : (
                         <></>
                       )}
+                      <div style={{ padding: "1rem" }}>
+                        <label
+                          htmlFor="categorySelect"
+                          style={{
+                            fontWeight: "bold",
+                            display: "flex",
+                            flexDirection: "row",
+                          }}
+                        >
+                          Select a Category*:
+                        </label>
+                        {/* <select
+                  id="category"
+                  style={{ width: "100%" }}
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                >
+                  <option value={""}>None</option>
+                  {categories.map((category, index) => (
+                    <option key={index} value={category.categoryName}>
+                      {category.categoryName}
+                    </option>
+                  ))}
+                </select> */}
+                        <FormControl style={{ width: "50%" }}>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            fullWidth
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                          >
+                            {categories.map((category, i) => (
+                              <MenuItem
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  justifyContent: "left",
+                                  textAlign: "left",
+                                  padding: "0.5rem",
+                                }}
+                                key={i}
+                                value={category.categoryName}
+                              >
+                                {category.categoryName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </div>
 
                       <Box
                         style={{
                           padding: "1rem",
                         }}
                       >
-                        <label htmlFor="upload-Image">
-                          <TextField
-                            style={{
-                              display: "none",
-                              width: "350px",
-                              height: "350px",
-                              borderRadius: "10%",
-                            }}
-                            fullWidth
-                            id="upload-Image"
-                            type="file"
-                            accept=".jpg , .png ,.jpeg"
-                            label="file"
-                            variant="outlined"
-                            onChange={(e) => handleFileChange(e)}
-                          />
-                          <Box
-                            style={{ borderRadius: "10%" }}
-                            sx={{
-                              margin: "1rem 0rem",
-                              cursor: "pointer",
-                              width: "140px",
-                              height: "140px",
-                              border: "2px solid grey",
-                              // borderRadius: '50%',
+                        <iframe
+                          src="https://solar-sign-app.netlify.app/"
+                          width={"100%"}
+                          height={"800px"}
+                        />
+                        <Grid container spacing={5}>
+                          <Grid item sm={6} md={6} lg={6}>
+                            <Box>
+                              <Typography
+                                style={{
+                                  fontWeight: "bold",
+                                  marginTop: "1rem",
+                                }}
+                              >
+                                Upload the downloaded template*
+                              </Typography>
+                              <label htmlFor="upload-Image">
+                                <TextField
+                                  style={{
+                                    display: "none",
+                                    width: "350px",
+                                    height: "350px",
+                                    borderRadius: "10%",
+                                  }}
+                                  fullWidth
+                                  id="upload-Image"
+                                  type="file"
+                                  accept=".jpg , .png ,.jpeg"
+                                  label="file"
+                                  variant="outlined"
+                                  onChange={(e) => handleFileChange(e)}
+                                />
+                                <Box
+                                  style={{ borderRadius: "10%" }}
+                                  sx={{
+                                    margin: "1rem 0rem",
+                                    cursor: "pointer",
+                                    width: "70px",
+                                    height: "70px",
+                                    border: "2px solid grey",
+                                    // borderRadius: '50%',
 
-                              "&:hover": {
-                                background: "rgba(112,112,112,0.5)",
-                              },
-                            }}
-                          >
-                            <CloudUploadIcon
-                              style={{
-                                color: "grey",
-                                margin: "auto",
-                                fontSize: "5rem",
-                              }}
-                              fontSize="large"
+                                    "&:hover": {
+                                      background: "rgba(112,112,112,0.5)",
+                                    },
+                                  }}
+                                >
+                                  <CloudUploadIcon
+                                    style={{
+                                      color: "grey",
+                                      margin: "auto",
+                                      // fontSize: "5rem",
+                                    }}
+                                    fontSize="large"
+                                  />
+                                </Box>
+                              </label>
+                              {designImage && (
+                                <Box>
+                                  <img
+                                    src={URL.createObjectURL(designImage)}
+                                    alt="designImage"
+                                    style={{
+                                      width: 100,
+                                      height: 100,
+                                      borderRadius: "1rem",
+                                      marginLeft: "1rem",
+                                    }}
+                                  />
+                                  <DeleteSharpIcon
+                                    onClick={() => handeldeleteImage()}
+                                    fontSize="small"
+                                    sx={{
+                                      color: "white",
+                                      position: "absolute",
+                                      cursor: "pointer",
+                                      padding: "0.2rem",
+                                      background: "black",
+                                      borderRadius: "50%",
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                              {olderImage && (
+                                <Box>
+                                  <img
+                                    src={olderImage?.secure_url}
+                                    alt="categoryImage"
+                                    style={{
+                                      width: 100,
+                                      height: 100,
+                                      borderRadius: "1rem",
+                                      marginLeft: "1rem",
+                                    }}
+                                  />
+                                  <DeleteSharpIcon
+                                    onClick={() => handelDeleteOlderImage()}
+                                    fontSize="small"
+                                    sx={{
+                                      color: "white",
+                                      position: "absolute",
+                                      cursor: "pointer",
+                                      padding: "0.2rem",
+                                      background: "black",
+                                      borderRadius: "50%",
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                            </Box>
+                            {error && <p style={{ color: "red" }}>{error}</p>}
+                            <p className="text-secondary">
+                              Upload jpg, jpeg and png only*
+                            </p>
+                          </Grid>
+                          <Grid item sm={6} md={6} lg={6}>
+                            <Typography
+                              marginTop={2}
+                              marginBottom={2}
+                              fontWeight={"bold"}
+                            >
+                              Upload the downloaded json file only*
+                            </Typography>
+                            <TextField
+                              type="file"
+                              onChange={handleJsonFileChange}
+                              inputProps={{ accept: ".json" }}
                             />
-                          </Box>
-                        </label>
-                        {designImage && (
-                          <Box>
-                            <img
-                              src={URL.createObjectURL(designImage)}
-                              alt="designImage"
-                              style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: "1rem",
-                                marginLeft: "1rem",
-                              }}
-                            />
-                            <DeleteSharpIcon
-                              onClick={() => handeldeleteImage()}
-                              fontSize="small"
-                              sx={{
-                                color: "white",
-                                position: "absolute",
-                                cursor: "pointer",
-                                padding: "0.2rem",
-                                background: "black",
-                                borderRadius: "50%",
-                              }}
-                            />
-                          </Box>
-                        )}
-                        {olderImage && (
-                          <Box>
-                            <img
-                              src={olderImage?.secure_url}
-                              alt="categoryImage"
-                              style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: "1rem",
-                                marginLeft: "1rem",
-                              }}
-                            />
-                            <DeleteSharpIcon
-                              onClick={() => setOlderImage("")}
-                              fontSize="small"
-                              sx={{
-                                color: "white",
-                                position: "absolute",
-                                cursor: "pointer",
-                                padding: "0.2rem",
-                                background: "black",
-                                borderRadius: "50%",
-                              }}
-                            />
-                          </Box>
-                        )}
+                            {jsonSelectedFile ? (
+                              <p style={{ fontWeight: "bold", color: "green" }}>
+                                File is selected
+                              </p>
+                            ) : (
+                              <p style={{ fontWeight: "bold", color: "red" }}>
+                                Select the json file
+                              </p>
+                            )}
+                          </Grid>
+                        </Grid>
                       </Box>
-
-                      {error && <p style={{ color: "red" }}>{error}</p>}
-                      <p className="pt-1 pl-2 text-secondary">
-                        Upload jpg, jpeg and png only*
-                      </p>
 
                       <Box
                         p={2}
@@ -592,6 +755,7 @@ const Design = () => {
                           <th>Image</th>
 
                           <th> Design Name</th>
+                          <th> Category Name</th>
 
                           <th>Action</th>
                         </tr>
@@ -631,6 +795,9 @@ const Design = () => {
                                 <td>
                                   <h5>{item.designName} </h5>
                                 </td>
+                                <td>
+                                  <h5>{item.categoryName} </h5>
+                                </td>
                                 <td className="text-start">
                                   <button
                                     style={{
@@ -649,7 +816,9 @@ const Design = () => {
                                       handleEditClick(
                                         item._id,
                                         item.designName,
-                                        item.designImage
+                                        item.designImage,
+                                        item.designImageJson,
+                                        item.categoryName
                                       )
                                     }
                                   >
