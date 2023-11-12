@@ -111,11 +111,7 @@ const Design = () => {
 
   const getDesigns = async () => {
     try {
-      const response = await axios.get("/api/design/getDesigns", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get("/api/design/getDesigns");
 
       if (response.status === 200) {
         setDesign(response?.data?.designs);
