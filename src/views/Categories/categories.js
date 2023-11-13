@@ -61,9 +61,9 @@ const Categories = () => {
   const getCategories = async () => {
     try {
       const response = await axios.get("/api/category/getCategories", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       });
 
       if (response.status === 200) {
