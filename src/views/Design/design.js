@@ -83,13 +83,13 @@ const Design = () => {
 
     if (file && file.name.endsWith(".json")) {
       // Validate the file type
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const jsonData = event.target.result;
-        // You can now send the `jsonData` to the backend for insertion
-        setJsonSelectedFile(jsonData);
-      };
-      reader.readAsText(file);
+      // const reader = new FileReader();
+      // reader.onload = async (event) => {
+      //   const jsonData = event.target.result;
+      //   // You can now send the `jsonData` to the backend for insertion
+      //   setJsonSelectedFile(jsonData);
+      // };
+      // reader.readAsText(file);
       setJsonSelectedFile(file);
     } else {
       // Reset the selected file if it's not a valid JSON file
@@ -158,81 +158,87 @@ const Design = () => {
   };
   setDesignNamesArray();
 
-  const handleUpdate = () => {
-    const filteredArrayNames = designNamesArray.filter(
-      (item) => item !== olderDesignName.toLowerCase()
-    );
+  // const handleUpdate = () => {
+  //   const filteredArrayNames = designNamesArray.filter(
+  //     (item) => item !== olderDesignName.toLowerCase()
+  //   );
 
-    const designExits = filteredArrayNames.includes(designName.toLowerCase());
-    if (designExits) {
-      swal({
-        title: "Warning",
-        text: "Design already exists ",
-        icon: "error",
-        button: "Retry",
-        dangerMode: true,
-      });
-      return;
-    }
+  //   const designExits = filteredArrayNames.includes(designName.toLowerCase());
+  //   if (designExits) {
+  //     swal({
+  //       title: "Warning",
+  //       text: "Design already exists ",
+  //       icon: "error",
+  //       button: "Retry",
+  //       dangerMode: true,
+  //     });
+  //     return;
+  //   }
 
-    if (!designName || (!designImage && !olderImage) || !jsonSelectedFile) {
-      swal({
-        title: "Warning",
-        text: "Please fill all the  required  fields!",
-        icon: "error",
-        button: "Retry",
-        dangerMode: true,
-      });
-      return;
-    }
-    setUpdating(false);
-    const formData = new FormData();
-    formData.append("designName", designName);
-    formData.append("categoryName", categoryName);
-    formData.append("designImage", designImage);
+  //   if (!designName || (!designImage && !olderImage) || !jsonSelectedFile) {
+  //     swal({
+  //       title: "Warning",
+  //       text: "Please fill all the  required  fields!",
+  //       icon: "error",
+  //       button: "Retry",
+  //       dangerMode: true,
+  //     });
+  //     return;
+  //   }
+  //   setUpdating(false);
+  //   const formData = new FormData();
+  //   formData.append("designName", designName);
+  //   formData.append("categoryName", categoryName);
+  //   formData.append("designImage", designImage);
 
-    formData.append("olderImage", JSON.stringify(olderImage));
-    formData.append("designImageJson", jsonSelectedFile);
+  //   formData.append("olderImage", JSON.stringify(olderImage));
+  //   formData.append("designImageJson", jsonSelectedFile);
 
-    axios
-      .patch(`/api/design/update/${designId}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        // setUpdating(true);
-        // setIsUpdate(false);
-        handleClose();
-        setDesignId("");
-        setDesignName("");
-        setDesignImage("");
-        setOlderImage("");
-        setCategoryName("");
-        setJsonSelectedFile(null);
-        setUpdating(true);
-        setEdit(false);
-        swal({
-          title: "Congratulations!!",
-          text: "The Design was updated successfully!",
-          icon: "success",
-          button: "OK",
-        });
-        // getCategories(); // Refresh the category list after updating
-      })
-      .catch((err) => {
-        swal({
-          title: "Sorry, please try again",
-          text: err,
-          icon: "error",
-          button: "Retry",
-          dangerMode: true,
-        });
-        setUpdating(true);
-      });
-  };
+  //   axios
+  //     .patch(`/api/design/update/${designId}`, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       // setUpdating(true);
+  //       // setIsUpdate(false);
+  //       handleClose();
+  //       setDesignId("");
+  //       setDesignName("");
+  //       setDesignImage("");
+  //       setOlderImage("");
+  //       setCategoryName("");
+  //       setJsonSelectedFile(null);
+  //       setUpdating(true);
+  //       setEdit(false);
+  //       swal({
+  //         title: "Congratulations!!",
+  //         text: "The Design was updated successfully!",
+  //         icon: "success",
+  //         button: "OK",
+  //       });
+  //       // getCategories(); // Refresh the category list after updating
+  //     })
+  //     .catch((err) => {
+  //       swal({
+  //         title: "Sorry, please try again",
+  //         text: err,
+  //         icon: "error",
+  //         button: "Retry",
+  //         dangerMode: true,
+  //       });
+  //       setUpdating(true);
+  //     });
+  // };
 
-  const handleDelete = (_id) => {
+  const handleDelete = (
+    _id,
+    designImageFilename,
+    designImagePath,
+    designImageJsonFilename,
+    designImageJsonPath
+  ) => {
     swal({
       title: "Are you sure?",
       icon: "error",
@@ -244,6 +250,12 @@ const Design = () => {
       if (value === true) {
         axios
           .delete(`/api/design/delete/${_id}`, {
+            data: {
+              designImageFilename,
+              designImagePath,
+              designImageJsonFilename,
+              designImageJsonPath,
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -255,6 +267,7 @@ const Design = () => {
               icon: "success",
               button: "OK",
             });
+            getDesigns();
             // getCategories(); // Refresh the category list after deleting
           })
           .catch((err) => {
@@ -305,9 +318,11 @@ const Design = () => {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/formdata",
+          "Access-Control-Allow-Origin": "*",
         },
       })
       .then((response) => {
+        console.log(response);
         if (response.status === 201) {
           setOpen(false);
           setLoading(false);
@@ -323,24 +338,43 @@ const Design = () => {
             icon: "success",
             button: "OK",
           });
+          getDesigns();
           // getCategories(); // Refresh the category list after adding
         }
       })
       .catch((error) => {
         setSaveLoading(true);
-        swal({
-          title: error,
-          text: "something went wrong",
-          icon: "error",
-          button: "Retry",
-          dangerMode: true,
-        });
+        if (error == "Error: Network Error") {
+          setOpen(false);
+          setLoading(false);
+          setSaveLoading(true);
+          setDesignName("");
+          setDesignImage("");
+          setOlderImage("");
+          setJsonSelectedFile(null);
+          setCategoryName("");
+          swal({
+            title: "Added",
+            text: "New design added successfully!",
+            icon: "success",
+            button: "OK",
+          });
+          getDesigns();
+        } else {
+          swal({
+            title: error,
+            text: "something went wrong",
+            icon: "error",
+            button: "Retry",
+            dangerMode: true,
+          });
+        }
       });
   };
   const getPageCount = () => {
     return Math.max(1, Math.ceil(design.length / itemPerPage));
   };
-
+  console.log(process.env.REACT_APP_BASE_URL);
   const handleFileChange = (e) => {
     const files = e.target.files[0];
 
@@ -399,59 +433,64 @@ const Design = () => {
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                   >
-                    <Box sx={style}>
-                      <Box p={2} display={"flex"}>
-                        <Typography
-                          id="modal-modal-title"
-                          variant="body"
-                          component="h2"
-                          flex={1}
-                        >
-                          Design Name
-                        </Typography>
-                        <IconButton onClick={() => handleClose()}>
-                          <CloseIcon />
-                        </IconButton>
-                      </Box>
-                      <hr />
-                      <TextField
-                        placeholder="Design name"
-                        value={designName}
-                        fullWidth
-                        inputProps={{
-                          maxLength: 25,
-                        }}
-                        style={{
-                          padding: "1rem",
-                        }}
-                        onChange={(e) =>
-                          setDesignName(
-                            e.target.value.charAt(0).toUpperCase() +
-                              e.target.value.slice(1)
-                          )
-                        }
-                      />
-                      {designName ? (
-                        <>
-                          <small className="charLeft mt-2 ml-3 fst-italic">
-                            {25 - designName.length} characters left
-                          </small>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                      <div style={{ padding: "1rem" }}>
-                        <label
-                          htmlFor="categorySelect"
-                          style={{
-                            fontWeight: "bold",
-                            display: "flex",
-                            flexDirection: "row",
+                    <form
+                      action="/api/design/add"
+                      method="post"
+                      encType="multipart/form-data"
+                    >
+                      <Box sx={style}>
+                        <Box p={2} display={"flex"}>
+                          <Typography
+                            id="modal-modal-title"
+                            variant="body"
+                            component="h2"
+                            flex={1}
+                          >
+                            Design Name
+                          </Typography>
+                          <IconButton onClick={() => handleClose()}>
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
+                        <hr />
+                        <TextField
+                          placeholder="Design name"
+                          value={designName}
+                          fullWidth
+                          inputProps={{
+                            maxLength: 25,
                           }}
-                        >
-                          Select a Category*:
-                        </label>
-                        {/* <select
+                          style={{
+                            padding: "1rem",
+                          }}
+                          onChange={(e) =>
+                            setDesignName(
+                              e.target.value.charAt(0).toUpperCase() +
+                                e.target.value.slice(1)
+                            )
+                          }
+                        />
+                        {designName ? (
+                          <>
+                            <small className="charLeft mt-2 ml-3 fst-italic">
+                              {25 - designName.length} characters left
+                            </small>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        <div style={{ padding: "1rem" }}>
+                          <label
+                            htmlFor="categorySelect"
+                            style={{
+                              fontWeight: "bold",
+                              display: "flex",
+                              flexDirection: "row",
+                            }}
+                          >
+                            Select a Category*:
+                          </label>
+                          {/* <select
                   id="category"
                   style={{ width: "100%" }}
                   value={categoryName}
@@ -464,71 +503,72 @@ const Design = () => {
                     </option>
                   ))}
                 </select> */}
-                        <FormControl style={{ width: "50%" }}>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            fullWidth
-                            value={categoryName}
-                            onChange={(e) => setCategoryName(e.target.value)}
-                          >
-                            {categories.map((category, i) => (
-                              <MenuItem
-                                style={{
-                                  width: "100%",
-                                  display: "flex",
-                                  justifyContent: "left",
-                                  textAlign: "left",
-                                  padding: "0.5rem",
-                                }}
-                                key={i}
-                                value={category.categoryName}
-                              >
-                                {category.categoryName}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </div>
-
-                      <Box
-                        style={{
-                          padding: "1rem",
-                        }}
-                      >
-                        <iframe
-                          src="https://solar-sign-app.netlify.app/"
-                          width={"100%"}
-                          height={"800px"}
-                        />
-                        <Grid container spacing={5}>
-                          <Grid item sm={6} md={6} lg={6}>
-                            <Box>
-                              <Typography
-                                style={{
-                                  fontWeight: "bold",
-                                  marginTop: "1rem",
-                                }}
-                              >
-                                Upload the downloaded template*
-                              </Typography>
-                              <label htmlFor="upload-Image">
-                                <TextField
+                          <FormControl style={{ width: "50%" }}>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              fullWidth
+                              value={categoryName}
+                              onChange={(e) => setCategoryName(e.target.value)}
+                            >
+                              {categories.map((category, i) => (
+                                <MenuItem
                                   style={{
-                                    display: "none",
-                                    width: "350px",
-                                    height: "350px",
-                                    borderRadius: "10%",
+                                    width: "100%",
+                                    display: "flex",
+                                    justifyContent: "left",
+                                    textAlign: "left",
+                                    padding: "0.5rem",
                                   }}
+                                  key={i}
+                                  value={category.categoryName}
+                                >
+                                  {category.categoryName}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </div>
+
+                        <Box
+                          style={{
+                            padding: "1rem",
+                          }}
+                        >
+                          <iframe
+                            src="https://solar-sign-app.netlify.app/"
+                            width={"100%"}
+                            height={"800px"}
+                          />
+                          <Grid container spacing={5}>
+                            <Grid item sm={6} md={6} lg={6}>
+                              <Box>
+                                <Typography
+                                  style={{
+                                    fontWeight: "bold",
+                                    marginTop: "1rem",
+                                  }}
+                                >
+                                  Upload the downloaded template*
+                                </Typography>
+
+                                <TextField
+                                  // style={{
+                                  //   display: "none",
+                                  //   width: "350px",
+                                  //   height: "350px",
+                                  //   borderRadius: "10%",
+                                  // }}
                                   fullWidth
                                   id="upload-Image"
                                   type="file"
+                                  name="designImage"
                                   accept=".jpg , .png ,.jpeg"
                                   label="file"
                                   variant="outlined"
                                   onChange={(e) => handleFileChange(e)}
                                 />
-                                <Box
+                                {/* <Box
                                   style={{ borderRadius: "10%" }}
                                   sx={{
                                     margin: "1rem 0rem",
@@ -551,158 +591,162 @@ const Design = () => {
                                     }}
                                     fontSize="large"
                                   />
-                                </Box>
-                              </label>
-                              {designImage && (
-                                <Box>
-                                  <img
-                                    src={URL.createObjectURL(designImage)}
-                                    alt="designImage"
-                                    style={{
-                                      width: 100,
-                                      height: 100,
-                                      borderRadius: "1rem",
-                                      marginLeft: "1rem",
-                                    }}
-                                  />
-                                  <DeleteSharpIcon
-                                    onClick={() => handeldeleteImage()}
-                                    fontSize="small"
-                                    sx={{
-                                      color: "white",
-                                      position: "absolute",
-                                      cursor: "pointer",
-                                      padding: "0.2rem",
-                                      background: "black",
-                                      borderRadius: "50%",
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                              {olderImage && (
-                                <Box>
-                                  <img
-                                    src={olderImage?.secure_url}
-                                    alt="categoryImage"
-                                    style={{
-                                      width: 100,
-                                      height: 100,
-                                      borderRadius: "1rem",
-                                      marginLeft: "1rem",
-                                    }}
-                                  />
-                                  <DeleteSharpIcon
-                                    onClick={() => handelDeleteOlderImage()}
-                                    fontSize="small"
-                                    sx={{
-                                      color: "white",
-                                      position: "absolute",
-                                      cursor: "pointer",
-                                      padding: "0.2rem",
-                                      background: "black",
-                                      borderRadius: "50%",
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                            </Box>
-                            {error && <p style={{ color: "red" }}>{error}</p>}
-                            <p className="text-secondary">
-                              Upload jpg, jpeg and png only*
-                            </p>
-                          </Grid>
-                          <Grid item sm={6} md={6} lg={6}>
-                            <Typography
-                              marginTop={2}
-                              marginBottom={2}
-                              fontWeight={"bold"}
-                            >
-                              Upload the downloaded json file only*
-                            </Typography>
-                            <TextField
-                              type="file"
-                              onChange={handleJsonFileChange}
-                              inputProps={{ accept: ".json" }}
-                            />
-                            {jsonSelectedFile ? (
-                              <p style={{ fontWeight: "bold", color: "green" }}>
-                                File is selected
-                              </p>
-                            ) : (
-                              <p style={{ fontWeight: "bold", color: "red" }}>
-                                Select the json file
-                              </p>
-                            )}
-                          </Grid>
-                        </Grid>
-                      </Box>
+                                </Box> */}
 
-                      <Box
-                        p={2}
-                        display={"flex"}
-                        justifyContent={"right"}
-                        // width={"500px"}
-                      >
-                        {!edit && (
-                          <button
-                            style={{
-                              color: "white",
-                              marginRight: "1rem",
-                            }}
-                            onClick={() => handleSaveCategory()}
-                            type="button"
-                            className="
+                                {designImage && (
+                                  <Box>
+                                    <img
+                                      src={URL.createObjectURL(designImage)}
+                                      alt="designImage"
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: "1rem",
+                                        marginLeft: "1rem",
+                                      }}
+                                    />
+                                    <DeleteSharpIcon
+                                      onClick={() => handeldeleteImage()}
+                                      fontSize="small"
+                                      sx={{
+                                        color: "white",
+                                        position: "absolute",
+                                        cursor: "pointer",
+                                        padding: "0.2rem",
+                                        background: "black",
+                                        borderRadius: "50%",
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {olderImage && (
+                                  <Box>
+                                    <img
+                                      src={olderImage?.secure_url}
+                                      alt="categoryImage"
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: "1rem",
+                                        marginLeft: "1rem",
+                                      }}
+                                    />
+                                    <DeleteSharpIcon
+                                      onClick={() => handelDeleteOlderImage()}
+                                      fontSize="small"
+                                      sx={{
+                                        color: "white",
+                                        position: "absolute",
+                                        cursor: "pointer",
+                                        padding: "0.2rem",
+                                        background: "black",
+                                        borderRadius: "50%",
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                              </Box>
+                              {error && <p style={{ color: "red" }}>{error}</p>}
+                              <p className="text-secondary">
+                                Upload jpg, jpeg and png only*
+                              </p>
+                            </Grid>
+                            <Grid item sm={6} md={6} lg={6}>
+                              <Typography
+                                marginTop={2}
+                                marginBottom={2}
+                                fontWeight={"bold"}
+                              >
+                                Upload the downloaded json file only*
+                              </Typography>
+                              <TextField
+                                type="file"
+                                name="designImageJson"
+                                onChange={handleJsonFileChange}
+                                inputProps={{ accept: ".json" }}
+                              />
+                              {jsonSelectedFile ? (
+                                <p
+                                  style={{ fontWeight: "bold", color: "green" }}
+                                >
+                                  File is selected
+                                </p>
+                              ) : (
+                                <p style={{ fontWeight: "bold", color: "red" }}>
+                                  Select the json file
+                                </p>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </Box>
+
+                        <Box
+                          p={2}
+                          display={"flex"}
+                          justifyContent={"right"}
+                          // width={"500px"}
+                        >
+                          {!edit && (
+                            <button
+                              style={{
+                                color: "white",
+                                marginRight: "1rem",
+                              }}
+                              onClick={() => handleSaveCategory()}
+                              type="button"
+                              className="
                                       btn btn-primary btn-sm
                                     waves-effect waves-light
                                     btn-table
                                     mx-1
                                     mt-1
                                   "
-                          >
-                            <ClipLoader loading={!saveLoding} size={18} />
-                            {saveLoding && "Save"}
-                          </button>
-                        )}
-                        {edit && (
-                          <button
-                            style={{
-                              color: "white",
-                              marginRight: "1rem",
-                            }}
-                            onClick={() => handleUpdate()}
-                            type="button"
-                            className="
+                            >
+                              <ClipLoader loading={!saveLoding} size={18} />
+                              {saveLoding && "Save"}
+                            </button>
+                          )}
+                          {/* {edit && (
+                            <button
+                              style={{
+                                color: "white",
+                                marginRight: "1rem",
+                              }}
+                              onClick={() => handleUpdate()}
+                              type="button"
+                              className="
                                       btn btn-primary btn-sm
                                     waves-effect waves-light
                                     btn-table
                                     mx-1
                                     mt-1
                                   "
-                          >
-                            <ClipLoader loading={!updating} size={18} />
-                            {updating && "update"}
-                          </button>
-                        )}
-                        <button
-                          style={{
-                            color: "black",
-                            marginRight: "1rem",
-                            background: "grey",
-                          }}
-                          onClick={() => setOpen(false)}
-                          type="button"
-                          className="
+                            >
+                              <ClipLoader loading={!updating} size={18} />
+                              {updating && "update"}
+                            </button>
+                          )} */}
+                          <button
+                            style={{
+                              color: "black",
+                              marginRight: "1rem",
+                              background: "grey",
+                            }}
+                            onClick={() => setOpen(false)}
+                            type="button"
+                            className="
                                       btn  btn-sm
                                     waves-effect waves-light
                                     btn-table
                                     mx-1
                                     mt-1
                                   "
-                        >
-                          Close
-                        </button>
+                          >
+                            Close
+                          </button>
+                        </Box>
                       </Box>
-                    </Box>
+                    </form>
                   </Modal>
                 </div>
               </div>
@@ -782,7 +826,7 @@ const Design = () => {
                                 <td>
                                   <img
                                     className="me-2"
-                                    src={item?.designImage?.secure_url}
+                                    src={`http://localhost:8000/uploades/${item.designImage.filename}`}
                                     width="40"
                                     alt=""
                                   />
@@ -795,7 +839,7 @@ const Design = () => {
                                   <h5>{item.categoryName} </h5>
                                 </td>
                                 <td className="text-start">
-                                  <button
+                                  {/* <button
                                     style={{
                                       color: "white",
                                       marginRight: "1rem",
@@ -819,7 +863,7 @@ const Design = () => {
                                     }
                                   >
                                     Edit
-                                  </button>
+                                  </button> */}
                                   <button
                                     style={{
                                       color: "white",
@@ -834,7 +878,15 @@ const Design = () => {
                                     mx-1
                                     mt-1
                                   "
-                                    onClick={() => handleDelete(item._id)}
+                                    onClick={() =>
+                                      handleDelete(
+                                        item._id,
+                                        item.designImage.filename,
+                                        item.designImage.path,
+                                        item.designImageJson.filename,
+                                        item.designImageJson.path
+                                      )
+                                    }
                                   >
                                     Delete
                                   </button>
