@@ -1,84 +1,91 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-import { isAutheticated } from 'src/auth'
-import Button from '@material-ui/core/Button'
+import { isAutheticated } from "src/auth";
+import Button from "@material-ui/core/Button";
 
 function NewOrders() {
-  const token = isAutheticated()
-  const [loading, setLoading] = useState(true)
-  const [success, setSuccess] = useState(true)
-  const [newOrdersData, setNewOrdersData] = useState([])
+  const token = isAutheticated();
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(true);
+  const [newOrdersData, setNewOrdersData] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemPerPage, setItemPerPage] = useState(10)
-  const [showData, setShowData] = useState(newOrdersData)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemPerPage, setItemPerPage] = useState(10);
+  const [showData, setShowData] = useState(newOrdersData);
 
   const handleShowEntries = (e) => {
-    setCurrentPage(1)
-    setItemPerPage(e.target.value)
-  }
+    setCurrentPage(1);
+    setItemPerPage(e.target.value);
+  };
 
   useEffect(() => {
     function getNewOrder() {
       axios
-        .get(`/api/order/getAll`, {
-          headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
+        .get(`/api/order/getAll/:new`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${token}`,
+          },
         })
         .then((res) => {
-          setNewOrdersData(res.data.order)
-          // console.log(res.data.order)
-          setLoading(false)
+          setNewOrdersData(res.data.order);
+          console.log(res.data);
+          setLoading(false);
         })
         .catch((err) => {
-          console.log(err)
-          setLoading(false)
-        })
+          console.log(err);
+          setLoading(false);
+        });
     }
-    getNewOrder()
-  }, [success])
+    getNewOrder();
+  }, [success]);
 
   useEffect(() => {
     const loadData = () => {
-      const indexOfLastPost = currentPage * itemPerPage
-      const indexOfFirstPost = indexOfLastPost - itemPerPage
-      setShowData(newOrdersData.slice(indexOfFirstPost, indexOfLastPost))
-    }
-    loadData()
-  }, [currentPage, itemPerPage, newOrdersData])
-
+      const indexOfLastPost = currentPage * itemPerPage;
+      const indexOfFirstPost = indexOfLastPost - itemPerPage;
+      setShowData(newOrdersData.slice(indexOfFirstPost, indexOfLastPost));
+    };
+    loadData();
+  }, [currentPage, itemPerPage, newOrdersData]);
 
   const handleDelete = (id) => {
-    console.log(id)
+    console.log(id);
     swal({
-      title: 'Are you sure?',
-      icon: 'error',
-      buttons: { Yes: { text: 'Yes', value: true }, Cancel: { text: 'Cancel', value: 'cancel' } },
+      title: "Are you sure?",
+      icon: "error",
+      buttons: {
+        Yes: { text: "Yes", value: true },
+        Cancel: { text: "Cancel", value: "cancel" },
+      },
     }).then((value) => {
       if (value === true) {
         axios
           .delete(`/api/order/delete/${id}`, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
+              "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,
             },
           })
           .then((res) => {
-            setSuccess((prev) => !prev)
+            setSuccess((prev) => !prev);
           })
           .catch((err) => {
             swal({
-              title: 'Warning',
-              text: err.response.data.message ? err.response.data.message : 'Something went wrong!',
-              icon: 'error',
-              button: 'Retry',
+              title: "Warning",
+              text: err.response.data.message
+                ? err.response.data.message
+                : "Something went wrong!",
+              icon: "error",
+              button: "Retry",
               dangerMode: true,
-            })
-          })
+            });
+          });
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="main-content">
@@ -94,26 +101,25 @@ function NewOrders() {
                     justify-content-between
                   "
               >
-                <div style={{ fontSize: '22px' }} className="fw-bold">
+                <div style={{ fontSize: "22px" }} className="fw-bold">
                   New Orders
                 </div>
 
-                <div className="page-title-right">
+                {/* <div className="page-title-right">
                   <Link to="/order/add">
                     <Button
                       variant="contained"
                       color="primary"
                       style={{
-                        fontWeight: 'bold',
-                        marginBottom: '1rem',
-                        textTransform: 'capitalize',
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
+                        textTransform: "capitalize",
                       }}
                     >
                       Add Order
                     </Button>
                   </Link>
-                </div>
-
+                </div> */}
               </div>
             </div>
           </div>
@@ -127,7 +133,7 @@ function NewOrders() {
                         <label className="w-100">
                           Show
                           <select
-                            style={{ width: '10%' }}
+                            style={{ width: "10%" }}
                             name=""
                             onChange={(e) => handleShowEntries(e)}
                             className="
@@ -150,13 +156,15 @@ function NewOrders() {
                   <div className="table-responsive table-shoot mt-3">
                     <table
                       className="table table-centered table-nowrap"
-                      style={{ border: '1px solid' }}
+                      style={{ border: "1px solid" }}
                     >
-                      <thead className="thead" style={{ background: 'rgb(140, 213, 213)' }}>
+                      <thead
+                        className="thead"
+                        style={{ background: "rgb(140, 213, 213)" }}
+                      >
                         <tr>
-
                           <th className="text-start">Order ID</th>
-                          <th className="text-start">Franchisee</th>
+                          <th className="text-start">Customer</th>
                           <th className="text-start">Order value</th>
                           <th className="text-start">Order At</th>
                           <th className="text-start">Status</th>
@@ -181,18 +189,25 @@ function NewOrders() {
                           showData.map((order, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-start">{order?.order_id}</td>
-                                <td className="text-start">{order?.shippingInfo?.name}</td>
-                                <td className="text-start">₹{order?.total_amount}</td>
+                                <td className="text-start">{order?.orderID}</td>
                                 <td className="text-start">
-                                  {new Date(order?.createdAt).toLocaleString('en-IN', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: 'numeric',
-                                    hour12: true,
-                                  })}
+                                  {order?.user?.name}
+                                </td>
+                                <td className="text-start">
+                                  ${order?.total_amount}
+                                </td>
+                                <td className="text-start">
+                                  {new Date(order?.paidAt).toLocaleString(
+                                    "en-IN",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                      hour: "2-digit",
+                                      minute: "numeric",
+                                      hour12: true,
+                                    }
+                                  )}
                                 </td>
                                 <td className="text-start">
                                   <span className="badge text-bg-success text-white">
@@ -200,12 +215,10 @@ function NewOrders() {
                                   </span>
                                 </td>
                                 <td className="text-start">
-
                                   {/* <Link to={`/orders/${order.orderStatus}/${order._id}`}> */}
                                   <Link to={`/orders/view/${order._id}`}>
-
                                     <button
-                                      style={{ color: 'white' }}
+                                      style={{ color: "white" }}
                                       type="button"
                                       className="
                                       btn btn-primary btn-sm
@@ -219,7 +232,7 @@ function NewOrders() {
                                   </Link>
                                   <Link to={`/orders/edit/${order._id}`}>
                                     <button
-                                      style={{ color: 'white' }}
+                                      style={{ color: "white" }}
                                       type="button"
                                       className="
                                       btn btn-info btn-sm
@@ -233,7 +246,7 @@ function NewOrders() {
                                   </Link>
 
                                   <button
-                                    style={{ color: 'white' }}
+                                    style={{ color: "white" }}
                                     type="button"
                                     className="
                                       btn btn-danger btn-sm
@@ -245,10 +258,9 @@ function NewOrders() {
                                   >
                                     Delete
                                   </button>
-
                                 </td>
                               </tr>
-                            )
+                            );
                           })
                         )}
                       </tbody>
@@ -263,9 +275,12 @@ function NewOrders() {
                         role="status"
                         aria-live="polite"
                       >
-                        Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                        {Math.min(currentPage * itemPerPage, newOrdersData.length)} of{' '}
-                        {newOrdersData.length} entries
+                        Showing {currentPage * itemPerPage - itemPerPage + 1} to{" "}
+                        {Math.min(
+                          currentPage * itemPerPage,
+                          newOrdersData.length
+                        )}{" "}
+                        of {newOrdersData.length} entries
                       </div>
                     </div>
 
@@ -275,13 +290,13 @@ function NewOrders() {
                           <li
                             className={
                               currentPage === 1
-                                ? 'paginate_button page-item previous disabled'
-                                : 'paginate_button page-item previous'
+                                ? "paginate_button page-item previous disabled"
+                                : "paginate_button page-item previous"
                             }
                           >
                             <span
                               className="page-link"
-                              style={{ cursor: 'pointer' }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setCurrentPage((prev) => prev - 1)}
                             >
                               Previous
@@ -292,8 +307,10 @@ function NewOrders() {
                             <li className="paginate_button page-item">
                               <span
                                 className="page-link"
-                                style={{ cursor: 'pointer' }}
-                                onClick={(e) => setCurrentPage((prev) => prev - 1)}
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) =>
+                                  setCurrentPage((prev) => prev - 1)
+                                }
                               >
                                 {currentPage - 1}
                               </span>
@@ -301,7 +318,10 @@ function NewOrders() {
                           )}
 
                           <li className="paginate_button page-item active">
-                            <span className="page-link" style={{ cursor: 'pointer' }}>
+                            <span
+                              className="page-link"
+                              style={{ cursor: "pointer" }}
+                            >
                               {currentPage}
                             </span>
                           </li>
@@ -310,18 +330,18 @@ function NewOrders() {
                             (currentPage + 1) * itemPerPage - itemPerPage >
                             newOrdersData.length - 1
                           ) && (
-                              <li className="paginate_button page-item ">
-                                <span
-                                  className="page-link"
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() => {
-                                    setCurrentPage((prev) => prev + 1)
-                                  }}
-                                >
-                                  {currentPage + 1}
-                                </span>
-                              </li>
-                            )}
+                            <li className="paginate_button page-item ">
+                              <span
+                                className="page-link"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setCurrentPage((prev) => prev + 1);
+                                }}
+                              >
+                                {currentPage + 1}
+                              </span>
+                            </li>
+                          )}
 
                           <li
                             className={
@@ -329,13 +349,13 @@ function NewOrders() {
                                 (currentPage + 1) * itemPerPage - itemPerPage >
                                 newOrdersData.length - 1
                               )
-                                ? 'paginate_button page-item next'
-                                : 'paginate_button page-item next disabled'
+                                ? "paginate_button page-item next"
+                                : "paginate_button page-item next disabled"
                             }
                           >
                             <span
                               className="page-link"
-                              style={{ cursor: 'pointer' }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setCurrentPage((prev) => prev + 1)}
                             >
                               Next
@@ -352,7 +372,7 @@ function NewOrders() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default NewOrders
+export default NewOrders;
