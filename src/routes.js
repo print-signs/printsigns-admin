@@ -92,6 +92,7 @@ import EditUserAddress from "./views/UserAddress/editUserAddress";
 import AddUserAddress from "./views/UserAddress/addUserAddress";
 import ViewAddress from "./views/UserAddress/viewAddress";
 import Design from "./views/Design/design";
+import Banners from "./views/Banner/banner";
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -247,6 +248,11 @@ const routes = [
   //Complaints
   { path: "/testimonials", name: "Testimonials", element: Testimonials },
   { path: "/testimonial/new", name: "AddTestimonial", element: AddTestimonial },
+  {
+    path: "/banner",
+    name: "Banners",
+    element: Banners,
+  },
   {
     path: "/testimonial/view/:id",
     name: "ViewTestimonial",

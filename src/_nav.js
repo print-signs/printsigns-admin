@@ -11,6 +11,7 @@ import {
   cilCommand,
   cilCompress,
   cilContact,
+  cilImage,
   cilLanguage,
   cilLoopCircular,
   cilMedicalCross,
@@ -102,6 +103,12 @@ const _nav = [
     name: "Website Related",
     icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
     items: [
+      {
+        component: CNavItem,
+        name: "Banner",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/banner",
+      },
       {
         component: CNavItem,
         name: "Testimonials",
