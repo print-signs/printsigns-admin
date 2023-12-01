@@ -76,16 +76,21 @@ function Address() {
       contact,
       email,
     };
+
     let res = await axios.post(`/api/config/address`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(res);
 
     if (res) {
       setLoading(false);
-      console.log(res);
-      swal("Success!", res.data.message, res.data.status);
+
+      swal("Success!", res.data.message);
+    } else {
+      setLoading(false);
+      swal("something went wrong!", res.data.message);
     }
   }
 
