@@ -83,7 +83,8 @@ const Banners = () => {
 
   useEffect(() => {
     getBanner();
-  }, [token, banner]);
+  }, []);
+  // }, [token, banner]);
 
   const handleEditClick = (_id, bannerName, bannerImage) => {
     setOpen(true);
@@ -310,7 +311,7 @@ const Banners = () => {
                 </div>
 
                 <div className="page-title-right">
-                  <Button
+                  {/* <Button
                     variant="contained"
                     color="primary"
                     style={{
@@ -324,7 +325,7 @@ const Banners = () => {
                     // }}
                   >
                     Add New Banner
-                  </Button>
+                  </Button> */}
                   <Modal
                     open={open}
                     onClose={handleClose}
@@ -359,7 +360,7 @@ const Banners = () => {
                         onChange={(e) =>
                           setBannerName(
                             e.target.value.charAt(0).toUpperCase() +
-                              e.target.value.slice(1)
+                            e.target.value.slice(1)
                           )
                         }
                       />
@@ -482,7 +483,7 @@ const Banners = () => {
                         p={2}
                         display={"flex"}
                         justifyContent={"right"}
-                        // width={"500px"}
+                      // width={"500px"}
                       >
                         {!edit && (
                           <button
@@ -626,7 +627,7 @@ const Banners = () => {
                                     width="40"
                                     alt=""
                                   />
-                                  <h5>{} </h5>
+                                  <h5>{ } </h5>
                                 </td>
                                 <td>
                                   <h5>{item.bannerName} </h5>

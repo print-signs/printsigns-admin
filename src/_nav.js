@@ -111,6 +111,24 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: "Register Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/registerImage",
+      },
+      {
+        component: CNavItem,
+        name: "Login Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/loginImage",
+      },
+      {
+        component: CNavItem,
+        name: "Shop Page Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/shopImage",
+      },
+      {
+        component: CNavItem,
         name: "Testimonials",
         icon: <CIcon icon={cilCompress} customClassName="nav-icon" />,
         to: "/testimonials",

@@ -93,6 +93,10 @@ import AddUserAddress from "./views/UserAddress/addUserAddress";
 import ViewAddress from "./views/UserAddress/viewAddress";
 import Design from "./views/Design/design";
 import Banners from "./views/Banner/banner";
+import RegisterImage from './views/Images/RegisterImage'
+import LoginImage from './views/Images/LoginImage'
+import ShopImage from './views/Images/ShopImage'
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -252,6 +256,21 @@ const routes = [
     path: "/banner",
     name: "Banners",
     element: Banners,
+  },
+  {
+    path: "/registerImage",
+    name: "RegisterImage",
+    element: RegisterImage,
+  },
+  {
+    path: "/loginImage",
+    name: "LoginImage",
+    element: LoginImage,
+  },
+  {
+    path: "/shopImage",
+    name: "ShopImage",
+    element: ShopImage,
   },
   {
     path: "/testimonial/view/:id",
