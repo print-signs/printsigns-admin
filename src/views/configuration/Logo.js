@@ -71,7 +71,7 @@ function Logo() {
         swal("Success!", res.data.message, res.data.status);
       })
       .catch((error) => {
-        console.log(error);
+        setLoading(false);
       });
   }
 
@@ -96,8 +96,9 @@ function Logo() {
                                   <label
                                     htmlFor="basicpill-phoneno-input"
                                     className="label-100 mt-3"
+                                    style={{ fontWeight: "bold" }}
                                   >
-                                    {/* Logo htmlFor Website Header(148 x 48 px) */}
+                                    Header Logo for user Website <br />
                                   </label>
                                   <div>
                                     <input
@@ -129,7 +130,7 @@ function Logo() {
                                             ? HeaderlogoUrl.image
                                             : Headerlogo
                                         }
-                                        alt="header logo"
+                                        alt=""
                                       />
                                     ) : (
                                       ""
@@ -138,9 +139,12 @@ function Logo() {
                                   <label
                                     htmlFor="basicpill-phoneno-input"
                                     className="label-100 mt-3"
+                                    style={{ fontWeight: "bold" }}
                                   >
                                     {/* Logo htmlFor Website Footer(148 x 48 px) */}
+                                    Footer logo for user Website <br />
                                   </label>
+                                  <br />
                                   <input
                                     type="file"
                                     name="Logo htmlFor Website Footer(148 x 48 px)"
@@ -166,7 +170,7 @@ function Logo() {
                                           ? FooterlogoUrl.image
                                           : Footerlogo
                                       }
-                                      alt="Footer logo"
+                                      alt=""
                                     />
                                   ) : (
                                     ""
@@ -174,8 +178,10 @@ function Logo() {
                                   <label
                                     htmlFor="basicpill-phoneno-input"
                                     className="label-100 mt-2 row ms-1"
+                                    style={{ fontWeight: "bold" }}
                                   >
                                     {/* Logo htmlFor Admin Header(148 x 48 px) */}
+                                    Logo for admin website <br />
                                   </label>
                                   <input
                                     type="file"
@@ -202,7 +208,7 @@ function Logo() {
                                           ? AdminlogoUrl.image
                                           : Adminlogo
                                       }
-                                      alt="Admin logo"
+                                      alt=""
                                     />
                                   ) : (
                                     ""
@@ -216,6 +222,11 @@ function Logo() {
                               <div className="form-group text-left">
                                 <button
                                   type="button"
+                                  disabled={
+                                    Adminlogo === "" ||
+                                    Footerlogo === "" ||
+                                    Headerlogo === ""
+                                  }
                                   onClick={handelSubmit}
                                   className="btn btn-success btn-login waves-effect waves-light mr-3 pt-2 pb-2 pr-4 pl-4"
                                 >
