@@ -23,7 +23,7 @@ function NewOrders() {
   useEffect(() => {
     function getNewOrder() {
       axios
-        .get(`/api/order/getAll/:new`, {
+        .get(`/api/order/getAll/new`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
@@ -31,7 +31,6 @@ function NewOrders() {
         })
         .then((res) => {
           setNewOrdersData(res.data.order);
-          console.log(res.data);
           setLoading(false);
         })
         .catch((err) => {
@@ -216,7 +215,9 @@ function NewOrders() {
                                 </td>
                                 <td className="text-start">
                                   {/* <Link to={`/orders/${order.orderStatus}/${order._id}`}> */}
-                                  <Link to={`/orders/view/${order._id}`}>
+                                  <Link
+                                    to={`/orders/${order.orderStatus}/${order._id}`}
+                                  >
                                     <button
                                       style={{ color: "white" }}
                                       type="button"
@@ -230,7 +231,7 @@ function NewOrders() {
                                       View
                                     </button>
                                   </Link>
-                                  <Link to={`/orders/edit/${order._id}`}>
+                                  {/* <Link to={`/orders/edit/${order._id}`}>
                                     <button
                                       style={{ color: "white" }}
                                       type="button"
@@ -243,9 +244,9 @@ function NewOrders() {
                                     >
                                       Edit
                                     </button>
-                                  </Link>
+                                  </Link> */}
 
-                                  <button
+                                  {/* <button
                                     style={{ color: "white" }}
                                     type="button"
                                     className="
@@ -257,7 +258,7 @@ function NewOrders() {
                                     onClick={() => handleDelete(order._id)}
                                   >
                                     Delete
-                                  </button>
+                                  </button> */}
                                 </td>
                               </tr>
                             );

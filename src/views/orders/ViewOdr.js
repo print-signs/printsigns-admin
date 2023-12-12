@@ -1,107 +1,111 @@
-import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
-import QRCode from 'react-qr-code'
-import ReactToPrint from 'react-to-print'
-import { isAutheticated } from 'src/auth'
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import QRCode from "react-qr-code";
+import ReactToPrint from "react-to-print";
+import { isAutheticated } from "src/auth";
 
-import PrintOrderDetails from './PrintOrderDetails.js'
+import PrintOrderDetails from "./PrintOrderDetails.js";
 
-function ViewOrder() {
-  const { status, id } = useParams()
-  const navigate = useNavigate()
-  const printOrderRef = useRef()
-  const token = isAutheticated()
-  const [orderData, setOrderData] = useState({})
-  const [loading, setLoading] = useState(true)
-  const [orderStatus, setOrderStatus] = useState('')
+function ViewOdr() {
+  const { status, id } = useParams();
+  const navigate = useNavigate();
+  const printOrderRef = useRef();
+  const token = isAutheticated();
+  const [orderData, setOrderData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [orderStatus, setOrderStatus] = useState("");
   const [data, setData] = useState({
-    courier_name: '',
-    tracking_id: '',
-  })
+    courier_name: "",
+    tracking_id: "",
+  });
 
   useEffect(() => {
     function getOrderDetails() {
-      setLoading(true)
+      setLoading(true);
       axios
         .get(`/api/order/${id}`, {
-          headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${token}`,
+          },
         })
         .then((res) => {
-          setLoading(false)
-          setOrderData(res.data.data)
+          setLoading(false);
+          console.log(res.data);
+          setOrderData(res.data.data);
         })
         .catch((err) => {
-          setLoading(false)
-          getBack()
-        })
+          setLoading(false);
+          getBack();
+        });
     }
-    getOrderDetails()
-  }, [])
+    getOrderDetails();
+  }, []);
 
   const handleChange = (e) => {
-    if (e.target.type === 'text') {
-      setData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    if (e.target.type === "text") {
+      setData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     } else {
-      setOrderStatus(e.target.value)
+      setOrderStatus(e.target.value);
     }
-  }
+  };
 
   function handleSubmit() {
-    if (orderStatus === '') return
-    if (orderData.status === 'processing') {
-      if (data.courier_name.trim() === '' || data.tracking_id.trim() === '') {
+    if (orderStatus === "") return;
+    if (orderData.status === "processing") {
+      if (data.courier_name.trim() === "" || data.tracking_id.trim() === "") {
         swal({
-          title: 'Warning',
-          text: 'Enter Courier Name And Tracking ID!',
-          icon: 'error',
-          button: 'Retry',
+          title: "Warning",
+          text: "Enter Courier Name And Tracking ID!",
+          icon: "error",
+          button: "Retry",
           dangerMode: true,
-        })
-        return
+        });
+        return;
       }
     }
-    setLoading(true)
+    setLoading(true);
     axios
       .patch(
         `/api/order/${id}`,
         { ...data, status: orderStatus },
         {
           headers: {
-            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       )
       .then((res) => {
         swal({
-          title: 'Updated',
-          text: 'Order updated!',
-          icon: 'success',
-          button: 'Return',
-        })
-        setLoading(false)
-        getBack()
+          title: "Updated",
+          text: "Order updated!",
+          icon: "success",
+          button: "Return",
+        });
+        setLoading(false);
+        getBack();
       })
       .catch((err) => {
-        setLoading(false)
+        setLoading(false);
         swal({
-          title: 'Warning',
-          text: 'Something went wrong!',
-          icon: 'error',
-          button: 'Retry',
+          title: "Warning",
+          text: "Something went wrong!",
+          icon: "error",
+          button: "Retry",
           dangerMode: true,
-        })
-      })
+        });
+      });
   }
 
   function getBack() {
-    navigate(`/orders/${status}`, { replace: true })
+    navigate(`/orders/${status}`, { replace: true });
   }
 
   return (
     <>
-      {' '}
+      {" "}
       <div className="main-content">
         <div className="page-content">
           <div className="container-fluid">
@@ -115,31 +119,37 @@ function ViewOrder() {
                     justify-content-between
                   "
                 >
-                  <div style={{ fontSize: '22px' }} className="fw-bold">
+                  <div style={{ fontSize: "22px" }} className="fw-bold">
                     Order Details
                   </div>
                   <div className="page-title-right">
-                    {(orderData?.status === 'new' || orderData?.status === 'processing') && (
+                    {(orderData?.status === "new" ||
+                      orderData?.status === "processing") && (
                       <ReactToPrint
                         trigger={() => (
-                          <button className="btn btn-info text-white me-2">Print</button>
+                          <button className="btn btn-info text-white me-2">
+                            Print
+                          </button>
                         )}
                         content={() => printOrderRef.current}
                       />
                     )}
 
-                    {orderData?.status !== 'cancelled' &&
-                      orderData?.status !== 'returned' &&
-                      orderData?.status !== 'delivered' && (
+                    {orderData?.status !== "cancelled" &&
+                      orderData?.status !== "returned" &&
+                      orderData?.status !== "delivered" && (
                         <button
                           className="btn btn-success text-white me-2"
                           onClick={() => handleSubmit()}
                           disabled={loading}
                         >
-                          {loading ? 'Loading' : 'Update'}
+                          {loading ? "Loading" : "Update"}
                         </button>
                       )}
-                    <button className="btn btn-primary" onClick={() => getBack()}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => getBack()}
+                    >
                       Back
                     </button>
                   </div>
@@ -153,12 +163,16 @@ function ViewOrder() {
                   <div className="card-body">
                     <div className="mt-1">
                       <label>
-                        <span className="fw-bold">Order ID: {orderData?.order_id}</span>
+                        <span className="fw-bold">
+                          Order ID: {orderData?.order_id}
+                        </span>
                       </label>
                     </div>
                     <div className="mt-1">
                       <label>
-                        <span className="fw-bold">Parent Name: {orderData?.parent?.name}</span>
+                        <span className="fw-bold">
+                          Parent Name: {orderData?.parent?.name}
+                        </span>
                       </label>
                     </div>
                     <div className="mt-1">
@@ -174,15 +188,15 @@ function ViewOrder() {
                         orderData?.items?.length > 0 &&
                         orderData.items.map((e, i) => (
                           <div key={i} className="my-2">
-                            <div className="row" style={{ fontSize: '14px' }}>
+                            <div className="row" style={{ fontSize: "14px" }}>
                               <div className="col-sm-4">
                                 <img
                                   src={e.product?.images[0]?.url}
                                   alt={e.product.name}
                                   style={{
-                                    width: '100%',
-                                    objectFit: 'contain',
-                                    maxHeight: '150px',
+                                    width: "100%",
+                                    objectFit: "contain",
+                                    maxHeight: "150px",
                                   }}
                                 />
                               </div>
@@ -201,7 +215,7 @@ function ViewOrder() {
                                     </p>
                                   </div>
                                   <div className="col-sm-6">
-                                    {' '}
+                                    {" "}
                                     <p className="m-0">
                                       <span>Price:</span> Rs.{e.price}
                                     </p>
@@ -237,49 +251,53 @@ function ViewOrder() {
               <div className="col-lg-5 mt-3">
                 <div className="card">
                   <div className="card-body">
-                    {status !== 'cancelled' && status !== 'returned' && status !== 'delivered' && (
-                      <div className="mt-1">
-                        <label className="fw-bold">Status :</label>
-                        <select
-                          className="form-control"
-                          onChange={handleChange}
-                          value={orderStatus}
-                        >
-                          {orderData.status === 'new' && (
-                            <>
-                              <option value="">New</option>
-                              <option value="processing">Processing</option>
-                              <option value="cancelled">Cancelled</option>
-                            </>
-                          )}
-                          {orderData.status === 'processing' && (
-                            <>
-                              <option value="">Processing</option>
-                              <option value="dispatched">Dispatch</option>
-                            </>
-                          )}
-                          {orderData.status === 'dispatched' && (
-                            <>
-                              <option value="">Dispatch</option>
-                              <option value="delivered">Delivered</option>
-                            </>
-                          )}
-                        </select>
-                      </div>
-                    )}
+                    {status !== "cancelled" &&
+                      status !== "returned" &&
+                      status !== "delivered" && (
+                        <div className="mt-1">
+                          <label className="fw-bold">Status :</label>
+                          <select
+                            className="form-control"
+                            onChange={handleChange}
+                            value={orderStatus}
+                          >
+                            {orderData.status === "new" && (
+                              <>
+                                <option value="">New</option>
+                                <option value="processing">Processing</option>
+                                <option value="cancelled">Cancelled</option>
+                              </>
+                            )}
+                            {orderData.status === "processing" && (
+                              <>
+                                <option value="">Processing</option>
+                                <option value="dispatched">Dispatch</option>
+                              </>
+                            )}
+                            {orderData.status === "dispatched" && (
+                              <>
+                                <option value="">Dispatch</option>
+                                <option value="delivered">Delivered</option>
+                              </>
+                            )}
+                          </select>
+                        </div>
+                      )}
                     <div className="mt-3">
                       {orderData?.order_id && (
                         <div className="d-flex">
                           <p className="fw-bold me-3">Order ID QR Code:</p>
                           <QRCode
-                            value={JSON.stringify({ order_id: orderData?.order_id })}
+                            value={JSON.stringify({
+                              order_id: orderData?.order_id,
+                            })}
                             size={256}
-                            style={{ height: '150px', width: '150px' }}
+                            style={{ height: "150px", width: "150px" }}
                           />
                         </div>
                       )}
                     </div>
-                    {orderData.status === 'processing' && (
+                    {orderData.status === "processing" && (
                       <>
                         <div className="mt-3">
                           <label className="fw-bold">Courier Name* :</label>
@@ -305,7 +323,8 @@ function ViewOrder() {
                     )}
                     <div className="mt-3">
                       <label>
-                        <span className="fw-bold">Amount Paid : </span>Rs.{orderData?.total_amount}
+                        <span className="fw-bold">Amount Paid : </span>Rs.
+                        {orderData?.total_amount}
                       </label>
                     </div>
                     {orderData?.address && (
@@ -313,17 +332,24 @@ function ViewOrder() {
                         <div className="mt-1">
                           <label>
                             <span className="fw-bold">Address : </span>
-                            {`${orderData.address?.full_name}, ${orderData.address?.flat_house_no_apartment
-                              }, ${orderData.address?.area_street_sector_village}, ${orderData.address?.landmark && orderData.address?.landmark + ', '
-                              }${orderData.address?.address_line &&
-                              orderData.address?.address_line + ', '
-                              }${orderData.address?.city}, ${orderData.address?.state}, ${orderData.address?.pincode
-                              }`}
+                            {`${orderData.address?.full_name}, ${
+                              orderData.address?.flat_house_no_apartment
+                            }, ${
+                              orderData.address?.area_street_sector_village
+                            }, ${
+                              orderData.address?.landmark &&
+                              orderData.address?.landmark + ", "
+                            }${
+                              orderData.address?.address_line &&
+                              orderData.address?.address_line + ", "
+                            }${orderData.address?.city}, ${
+                              orderData.address?.state
+                            }, ${orderData.address?.pincode}`}
                           </label>
                         </div>
                         <div className="mt-1">
                           <label>
-                            {' '}
+                            {" "}
                             <span className="fw-bold">Contact Number : </span>
                             {orderData.address?.mobile_number}
                           </label>
@@ -364,7 +390,7 @@ function ViewOrder() {
                         <span className="fw-bold">Razorpay Order ID : </span>
                         {orderData?.razorpay_order_id}
                       </label>
-                    </div>{' '}
+                    </div>{" "}
                     <div className="mt-1">
                       <label>
                         <span className="fw-bold">Razorpay Payment ID : </span>
@@ -379,9 +405,9 @@ function ViewOrder() {
                     <table
                       className="table table-info table-sm m-0"
                       style={{
-                        borderRadius: '8px',
-                        borderCollapse: 'collapse',
-                        overflow: 'hidden',
+                        borderRadius: "8px",
+                        borderCollapse: "collapse",
+                        overflow: "hidden",
                       }}
                     >
                       <tbody>
@@ -390,22 +416,27 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.new
-                              ? new Date(orderData?.status_timeline?.new).toLocaleString('en-IN', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: 'numeric',
-                                hour12: true,
-                              })
-                              : new Date(orderData?.placed_on).toLocaleString('en-IN', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: 'numeric',
-                                hour12: true,
-                              })}
+                              ? new Date(
+                                  orderData?.status_timeline?.new
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
+                                  hour12: true,
+                                })
+                              : new Date(orderData?.placed_on).toLocaleString(
+                                  "en-IN",
+                                  {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "numeric",
+                                    hour12: true,
+                                  }
+                                )}
                           </td>
                         </tr>
                         <tr className="text-center">
@@ -413,18 +444,17 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.processing
-                              ? new Date(orderData?.status_timeline?.processing).toLocaleString(
-                                'en-IN',
-                                {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: 'numeric',
+                              ? new Date(
+                                  orderData?.status_timeline?.processing
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
                                   hour12: true,
-                                },
-                              )
-                              : '-'}
+                                })
+                              : "-"}
                           </td>
                         </tr>
                         <tr className="text-center">
@@ -432,18 +462,17 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.dispatched
-                              ? new Date(orderData?.status_timeline?.dispatched).toLocaleString(
-                                'en-IN',
-                                {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: 'numeric',
+                              ? new Date(
+                                  orderData?.status_timeline?.dispatched
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
                                   hour12: true,
-                                },
-                              )
-                              : '-'}
+                                })
+                              : "-"}
                           </td>
                         </tr>
                         <tr className="text-center">
@@ -451,18 +480,17 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.delivered
-                              ? new Date(orderData?.status_timeline?.delivered).toLocaleString(
-                                'en-IN',
-                                {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: 'numeric',
+                              ? new Date(
+                                  orderData?.status_timeline?.delivered
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
                                   hour12: true,
-                                },
-                              )
-                              : '-'}
+                                })
+                              : "-"}
                           </td>
                         </tr>
                         <tr className="text-center">
@@ -470,18 +498,17 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.cancelled
-                              ? new Date(orderData?.status_timeline?.cancelled).toLocaleString(
-                                'en-IN',
-                                {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: 'numeric',
+                              ? new Date(
+                                  orderData?.status_timeline?.cancelled
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
                                   hour12: true,
-                                },
-                              )
-                              : '-'}
+                                })
+                              : "-"}
                           </td>
                         </tr>
                         <tr className="text-center">
@@ -489,18 +516,17 @@ function ViewOrder() {
                           <td> : </td>
                           <td>
                             {orderData?.status_timeline?.returned
-                              ? new Date(orderData?.status_timeline?.returned).toLocaleString(
-                                'en-IN',
-                                {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: 'numeric',
+                              ? new Date(
+                                  orderData?.status_timeline?.returned
+                                ).toLocaleString("en-IN", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "numeric",
                                   hour12: true,
-                                },
-                              )
-                              : '-'}
+                                })
+                              : "-"}
                           </td>
                         </tr>
                       </tbody>
@@ -512,11 +538,11 @@ function ViewOrder() {
           </div>
         </div>
       </div>
-      <div style={{ display: 'none' }}>
+      <div style={{ display: "none" }}>
         <PrintOrderDetails orderData={orderData} ref={printOrderRef} />
       </div>
     </>
-  )
+  );
 }
 
-export default ViewOrder
+export default ViewOdr;

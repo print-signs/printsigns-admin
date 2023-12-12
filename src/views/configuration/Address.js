@@ -18,6 +18,8 @@ function Address() {
   const [website, setWebsite] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   useEffect(() => {
     async function getConfiguration() {
@@ -37,6 +39,8 @@ function Address() {
           setWebsite(el.website);
           setContact(el.contact);
           setEmail(el.email);
+          setLatitude(el.latitude);
+          setLongitude(el.longitude);
         });
       });
     }
@@ -61,10 +65,30 @@ function Address() {
       setContact(e.target.value);
     } else if (e.target.name.toLowerCase() === "email") {
       setEmail(e.target.value);
+    } else if (e.target.name.toLowerCase() === "latitude") {
+      setLatitude(e.target.value);
+    } else if (e.target.name.toLowerCase() === "longitude") {
+      setLongitude(e.target.value);
     }
   }
   async function handelSubmit() {
     setLoading(true);
+    if (
+      !company ||
+      !address ||
+      !city ||
+      !state ||
+      !country ||
+      !pincode ||
+      !website ||
+      !contact ||
+      !email ||
+      !longitude ||
+      !latitude
+    ) {
+      setLoading(false);
+      return swal("Fill all the required filed!");
+    }
     let data = {
       company,
       address,
@@ -75,7 +99,10 @@ function Address() {
       website,
       contact,
       email,
+      longitude,
+      latitude,
     };
+
     let res = await axios.post(`/api/config/address`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -85,7 +112,11 @@ function Address() {
     if (res) {
       setLoading(false);
       console.log(res);
-      swal("Success!", res.data.message, res.data.status);
+
+      swal("Success!", res.data.message);
+    } else {
+      setLoading(false);
+      swal("something went wrong!", res.data.message);
     }
   }
 
@@ -229,6 +260,34 @@ function Address() {
                                     value={email}
                                     type="text"
                                     name="email"
+                                    onChange={(e) => handelChange(e)}
+                                    className="form-control input-field "
+                                    id="basicpill-phoneno-input"
+                                  />
+                                  <label
+                                    htmlFor="basicpill-phoneno-input"
+                                    className="label-100 mt-3"
+                                  >
+                                    Latitude
+                                  </label>
+                                  <input
+                                    value={latitude}
+                                    type="text"
+                                    name="latitude"
+                                    onChange={(e) => handelChange(e)}
+                                    className="form-control input-field "
+                                    id="basicpill-phoneno-input"
+                                  />
+                                  <label
+                                    htmlFor="basicpill-phoneno-input"
+                                    className="label-100 mt-3"
+                                  >
+                                    Longitude
+                                  </label>
+                                  <input
+                                    value={longitude}
+                                    type="text"
+                                    name="longitude"
                                     onChange={(e) => handelChange(e)}
                                     className="form-control input-field "
                                     id="basicpill-phoneno-input"

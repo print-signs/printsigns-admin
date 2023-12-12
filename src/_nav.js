@@ -66,12 +66,12 @@ const _nav = [
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
         to: "/orders/new",
       },
-      {
-        component: CNavItem,
-        name: "Paid",
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-        to: "/orders/returned",
-      },
+      // {
+      //   component: CNavItem,
+      //   name: "Paid",
+      //   icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+      //   to: "/orders/returned",
+      // },
       {
         component: CNavItem,
         name: "Processing",
@@ -108,6 +108,24 @@ const _nav = [
         name: "Banner",
         icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
         to: "/banner",
+      },
+      {
+        component: CNavItem,
+        name: "Register Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/registerImage",
+      },
+      {
+        component: CNavItem,
+        name: "Login Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/loginImage",
+      },
+      {
+        component: CNavItem,
+        name: "Shop Page Image",
+        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+        to: "/shopImage",
       },
       {
         component: CNavItem,

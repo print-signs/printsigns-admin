@@ -13,7 +13,8 @@ function Socialmedia() {
     const [instagram, setInstagram] = useState('')
     const [twitter, setTwitter] = useState('')
     const [linkedin, setLinkedin] = useState('')
-
+    const [youtube, setYoutube] = useState('')
+    console.log("youtube", youtube);
     useEffect(() => {
         async function getConfiguration() {
             const configDetails = await axios.get(`/api/config`, {
@@ -21,12 +22,14 @@ function Socialmedia() {
                     Authorization: `Bearer ${token}`,
                 },
             })
+
             configDetails.data.result.map((item) => {
                 console.log(item.socialMedia)
                 setFacebook(item?.socialMedia[0]?.facebook)
                 setInstagram(item?.socialMedia[0]?.instagram)
                 setTwitter(item?.socialMedia[0]?.twitter)
                 setLinkedin(item?.socialMedia[0]?.linkedin)
+                setYoutube(item?.socialMedia[0]?.youtube)
             })
         }
         getConfiguration()
@@ -41,6 +44,8 @@ function Socialmedia() {
             setInstagram(e.target.value)
         } else if (e.target.name === 'linkedin') {
             setLinkedin(e.target.value)
+        } else if (e.target.name === 'youtube') {
+            setYoutube(e.target.value)
         }
     }
     async function handelSubmit() {
@@ -50,6 +55,7 @@ function Socialmedia() {
             twitter,
             instagram,
             linkedin,
+            youtube
         }
         let res = await axios.post(`/api/config/social`, data, {
             headers: {
@@ -115,6 +121,17 @@ function Socialmedia() {
                                                                         value={instagram}
                                                                         type="text"
                                                                         name="instagram"
+                                                                        onChange={(e) => handelChange(e)}
+                                                                        className="form-control input-field "
+                                                                        id="basicpill-phoneno-input"
+                                                                    />{' '}
+                                                                    <label for="basicpill-phoneno-input" className="label-100 mt-3">
+                                                                        Youtube
+                                                                    </label>
+                                                                    <input
+                                                                        value={youtube}
+                                                                        type="text"
+                                                                        name="youtube"
                                                                         onChange={(e) => handelChange(e)}
                                                                         className="form-control input-field "
                                                                         id="basicpill-phoneno-input"

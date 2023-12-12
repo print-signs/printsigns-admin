@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 
 function ViewOrders() {
   const { status, id } = useParams();
+  const [success, setSuccess] = useState(true);
 
   const { cartItems, subTotal, shippingCharge, tax, shipingInfo, total } =
     useSelector((state) => state.cart);
@@ -51,7 +52,7 @@ function ViewOrders() {
         setLoading(false);
         setOrderId(res.data?.order?.order_id);
         setOrderDetails(res.data?.order);
-        console.log(res.data?.order);
+        console.log(res.data);
         // let options = {
         //     Franchisee: res.data?.order?.shippingInfo?.Franchisee?._id,
         //     name: res.data?.order?.shippingInfo?.name,
@@ -82,6 +83,7 @@ function ViewOrders() {
     if (e.target.type === "text") {
       setData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     } else {
+      if (e.target.value === "") toast.error("please select status");
       setOrderStatus(e.target.value);
     }
   };
@@ -91,6 +93,193 @@ function ViewOrders() {
       quantity: e.target.value,
       total_Price: productDetails?.base_Price * e.target.value,
     }));
+  };
+  // ------------------------------------------------------
+
+  const handlechangestatus = () => {
+    if (orderStatus === "dispatched") {
+      swal({
+        title: `Are you sure for ${orderStatus}?`,
+        icon: "warning",
+        content: {
+          element: "div",
+          attributes: {
+            innerHTML:
+              '<input id="input1" placeholder="Enter Courier Name" className="swal2-input" style="margin:3px;height:40px;text-align:center;">' +
+              '<input id="input2" placeholder="Courier Tracking ID" className="swal2-input" style="margin:3px;height:40px;text-align:center;">',
+          },
+        },
+        buttons: {
+          Yes: { text: "Submit", value: true },
+
+          Cancel: { text: "Cancel", value: "cancel" },
+        },
+      }).then((result) => {
+        if (result === true) {
+          // You have the input values, you can use them in your API call
+          const courierName = document.getElementById("input1").value.trim();
+          const TrackingID = document.getElementById("input2").value.trim();
+
+          // Check if values are entered
+          if (courierName === "" || TrackingID === "") {
+            swal({
+              title: "Warning",
+              text: "Please enter values Courier Name And Tracking ID",
+              icon: "warning",
+              button: "Ok",
+              dangerMode: true,
+            });
+          } else {
+            axios
+              .patch(
+                `/api/order/change/status/${id}`,
+                {
+                  status: orderStatus,
+                  courierName,
+                  TrackingID,
+                },
+                {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log("status");
+                toast.success(
+                  `Order status change ${status} to ${orderStatus}`
+                );
+                // setSuccess((prev) => !prev);
+              })
+              .catch((err) => {
+                swal({
+                  title: "Warning",
+                  text: err.response.data.message
+                    ? err.response.data.message
+                    : "Something went wrong!",
+                  icon: "error",
+                  button: "Retry",
+                  dangerMode: true,
+                });
+              });
+          }
+        }
+        // else {
+        //   swal.close(); // Close the popup if canceled
+        // }
+      });
+    } else if (orderStatus === "delivered") {
+      swal({
+        title: `Are you sure for ${orderStatus}?`,
+        icon: "warning",
+        content: {
+          element: "div",
+          attributes: {
+            innerHTML:
+              '<input id="input1" type="date" placeholder="Delivered ON" className="swal2-input" style="height:40px;text-align:center;">',
+            // '<input id="input2" placeholder="Courier Tracking ID" className="swal2-input" style="margin:3px;height:40px">',
+          },
+        },
+        buttons: {
+          Yes: { text: "Submit", value: true },
+
+          Cancel: { text: "Cancel", value: "cancel" },
+        },
+      }).then((result) => {
+        if (result === true) {
+          // You have the input values, you can use them in your API call
+          const DDate = document.getElementById("input1").value.trim();
+
+          // Check if values are entered
+          if (DDate === "") {
+            swal({
+              title: "Warning",
+              text: "Please enter Delivered Date",
+              icon: "warning",
+              button: "Ok",
+              dangerMode: true,
+            });
+          } else {
+            axios
+              .patch(
+                `/api/order/change/status/${id}`,
+                {
+                  status: orderStatus,
+                  DDate,
+                },
+                {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log("status");
+                toast.success(
+                  `Order status change ${status} to ${orderStatus}`
+                );
+                // setSuccess((prev) => !prev);
+              })
+              .catch((err) => {
+                swal({
+                  title: "Warning",
+                  text: err.response.data.message
+                    ? err.response.data.message
+                    : "Something went wrong!",
+                  icon: "error",
+                  button: "Retry",
+                  dangerMode: true,
+                });
+              });
+          }
+        }
+        // else {
+        //   swal.close(); // Close the popup if canceled
+        // }
+      });
+    } else {
+      swal({
+        title: `Are you sure for ${orderStatus}?`,
+        icon: "warning",
+
+        buttons: {
+          Yes: { text: "Yes", value: true },
+          Cancel: { text: "Cancel", value: "cancel" },
+        },
+      }).then((value) => {
+        if (value === true) {
+          axios
+            .patch(
+              `/api/order/change/status/${id}`,
+              { status: orderStatus },
+              {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((res) => {
+              console.log("status");
+              toast.success(`order status change ${status} to ${orderStatus}`);
+              // setSuccess((prev) => !prev);
+            })
+            .catch((err) => {
+              swal({
+                title: "Warning",
+                text: err.response.data.message
+                  ? err.response.data.message
+                  : "Something went wrong!",
+                icon: "error",
+                button: "Retry",
+                dangerMode: true,
+              });
+            });
+        }
+      });
+    }
   };
 
   function getBack() {
@@ -115,12 +304,36 @@ function ViewOrders() {
                 >
                   <div style={{ fontSize: "22px" }} className="fw-bold">
                     <p> View Order</p>
-                    {orderId && (
+                  </div>
+                  <div className="m-4">
+                    {orderDetails?.orderID && (
                       <span>
-                        <small>Order ID : {orderId}</small>{" "}
+                        <h6 className="">Order ID : {orderDetails?.orderID}</h6>{" "}
                       </span>
                     )}
                   </div>
+                  {orderDetails?.courier_name && (
+                    <div className="m-4">
+                      <span>
+                        <h6 className="">
+                          Courier Name: {orderDetails?.courier_name}
+                        </h6>{" "}
+                        <h6 className="">
+                          Tracking ID : {orderDetails?.courier_tracking_id}
+                        </h6>
+                      </span>
+                    </div>
+                  )}
+                  {orderDetails?.isDelivered && (
+                    <div className="m-4">
+                      <span>
+                        <h6 className="">Delivered: Yes</h6>{" "}
+                        <h6 className="">
+                          Delivered Date: {orderDetails?.DeliveredDate}
+                        </h6>
+                      </span>
+                    </div>
+                  )}
                   <div className="page-title-right">
                     {/* <Button
                                             variant="contained"
@@ -136,7 +349,8 @@ function ViewOrders() {
                                         >
                                             {loading ? 'Loading' : 'Edit Now'}
                                         </Button> */}
-                    <Link to="/orders/new">
+
+                    <Link to={`/orders/${status}`}>
                       <Button
                         variant="contained"
                         color="secondary"
@@ -154,9 +368,9 @@ function ViewOrders() {
               </div>
             </div>
             {loading ? (
-              <div class="d-flex justify-content-center">
-                <div class="spinner-border  text-info" role="status">
-                  <span class="visually-hidden">Loading...</span>
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border  text-info" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
             ) : (
@@ -305,12 +519,14 @@ function ViewOrders() {
                             </td>
                           </tr>
                           <tr className="text-center">
-                            <th scope="row">Processing Started</th>
-                            <td> : </td>
-                            <td>
-                              {productData?.status_timeline?.processing
+                            <th scope="row" className="text-warning">
+                              Processing Started
+                            </th>
+                            <td className="text-warning"> : </td>
+                            <td className="text-warning">
+                              {orderDetails?.status_timeline?.processing
                                 ? new Date(
-                                    productData?.status_timeline?.processing
+                                    orderDetails?.status_timeline?.processing
                                   ).toLocaleString("en-IN", {
                                     month: "short",
                                     day: "numeric",
@@ -323,12 +539,14 @@ function ViewOrders() {
                             </td>
                           </tr>
                           <tr className="text-center">
-                            <th scope="row">Dispatched On</th>
-                            <td> : </td>
-                            <td>
-                              {productData?.status_timeline?.dispatched
+                            <th scope="row" className="text-primary">
+                              Dispatched On
+                            </th>
+                            <td className="text-primary"> : </td>
+                            <td className="text-primary">
+                              {orderDetails?.status_timeline?.dispatched
                                 ? new Date(
-                                    productData?.status_timeline?.dispatched
+                                    orderDetails?.status_timeline?.dispatched
                                   ).toLocaleString("en-IN", {
                                     month: "short",
                                     day: "numeric",
@@ -341,12 +559,14 @@ function ViewOrders() {
                             </td>
                           </tr>
                           <tr className="text-center">
-                            <th scope="row">Delivered On</th>
-                            <td> : </td>
-                            <td>
-                              {productData?.status_timeline?.delivered
+                            <th scope="row" className="text-success">
+                              Delivered On
+                            </th>
+                            <td className="text-success"> : </td>
+                            <td className="text-success">
+                              {orderDetails?.status_timeline?.delivered
                                 ? new Date(
-                                    productData?.status_timeline?.delivered
+                                    orderDetails?.status_timeline?.delivered
                                   ).toLocaleString("en-IN", {
                                     month: "short",
                                     day: "numeric",
@@ -358,31 +578,35 @@ function ViewOrders() {
                                 : "-"}
                             </td>
                           </tr>
-                          <tr className="text-center">
-                            <th scope="row">Cancelled On</th>
-                            <td> : </td>
-                            <td>
-                              {productData?.status_timeline?.cancelled
-                                ? new Date(
-                                    productData?.status_timeline?.cancelled
-                                  ).toLocaleString("en-IN", {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "numeric",
-                                    hour12: true,
-                                  })
-                                : "-"}
-                            </td>
-                          </tr>
-                          <tr className="text-center">
+                          {orderDetails?.status_timeline?.cancelled && (
+                            <tr className="text-center">
+                              <th scope="row" className="text-danger">
+                                Cancelled On
+                              </th>
+                              <td className="text-danger"> : </td>
+                              <td className="text-danger">
+                                {orderDetails?.status_timeline?.cancelled
+                                  ? new Date(
+                                      orderDetails?.status_timeline?.cancelled
+                                    ).toLocaleString("en-IN", {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                      hour: "2-digit",
+                                      minute: "numeric",
+                                      hour12: true,
+                                    })
+                                  : "-"}
+                              </td>
+                            </tr>
+                          )}
+                          {/* <tr className="text-center">
                             <th scope="row">Returned On</th>
                             <td> : </td>
                             <td>
-                              {productData?.status_timeline?.returned
+                              {orderDetails?.status_timeline?.returned
                                 ? new Date(
-                                    productData?.status_timeline?.returned
+                                    orderDetails?.status_timeline?.returned
                                   ).toLocaleString("en-IN", {
                                     month: "short",
                                     day: "numeric",
@@ -393,7 +617,7 @@ function ViewOrders() {
                                   })
                                 : "-"}
                             </td>
-                          </tr>
+                          </tr> */}
                         </tbody>
                       </table>
                     </div>
@@ -403,9 +627,72 @@ function ViewOrders() {
                   <div className="card">
                     <div className="card-body">
                       <div className="mt-1">
-                        <h5 className="text-success">
+                        <h6 className="text-success">
                           Order Status: {orderDetails?.orderStatus}
-                        </h5>
+                        </h6>
+                        {/* order status change  */}{" "}
+                        <div className="mb-2">
+                          {" "}
+                          {status !== "cancelled" &&
+                            status !== "returned" &&
+                            status !== "delivered" && (
+                              <div className="mt-1">
+                                <label className="fw-bold">
+                                  Change Status :
+                                </label>
+                                <div className="row">
+                                  <div className="col-lg-9">
+                                    <select
+                                      className="form-control"
+                                      onChange={handleChange}
+                                      value={orderStatus}
+                                    >
+                                      {orderDetails?.orderStatus === "new" && (
+                                        <>
+                                          <option value="">New</option>
+                                          <option value="processing">
+                                            Processing
+                                          </option>
+                                          <option value="cancelled">
+                                            Cancelled
+                                          </option>
+                                        </>
+                                      )}
+                                      {orderDetails?.orderStatus ===
+                                        "processing" && (
+                                        <>
+                                          <option value="">Processing</option>
+                                          <option value="dispatched">
+                                            Dispatch
+                                          </option>
+                                        </>
+                                      )}
+                                      {orderDetails?.orderStatus ===
+                                        "dispatched" && (
+                                        <>
+                                          <option value="">Dispatch</option>
+                                          <option value="delivered">
+                                            Delivered
+                                          </option>
+                                        </>
+                                      )}
+                                    </select>
+                                  </div>
+                                  {orderStatus && (
+                                    <div className="col-lg-3">
+                                      <button
+                                        className="btn btn-primary"
+                                        onClick={(e) => handlechangestatus(e)}
+                                      >
+                                        Update
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                        {/*  */}
                         <label className="fw-bold mt-1">Shipping Info :</label>
                         {/* <div className="d-flex">
                                                 <select

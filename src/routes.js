@@ -41,7 +41,7 @@ import DispatchedOrders from "./views/orders/DispatchedOrders.js";
 import DeliveredOrders from "./views/orders/DeliveredOrders.js";
 import CancelledOrders from "./views/orders/CancelledOrders.js";
 import ReturnedOrders from "./views/orders/ReturnedOrders.js";
-import ViewOrder from "./views/orders/ViewOrder";
+import ViewOdr from "./views/orders/ViewOdr";
 import AddOrder from "./views/orders/AddOrder";
 //Taxes
 import Tax from "./views/configuration/tax/Tax";
@@ -93,6 +93,10 @@ import AddUserAddress from "./views/UserAddress/addUserAddress";
 import ViewAddress from "./views/UserAddress/viewAddress";
 import Design from "./views/Design/design";
 import Banners from "./views/Banner/banner";
+import RegisterImage from "./views/Images/RegisterImage";
+import LoginImage from "./views/Images/LoginImage";
+import ShopImage from "./views/Images/ShopImage";
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   {
@@ -176,7 +180,7 @@ const routes = [
   // },
   // Categories
   {
-    path: "//categories",
+    path: "/categories",
     name: "Categories",
     element: Categories,
   },
@@ -254,6 +258,21 @@ const routes = [
     element: Banners,
   },
   {
+    path: "/registerImage",
+    name: "RegisterImage",
+    element: RegisterImage,
+  },
+  {
+    path: "/loginImage",
+    name: "LoginImage",
+    element: LoginImage,
+  },
+  {
+    path: "/shopImage",
+    name: "ShopImage",
+    element: ShopImage,
+  },
+  {
     path: "/testimonial/view/:id",
     name: "ViewTestimonial",
     element: ViewTestimonial,
@@ -271,14 +290,34 @@ const routes = [
   { path: "/orders/new", name: "New Orders", element: NewOrders },
   { path: "/order/add", name: "add Order", element: AddOrder },
   { path: "/orders/edit/:id", name: "Edit Order", element: EditOrder },
-  { path: "/orders/view/:id", name: "View Order", element: ViewOrders },
+  { path: "/orders/:status/:id", name: "View Order", element: ViewOrders },
 
-  // { path: '/orders/processing', name: 'Processing Orders', element: ProcessingOrders },
-  // { path: '/orders/dispatched', name: 'Dispatched Orders', element: DispatchedOrders },
-  // { path: '/orders/delivered', name: 'Delivered Orders', element: DeliveredOrders },
-  // { path: '/orders/cancelled', name: 'Cancelled Orders', element: CancelledOrders },
-  // { path: '/orders/returned', name: 'Returned Orders', element: ReturnedOrders },
-  { path: "/order/:status/:id", name: "View Order", element: ViewOrder },
+  {
+    path: "/orders/processing",
+    name: "Processing Orders",
+    element: ProcessingOrders,
+  },
+  {
+    path: "/orders/dispatched",
+    name: "Dispatched Orders",
+    element: DispatchedOrders,
+  },
+  {
+    path: "/orders/delivered",
+    name: "Delivered Orders",
+    element: DeliveredOrders,
+  },
+  {
+    path: "/orders/cancelled",
+    name: "Cancelled Orders",
+    element: CancelledOrders,
+  },
+  {
+    path: "/orders/returned",
+    name: "Returned Orders",
+    element: ReturnedOrders,
+  },
+  // { path: "/order/:status/:id", name: "View Order", element: ViewOdr },
 
   //dashboard
 

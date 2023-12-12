@@ -1,50 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { isAutheticated } from 'src/auth'
-
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { isAutheticated } from "src/auth";
+import toast from "react-hot-toast";
 
 function ProcessingOrders() {
-  const token = isAutheticated()
-  const [loading, setLoading] = useState(true)
-  const [success, setSuccess] = useState(true)
-  const [processingOrdersData, setProcessingOrdersData] = useState([])
+  const token = isAutheticated();
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(true);
+  const [processingOrdersData, setProcessingOrdersData] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemPerPage, setItemPerPage] = useState(10)
-  const [showData, setShowData] = useState(processingOrdersData)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemPerPage, setItemPerPage] = useState(10);
+  const [showData, setShowData] = useState(processingOrdersData);
 
   const handleShowEntries = (e) => {
-    setCurrentPage(1)
-    setItemPerPage(e.target.value)
-  }
+    setCurrentPage(1);
+    setItemPerPage(e.target.value);
+  };
 
   useEffect(() => {
     function getProcessingOrder() {
       axios
-        .get(`/api/order/list/processing`, {
-          headers: { 'Access-Control-Allow-Origin': '*', Authorization: `Bearer ${token}` },
+        .get(`/api/order/getAll/processing`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${token}`,
+          },
         })
         .then((res) => {
-          setProcessingOrdersData(res.data.data)
-          setLoading(false)
+          console.log(res.data.order);
+          setProcessingOrdersData(res.data.order);
+          setLoading(false);
         })
         .catch((err) => {
-          console.log(err)
-          setLoading(false)
-        })
+          console.log(err);
+          setLoading(false);
+        });
     }
-    getProcessingOrder()
-  }, [])
+    getProcessingOrder();
+  }, []);
 
   useEffect(() => {
     const loadData = () => {
-      const indexOfLastPost = currentPage * itemPerPage
-      const indexOfFirstPost = indexOfLastPost - itemPerPage
-      setShowData(processingOrdersData.slice(indexOfFirstPost, indexOfLastPost))
-    }
-    loadData()
-  }, [currentPage, itemPerPage, processingOrdersData])
+      const indexOfLastPost = currentPage * itemPerPage;
+      const indexOfFirstPost = indexOfLastPost - itemPerPage;
+      setShowData(
+        processingOrdersData.slice(indexOfFirstPost, indexOfLastPost)
+      );
+    };
+    loadData();
+  }, [currentPage, itemPerPage, processingOrdersData]);
 
   return (
     <div className="main-content">
@@ -60,7 +66,7 @@ function ProcessingOrders() {
                     justify-content-between
                   "
               >
-                <div style={{ fontSize: '22px' }} className="fw-bold">
+                <div style={{ fontSize: "22px" }} className="fw-bold">
                   Processing Orders
                 </div>
               </div>
@@ -76,7 +82,7 @@ function ProcessingOrders() {
                         <label className="w-100">
                           Show
                           <select
-                            style={{ width: '10%' }}
+                            style={{ width: "10%" }}
                             name=""
                             onChange={(e) => handleShowEntries(e)}
                             className="
@@ -99,14 +105,17 @@ function ProcessingOrders() {
                   <div className="table-responsive table-shoot mt-3">
                     <table
                       className="table table-centered table-nowrap"
-                      style={{ border: '1px solid' }}
+                      style={{ border: "1px solid" }}
                     >
-                      <thead className="thead-light" style={{ background: '#ecdddd' }}>
+                      <thead
+                        className="thead-light"
+                        style={{ background: "#ecdddd" }}
+                      >
                         <tr>
                           <th className="text-start">Order ID</th>
-                          <th className="text-start">Parent Name</th>
-                          <th className="text-start">Amount</th>
-                          <th className="text-start">Placed On</th>
+                          <th className="text-start">Customer</th>
+                          <th className="text-start">Order value</th>
+                          <th className="text-start">Order At</th>
                           <th className="text-start">Status</th>
                           <th className="text-start">Actions</th>
                         </tr>
@@ -129,34 +138,44 @@ function ProcessingOrders() {
                           showData.map((order, i) => {
                             return (
                               <tr key={i}>
-                                <td className="text-start">{order.order_id}</td>
-                                <td className="text-start">{order.parent.name}</td>
-                                <td className="text-start">{order?.total_amount}</td>
+                                <td className="text-start">{order?.orderID}</td>
                                 <td className="text-start">
-                                  {new Date(order?.placed_on).toLocaleString('en-IN', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: 'numeric',
-                                    hour12: true,
-                                  })}
+                                  {order?.user?.name}
+                                </td>
+                                <td className="text-start">
+                                  ${order?.total_amount}
+                                </td>
+                                <td className="text-start">
+                                  {new Date(order?.paidAt).toLocaleString(
+                                    "en-IN",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                      hour: "2-digit",
+                                      minute: "numeric",
+                                      hour12: true,
+                                    }
+                                  )}
                                 </td>
                                 <td className="text-start">
                                   <span className="badge text-bg-success text-white">
-                                    {order?.status}
+                                    {order?.orderStatus}
                                   </span>
                                 </td>
                                 <td className="text-start">
-                                  <Link to={`/orders/${order.status}/${order._id}`}>
+                                  {/* <Link to={`/orders/${order.orderStatus}/${order._id}`}> */}
+                                  <Link
+                                    to={`/orders/${order.orderStatus}/${order._id}`}
+                                  >
                                     <button
-                                      style={{ color: 'white' }}
+                                      style={{ color: "white" }}
                                       type="button"
                                       className="
                                       btn btn-primary btn-sm
                                     waves-effect waves-light
                                     btn-table
-                                    ms-2
+                                    ms-2 mt-1
                                   "
                                     >
                                       View
@@ -164,7 +183,7 @@ function ProcessingOrders() {
                                   </Link>
                                 </td>
                               </tr>
-                            )
+                            );
                           })
                         )}
                       </tbody>
@@ -179,9 +198,12 @@ function ProcessingOrders() {
                         role="status"
                         aria-live="polite"
                       >
-                        Showing {currentPage * itemPerPage - itemPerPage + 1} to{' '}
-                        {Math.min(currentPage * itemPerPage, processingOrdersData.length)} of{' '}
-                        {processingOrdersData.length} entries
+                        Showing {currentPage * itemPerPage - itemPerPage + 1} to{" "}
+                        {Math.min(
+                          currentPage * itemPerPage,
+                          processingOrdersData.length
+                        )}{" "}
+                        of {processingOrdersData.length} entries
                       </div>
                     </div>
 
@@ -191,13 +213,13 @@ function ProcessingOrders() {
                           <li
                             className={
                               currentPage === 1
-                                ? 'paginate_button page-item previous disabled'
-                                : 'paginate_button page-item previous'
+                                ? "paginate_button page-item previous disabled"
+                                : "paginate_button page-item previous"
                             }
                           >
                             <span
                               className="page-link"
-                              style={{ cursor: 'pointer' }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setCurrentPage((prev) => prev - 1)}
                             >
                               Previous
@@ -208,8 +230,10 @@ function ProcessingOrders() {
                             <li className="paginate_button page-item">
                               <span
                                 className="page-link"
-                                style={{ cursor: 'pointer' }}
-                                onClick={(e) => setCurrentPage((prev) => prev - 1)}
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) =>
+                                  setCurrentPage((prev) => prev - 1)
+                                }
                               >
                                 {currentPage - 1}
                               </span>
@@ -217,7 +241,10 @@ function ProcessingOrders() {
                           )}
 
                           <li className="paginate_button page-item active">
-                            <span className="page-link" style={{ cursor: 'pointer' }}>
+                            <span
+                              className="page-link"
+                              style={{ cursor: "pointer" }}
+                            >
                               {currentPage}
                             </span>
                           </li>
@@ -226,18 +253,18 @@ function ProcessingOrders() {
                             (currentPage + 1) * itemPerPage - itemPerPage >
                             processingOrdersData.length - 1
                           ) && (
-                              <li className="paginate_button page-item ">
-                                <span
-                                  className="page-link"
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() => {
-                                    setCurrentPage((prev) => prev + 1)
-                                  }}
-                                >
-                                  {currentPage + 1}
-                                </span>
-                              </li>
-                            )}
+                            <li className="paginate_button page-item ">
+                              <span
+                                className="page-link"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setCurrentPage((prev) => prev + 1);
+                                }}
+                              >
+                                {currentPage + 1}
+                              </span>
+                            </li>
+                          )}
 
                           <li
                             className={
@@ -245,13 +272,13 @@ function ProcessingOrders() {
                                 (currentPage + 1) * itemPerPage - itemPerPage >
                                 processingOrdersData.length - 1
                               )
-                                ? 'paginate_button page-item next'
-                                : 'paginate_button page-item next disabled'
+                                ? "paginate_button page-item next"
+                                : "paginate_button page-item next disabled"
                             }
                           >
                             <span
                               className="page-link"
-                              style={{ cursor: 'pointer' }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setCurrentPage((prev) => prev + 1)}
                             >
                               Next
@@ -268,7 +295,7 @@ function ProcessingOrders() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ProcessingOrders
+export default ProcessingOrders;

@@ -73,9 +73,9 @@ const AppSidebar = () => {
       >
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
 
-        {HeaderlogoUrl ? (
+        {AdminlogoUrl ? (
           <Link to="/dashboard">
-            <img src={HeaderlogoUrl} alt="" width="100%" />
+            <img src={AdminlogoUrl} alt="" width="100%" />
           </Link>
         ) : { AppName } ? (
           <h2>The Solar Sign </h2>
