@@ -26,7 +26,6 @@
     "test:debug": "react-scripts --inspect-brk test --runInBand",
     "heroku-postbuild": "npm run build"
   },
- 
   "config": {
     "coreui_library_short_version": "4.1"
   },
