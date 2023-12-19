@@ -16,7 +16,8 @@ const setupAxios = () => {
   // axios.defaults.baseURL = "http://localhost:8000";
 
   // axios.defaults.baseURL = "https://happy-sombrero-ray.cyclic.app/"; //->latest deployed
-  axios.defaults.baseURL = "https://printsigns.onrender.com/"; //->latest deployed
+  // axios.defaults.baseURL = "https://printsigns.onrender.com/"; //->latest deployed
+  axios.defaults.baseURL = "https://api.thesolarsign.com/"; //->latest deployed
 
   axios.defaults.headers = {
     "Cache-Control": "no-cache,no-store",

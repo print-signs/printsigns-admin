@@ -421,9 +421,9 @@ const Design = () => {
                       textTransform: "capitalize",
                     }}
                     onClick={handleOpen}
-                    // onClick={() => {
-                    //   navigate("/testimonial/new", { replace: true });
-                    // }}
+                  // onClick={() => {
+                  //   navigate("/testimonial/new", { replace: true });
+                  // }}
                   >
                     Add New Design
                   </Button>
@@ -466,7 +466,7 @@ const Design = () => {
                           onChange={(e) =>
                             setDesignName(
                               e.target.value.charAt(0).toUpperCase() +
-                                e.target.value.slice(1)
+                              e.target.value.slice(1)
                             )
                           }
                         />
@@ -684,7 +684,7 @@ const Design = () => {
                           p={2}
                           display={"flex"}
                           justifyContent={"right"}
-                          // width={"500px"}
+                        // width={"500px"}
                         >
                           {!edit && (
                             <button
@@ -826,11 +826,11 @@ const Design = () => {
                                 <td>
                                   <img
                                     className="me-2"
-                                    src={`http://localhost:8000/uploades/${item.designImage.filename}`}
+                                    src={`https://api.thesolarsign.com/uploades/${item.designImage.filename}`}
                                     width="40"
                                     alt=""
                                   />
-                                  <h5>{} </h5>
+                                  <h5>{ } </h5>
                                 </td>
                                 <td>
                                   <h5>{item.designName} </h5>
