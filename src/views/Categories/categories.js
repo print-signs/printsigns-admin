@@ -83,7 +83,7 @@ const Categories = () => {
 
   useEffect(() => {
     getCategories();
-  }, [token, category]);
+  }, [token]);
 
   const handleEditClick = (_id, categoryName, categoryImage) => {
     setOpen(true);
@@ -323,9 +323,9 @@ const Categories = () => {
                       textTransform: "capitalize",
                     }}
                     onClick={handleOpen}
-                    // onClick={() => {
-                    //   navigate("/testimonial/new", { replace: true });
-                    // }}
+                  // onClick={() => {
+                  //   navigate("/testimonial/new", { replace: true });
+                  // }}
                   >
                     Add New Category
                   </Button>
@@ -363,7 +363,7 @@ const Categories = () => {
                         onChange={(e) =>
                           setCategoryName(
                             e.target.value.charAt(0).toUpperCase() +
-                              e.target.value.slice(1)
+                            e.target.value.slice(1)
                           )
                         }
                       />
@@ -486,7 +486,7 @@ const Categories = () => {
                         p={2}
                         display={"flex"}
                         justifyContent={"right"}
-                        // width={"500px"}
+                      // width={"500px"}
                       >
                         {!edit && (
                           <button
@@ -630,7 +630,7 @@ const Categories = () => {
                                     width="40"
                                     alt=""
                                   />
-                                  <h5>{} </h5>
+                                  <h5>{ } </h5>
                                 </td>
                                 <td>
                                   <h5>{item.categoryName} </h5>

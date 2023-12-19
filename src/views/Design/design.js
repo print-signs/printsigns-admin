@@ -130,7 +130,7 @@ const Design = () => {
 
   useEffect(() => {
     getDesigns();
-  }, [token, design]);
+  }, [token]);
 
   const handleEditClick = (
     _id,
