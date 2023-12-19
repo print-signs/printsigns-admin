@@ -408,7 +408,7 @@ const Design = () => {
                   "
               >
                 <div style={{ fontSize: "22px" }} className="fw-bold">
-                  Design is
+                  Design
                 </div>
 
                 <div className="page-title-right">
