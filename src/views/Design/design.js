@@ -26,7 +26,8 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "90%",
-  height: "900px",
+  maxHeight: "90vh",
+
   bgcolor: "background.paper",
   borderRadius: "0.5rem",
   boxShadow: 24,
@@ -421,9 +422,7 @@ const Design = () => {
                       textTransform: "capitalize",
                     }}
                     onClick={handleOpen}
-                  // onClick={() => {
-                  //   navigate("/testimonial/new", { replace: true });
-                  // }}
+
                   >
                     Add New Design
                   </Button>
@@ -490,19 +489,7 @@ const Design = () => {
                           >
                             Select a Category*:
                           </label>
-                          {/* <select
-                  id="category"
-                  style={{ width: "100%" }}
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                >
-                  <option value={""}>None</option>
-                  {categories.map((category, index) => (
-                    <option key={index} value={category.categoryName}>
-                      {category.categoryName}
-                    </option>
-                  ))}
-                </select> */}
+
                           <FormControl style={{ width: "50%" }}>
                             <Select
                               labelId="demo-simple-select-label"
@@ -553,12 +540,7 @@ const Design = () => {
                                 </Typography>
 
                                 <TextField
-                                  // style={{
-                                  //   display: "none",
-                                  //   width: "350px",
-                                  //   height: "350px",
-                                  //   borderRadius: "10%",
-                                  // }}
+
                                   fullWidth
                                   id="upload-Image"
                                   type="file"
@@ -568,30 +550,7 @@ const Design = () => {
                                   variant="outlined"
                                   onChange={(e) => handleFileChange(e)}
                                 />
-                                {/* <Box
-                                  style={{ borderRadius: "10%" }}
-                                  sx={{
-                                    margin: "1rem 0rem",
-                                    cursor: "pointer",
-                                    width: "70px",
-                                    height: "70px",
-                                    border: "2px solid grey",
-                                    // borderRadius: '50%',
 
-                                    "&:hover": {
-                                      background: "rgba(112,112,112,0.5)",
-                                    },
-                                  }}
-                                >
-                                  <CloudUploadIcon
-                                    style={{
-                                      color: "grey",
-                                      margin: "auto",
-                                      // fontSize: "5rem",
-                                    }}
-                                    fontSize="large"
-                                  />
-                                </Box> */}
 
                                 {designImage && (
                                   <Box>
@@ -706,26 +665,7 @@ const Design = () => {
                               {saveLoding && "Save"}
                             </button>
                           )}
-                          {/* {edit && (
-                            <button
-                              style={{
-                                color: "white",
-                                marginRight: "1rem",
-                              }}
-                              onClick={() => handleUpdate()}
-                              type="button"
-                              className="
-                                      btn btn-primary btn-sm
-                                    waves-effect waves-light
-                                    btn-table
-                                    mx-1
-                                    mt-1
-                                  "
-                            >
-                              <ClipLoader loading={!updating} size={18} />
-                              {updating && "update"}
-                            </button>
-                          )} */}
+
                           <button
                             style={{
                               color: "black",
@@ -839,31 +779,7 @@ const Design = () => {
                                   <h5>{item.categoryName} </h5>
                                 </td>
                                 <td className="text-start">
-                                  {/* <button
-                                    style={{
-                                      color: "white",
-                                      marginRight: "1rem",
-                                    }}
-                                    type="button"
-                                    className="
-                                      btn btn-primary btn-sm
-                                    waves-effect waves-light
-                                    btn-table
-                                    mx-1
-                                    mt-1
-                                  "
-                                    onClick={() =>
-                                      handleEditClick(
-                                        item._id,
-                                        item.designName,
-                                        item.designImage,
-                                        item.designImageJson,
-                                        item.categoryName
-                                      )
-                                    }
-                                  >
-                                    Edit
-                                  </button> */}
+
                                   <button
                                     style={{
                                       color: "white",
@@ -914,7 +830,7 @@ const Design = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
